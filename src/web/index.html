@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Select an IFC file · MEP drill planner</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <main>
+    <header class="mast">
+      <p class="eyebrow">MEP drill planner</p>
+      <h1>Select an IFC file</h1>
+      <p class="lede">Pick a sample model or open an <span class="mono">.ifc</span> from this computer. The file stays local, and extraction uses the top of each MEP element’s bounding box as a drill candidate.</p>
+    </header>
+
+    <p id="banner" class="banner" hidden></p>
+
+    <section class="panel" aria-labelledby="samples-heading">
+      <div class="panel-head">
+        <h2 id="samples-heading">Sample models</h2>
+        <p id="samples-status" class="hint">Loading…</p>
+      </div>
+      <div id="samples" class="file-list" role="radiogroup" aria-labelledby="samples-heading"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="open-heading">
+      <div class="panel-head">
+        <h2 id="open-heading">Open a file</h2>
+      </div>
+      <div id="drop" class="drop">
+        <input id="file-input" type="file" accept=".ifc,application/octet-stream">
+        <p class="drop-title">Drop an IFC here</p>
+        <p class="hint">or</p>
+        <button type="button" id="browse" class="ghost">Browse</button>
+      </div>
+      <div id="uploads" class="file-list" role="radiogroup" aria-label="Opened files"></div>
+    </section>
+
+    <section class="selection" aria-live="polite">
+      <div>
+        <p class="eyebrow">Selected</p>
+        <h2 id="selected-title">No model yet</h2>
+        <p id="selected-meta" class="hint">Choose a sample or open a file. Extraction runs on the model shown here.</p>
+      </div>
+      <button type="button" id="extract" class="primary" disabled>Extract anchor points</button>
+    </section>
+
+    <section id="results" class="panel" hidden>
+      <div class="panel-head">
+        <h2 id="results-heading">Anchor points</h2>
+        <p id="results-meta" class="hint"></p>
+      </div>
+      <div id="types" class="types"></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Element</th>
+              <th class="num">X</th>
+              <th class="num">Y</th>
+              <th class="num">Z</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <button type="button" id="show-all" class="ghost" hidden>Show all points</button>
+    </section>
+  </main>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
