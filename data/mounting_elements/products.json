@@ -1,0 +1,788 @@
+{
+  "schema_version": 1,
+  "description": "Feasible mounting and support hardware for the pipe, duct and device sizes found in the Zenodo DuplexModel+MEP discipline models. Values are only those found in the cited sources. max_support_spacing is null on every product because none of the cited product pages publish a support spacing for that article; spacing lives in guidance.",
+  "products": [
+    {
+      "id": "muepro-optimal-119866",
+      "manufacturer": "Müpro",
+      "product_line": "OPTIMAL",
+      "name": "OPTIMAL Rohrschelle 13–15 mm, Anschlussgewinde M8/M10",
+      "article_number": "119866",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 13, "max": 15},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": null,
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Galvanised pipe clamp with DÄMMGULAST insert for indoor pipework, including drinking-water and heating pipe. The same page lists an M8-only article 119822 for the same 13–15 mm range. No load rating is printed in the article table.",
+      "sources": [
+        {
+          "title": "Müpro OPTIMAL Rohrschelle article table",
+          "url": "https://www.muepro.de/Produkte/Befestigungstechnik/Rohrschellen/OPTIMAL.html",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "muepro-optimal-119862",
+      "manufacturer": "Müpro",
+      "product_line": "OPTIMAL",
+      "name": "OPTIMAL Rohrschelle 19–24 mm, Anschlussgewinde M8/M10",
+      "article_number": "119862",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 19, "max": 24},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": null,
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Same OPTIMAL table. M8-only article for this range is 119818. No load rating is printed in the article table.",
+      "sources": [
+        {
+          "title": "Müpro OPTIMAL Rohrschelle article table",
+          "url": "https://www.muepro.de/Produkte/Befestigungstechnik/Rohrschellen/OPTIMAL.html",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "muepro-optimal-119858",
+      "manufacturer": "Müpro",
+      "product_line": "OPTIMAL",
+      "name": "OPTIMAL Rohrschelle 41–44 mm, Anschlussgewinde M8/M10",
+      "article_number": "119858",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 41, "max": 44},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": null,
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Same OPTIMAL table, listed there as the 1 1/4 in size. M8-only article for this range is 119814. No load rating is printed in the article table.",
+      "sources": [
+        {
+          "title": "Müpro OPTIMAL Rohrschelle article table",
+          "url": "https://www.muepro.de/Produkte/Befestigungstechnik/Rohrschellen/OPTIMAL.html",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "fischer-frs-l-539443",
+      "manufacturer": "fischer",
+      "product_line": "FRS-L Universal",
+      "name": "Rohrschelle FRS-L Universal 8–11 mm",
+      "article_number": "539443",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 8, "max": 11},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": {
+        "value": 0.7,
+        "unit": "kN",
+        "kind": "max. recommended static load, centric tension"
+      },
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Two-screw clamp, galvanised, combo thread M8/M10. The 0.7 kN figure and clamping range are on the fischer international page (GTIN 4048962269550). Article number 539443 is taken from a reseller listing of FRS-L Universal 8–11. A reseller also prints Zulässige Nutzlast 980 N; that second figure is not used.",
+      "sources": [
+        {
+          "title": "fischer Pipe clamp FRS-L Universal",
+          "url": "https://www.fischer-international.com/en/products/installation-systems/pipe-clamps/two-screw-pipe-clamps/pipe-clamp-frs-l-universal",
+          "accessed": "2026-10-18"
+        },
+        {
+          "title": "Reseller listing FISCHER 539443 FRS-L Universal 8-11",
+          "url": "https://www.unielektro.de/FISCHER-539443-FRS-L-Universal-8-11-Rohrschelle--item-01253925",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "fischer-frs-plus-079440",
+      "manufacturer": "fischer",
+      "product_line": "FRS Plus",
+      "name": "Rohrschelle FRS Plus 12–15",
+      "article_number": "079440",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 12, "max": 15},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": {
+        "value": 0.8,
+        "unit": "kN",
+        "kind": "max. recommended static load, centric tension"
+      },
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Datasheet nominal size 1/4 in. Closing screw M5×20. For heating, sanitary and waste pipe on wall, ceiling and floor.",
+      "sources": [
+        {
+          "title": "fischer datasheet Rohrschelle FRS Plus",
+          "url": "https://www.meinhausshop.de/media/pdf/94_046_22--DBL-01-de.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "fischer-frs-plus-079441",
+      "manufacturer": "fischer",
+      "product_line": "FRS Plus",
+      "name": "Rohrschelle FRS Plus 15–19",
+      "article_number": "079441",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 15, "max": 19},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": {
+        "value": 0.8,
+        "unit": "kN",
+        "kind": "max. recommended static load, centric tension"
+      },
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Datasheet nominal size 3/8 in. Closing screw M5×25.",
+      "sources": [
+        {
+          "title": "fischer datasheet Rohrschelle FRS Plus",
+          "url": "https://www.meinhausshop.de/media/pdf/94_046_22--DBL-01-de.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "fischer-frs-plus-079442",
+      "manufacturer": "fischer",
+      "product_line": "FRS Plus",
+      "name": "Rohrschelle FRS Plus 20–24",
+      "article_number": "079442",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 20, "max": 24},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": {
+        "value": 0.8,
+        "unit": "kN",
+        "kind": "max. recommended static load, centric tension"
+      },
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Datasheet nominal size 1/2 in. Closing screw M5×25.",
+      "sources": [
+        {
+          "title": "fischer datasheet Rohrschelle FRS Plus",
+          "url": "https://www.meinhausshop.de/media/pdf/94_046_22--DBL-01-de.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "fischer-frs-plus-079445",
+      "manufacturer": "fischer",
+      "product_line": "FRS Plus",
+      "name": "Rohrschelle FRS Plus 40–45",
+      "article_number": "079445",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 40, "max": 45},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": {
+        "value": 1.0,
+        "unit": "kN",
+        "kind": "max. recommended static load, centric tension"
+      },
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Datasheet nominal size 1 1/4 in. Closing screw M5×30.",
+      "sources": [
+        {
+          "title": "fischer datasheet Rohrschelle FRS Plus",
+          "url": "https://www.meinhausshop.de/media/pdf/94_046_22--DBL-01-de.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "fischer-frs-a2-064697",
+      "manufacturer": "fischer",
+      "product_line": "FRS A2",
+      "name": "Rohrschelle FRS 4 in A2",
+      "article_number": "064697",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 102, "max": 116},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M10"],
+      "load_rating": null,
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Stainless A2 two-screw clamp. The cited table gives the clamping range and M10 connection thread and does not give a load for this row.",
+      "sources": [
+        {
+          "title": "fischer datasheet Rohrschellen FRS A2/A4",
+          "url": "https://www.meinhausshop.de/media/pdf/meinhausshop-frs-a2-de.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "hilti-mp-mi-20843",
+      "manufacturer": "Hilti",
+      "product_line": "MP-MI",
+      "name": "MP-MI 3/8 in G heavy pipe clamp",
+      "article_number": "20843",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 15, "max": 19},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M10", "M12"],
+      "load_rating": {
+        "value": 1800,
+        "unit": "N",
+        "kind": "maximum load F, ambient, for the 15–64 mm band of MP-MI series G"
+      },
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "ETA-18/0130 gives the article number, clamping range 15–19 mm and the M10/M12 connection head for series G. The 1800 N ambient load for the 15–64 mm band was found in a distributor reproduction of the Hilti MP-MI table, not on hilti.de during this pass. Closing screw is M8; that is not the rod thread.",
+      "sources": [
+        {
+          "title": "ETA-18/0130 Hilti MP-MI pipe clamps",
+          "url": "https://www.dibt.de/pdf_storage/2024/ETA-18!0130(8.06.02-122!21).pdf",
+          "accessed": "2026-10-18"
+        },
+        {
+          "title": "Distributor reproduction of the Hilti MP-MI load table",
+          "url": "https://1001krep.ru/f/mp-mi.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "hilti-mp-mi-20845",
+      "manufacturer": "Hilti",
+      "product_line": "MP-MI",
+      "name": "MP-MI 1/2 in G heavy pipe clamp",
+      "article_number": "20845",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 20, "max": 25},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M10", "M12"],
+      "load_rating": {
+        "value": 1800,
+        "unit": "N",
+        "kind": "maximum load F, ambient, for the 15–64 mm band of MP-MI series G"
+      },
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Clamping range 20–25 mm from ETA-18/0130 table A2.1. Load source is the same distributor reproduction as MP-MI 3/8 in G.",
+      "sources": [
+        {
+          "title": "ETA-18/0130 Hilti MP-MI pipe clamps",
+          "url": "https://www.dibt.de/pdf_storage/2024/ETA-18!0130(8.06.02-122!21).pdf",
+          "accessed": "2026-10-18"
+        },
+        {
+          "title": "Distributor reproduction of the Hilti MP-MI load table",
+          "url": "https://1001krep.ru/f/mp-mi.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "hilti-mp-mi-20851",
+      "manufacturer": "Hilti",
+      "product_line": "MP-MI",
+      "name": "MP-MI 1 1/4 in G heavy pipe clamp",
+      "article_number": "20851",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 40, "max": 45},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M10", "M12"],
+      "load_rating": {
+        "value": 1800,
+        "unit": "N",
+        "kind": "maximum load F, ambient, for the 15–64 mm band of MP-MI series G"
+      },
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Clamping range 40–45 mm from ETA-18/0130 table A2.1. 40–45 mm sits inside the 15–64 mm load band of the reproduced table.",
+      "sources": [
+        {
+          "title": "ETA-18/0130 Hilti MP-MI pipe clamps",
+          "url": "https://www.dibt.de/pdf_storage/2024/ETA-18!0130(8.06.02-122!21).pdf",
+          "accessed": "2026-10-18"
+        },
+        {
+          "title": "Distributor reproduction of the Hilti MP-MI load table",
+          "url": "https://1001krep.ru/f/mp-mi.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "walraven-bismat-ksb2-3396105",
+      "manufacturer": "Walraven",
+      "product_line": "BISMAT KSB 2",
+      "name": "BIS Zweischraubenschelle KSB 2, 100–105 mm, M8/M10",
+      "article_number": "3396105",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 100, "max": 105},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": null,
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Electrolytically galvanised steel, EPDM insert, stated as suitable for copper, steel and cast-iron pipe. The reseller page does not print a numeric load for this article. It does say the KSB 2 family is RAL-GZ 655 tested for medium loads, without a newton value.",
+      "sources": [
+        {
+          "title": "Walraven BIS KSB 2 100–105 mm reseller listing (Werksnummer 3396105)",
+          "url": "https://shop.famo24.de/bis-zweischraubenschelle-ksb-2-100-105-mm-m8-10-ev-epdm/14810134",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "walraven-bismat-2000-3403105",
+      "manufacturer": "Walraven",
+      "product_line": "BISMAT 2000",
+      "name": "BISMAT 2000 Zweischraubenschelle 100–105 mm, M8/M10",
+      "article_number": "3403105",
+      "element_types": ["pipe"],
+      "role": "primary",
+      "outer_diameter_mm": {"min": 100, "max": 105},
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": null,
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Steel 1.0332, electrolytically galvanised, EPDM insert, temperature −50 to +110 °C. The reseller lists Zulässige Nutzlast as 935 with no unit, so no load is recorded. Stated suitable for copper pipe.",
+      "sources": [
+        {
+          "title": "Walraven BISMAT 2000 100–105 mm reseller listing (3403105)",
+          "url": "https://heizung-billiger.de/727280-walraven-bismat-rohrschelle-2000-100-105mm-m8-m10-zweischraubenschelle-epdm-stahl-elektrolytisch-verzinkt-walraven-3403105-8712993004126.html",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "sikla-plu-2g-199893",
+      "manufacturer": "Sikla",
+      "product_line": "PLU 2G-N m.E.",
+      "name": "Lüftungsschelle PLU 2G-N m.E. Typ 150",
+      "article_number": "199893",
+      "element_types": ["duct_round"],
+      "role": "primary",
+      "outer_diameter_mm": null,
+      "nominal_diameter_mm": 150,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": {
+        "value": 0.8,
+        "unit": "kN",
+        "kind": "zulässige Nutzlast for types 71–200"
+      },
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Two-piece clamp for spiral-seam duct (Wickelfalzrohr), with SBR/EPDM insert, single-point fixing for DN 71–500. Type number 150 is the nominal duct diameter in mm. Band 20×1.5 mm. The page does not publish a support spacing.",
+      "sources": [
+        {
+          "title": "Sikla Lüftungsschelle PLU 2G-N m.E.",
+          "url": "https://www.sikla.ch/startseite-131533/produkte-131535/e-katalog-131895/siconnect-3832/lueftung-10505/lueftungsschelle-plu-2g-n-me-116704",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "sikla-luw-sl-189893",
+      "manufacturer": "Sikla",
+      "product_line": "LUW",
+      "name": "Lüftungswinkel LUW SL",
+      "article_number": "189893",
+      "element_types": ["duct_rectangular"],
+      "role": "primary",
+      "outer_diameter_mm": null,
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": {
+        "value": 0.8,
+        "unit": "kN",
+        "kind": "Nennlast"
+      },
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [
+        "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window."
+      ],
+      "notes": "Angle for hanging a rectangular duct directly under a soffit or on a threaded rod. Pre-assembled EPDM isolation pad, 13 mm slot adjustment, leg lengths 41/85 mm, band 35×2.5 mm. Fixed to the duct with rivets or screws Ø4–5 mm or M8.",
+      "sources": [
+        {
+          "title": "Sikla Lüftungswinkel LUW",
+          "url": "https://www.sikla.de/startseite-131533/produkte-131535/e-katalog-131895/siconnect-3832/lueftung-10505/lueftungswinkel-luw-4160",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "sikla-luw-sz-189902",
+      "manufacturer": "Sikla",
+      "product_line": "LUW",
+      "name": "Lüftungswinkel LUW SZ",
+      "article_number": "189902",
+      "element_types": ["duct_rectangular"],
+      "role": "primary",
+      "outer_diameter_mm": null,
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8", "M10"],
+      "load_rating": {
+        "value": 0.8,
+        "unit": "kN",
+        "kind": "Nennlast"
+      },
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [
+        "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window."
+      ],
+      "notes": "Z-shaped angle, leg lengths 41/53/34 mm, same nominal load and M8/M10 connection as LUW SL. Sikla's montage notes describe SZ for a wide, shallow duct.",
+      "sources": [
+        {
+          "title": "Sikla Lüftungswinkel LUW",
+          "url": "https://www.sikla.de/startseite-131533/produkte-131535/e-katalog-131895/siconnect-3832/lueftung-10505/lueftungswinkel-luw-4160",
+          "accessed": "2026-10-18"
+        },
+        {
+          "title": "Sikla Montagetechnik, Lüftungswinkel SZ note",
+          "url": "https://www.sikla.de/fast/600/Montagetechnik_2023-04.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "hilti-mq-41-3-369596",
+      "manufacturer": "Hilti",
+      "product_line": "MQ",
+      "name": "MQ-41/3 installation channel, 3 m",
+      "article_number": "369596",
+      "element_types": ["channel"],
+      "role": "companion",
+      "outer_diameter_mm": null,
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M12"],
+      "load_rating": null,
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "Pre-galvanised S250GD channel, height 41.3 mm, wall 3 mm, for building-services supports including pipe and duct. ETA-18/0119 table of back-hole fasteners specifies an M12 bolt, strength class 4.8 to DIN 976-1, for MQ-41/3. No single allowable hanger load is copied here; the ETA resistance tables are case-specific. A 6 m length is article 369597.",
+      "sources": [
+        {
+          "title": "ETA-18/0119 Hilti MQ installation channels",
+          "url": "https://www.dibt.de/pdf_storage/2024/ETA-18!0119(8.06.02-121!21).pdf",
+          "accessed": "2026-10-18"
+        },
+        {
+          "title": "Hilti MQ-41/3 product page",
+          "url": "https://www.hilti.de/c/CLS_MODULAR_SUPPORT_SYSTEM/CLS_MODULAR_SUPPORT_PRO/r6130",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "hilti-rod-am8-339793",
+      "manufacturer": "Hilti",
+      "product_line": "AM",
+      "name": "Threaded rod AM8×1000, strength class 4.8",
+      "article_number": "339793",
+      "element_types": ["threaded_rod"],
+      "role": "companion",
+      "outer_diameter_mm": null,
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8"],
+      "load_rating": null,
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "DIN 976-1 grade 4.8, galvanised. The cited Hilti installation manual gives article 339793 for AM8×1000 and states yield strength 320 N/mm² and ultimate strength 400 N/mm² for that grade. It does not give a hanger spacing. AM8×2000 is article 339794 and AM8×3000 is 216415 in the same table.",
+      "sources": [
+        {
+          "title": "Hilti manual, medium-light installation systems, M8 threaded rod table",
+          "url": "https://assets.hilti.com/api/public/content/5021068-original?v=Manuale+Sistemi+installazione+medio+leggere.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "hilti-rod-am10-339795",
+      "manufacturer": "Hilti",
+      "product_line": "AM",
+      "name": "Threaded rod AM10×1000, strength class 4.8",
+      "article_number": "339795",
+      "element_types": ["threaded_rod"],
+      "role": "companion",
+      "outer_diameter_mm": null,
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M10"],
+      "load_rating": null,
+      "max_support_spacing": null,
+      "anchor": null,
+      "assumptions": [],
+      "notes": "DIN 976-1 grade 4.8, galvanised. Same Hilti manual: article 339795 for AM10×1000, 339796 for 2 m, 216418 for 3 m. No hanger spacing is printed for the rod.",
+      "sources": [
+        {
+          "title": "Hilti manual, medium-light installation systems, M10 threaded rod table",
+          "url": "https://assets.hilti.com/api/public/content/5021068-original?v=Manuale+Sistemi+installazione+medio+leggere.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "fischer-ea-ii-m8-532231",
+      "manufacturer": "fischer",
+      "product_line": "EA II",
+      "name": "Einschlaganker EA II M8×25, galvanised",
+      "article_number": "532231",
+      "element_types": ["ceiling_anchor"],
+      "role": "companion",
+      "outer_diameter_mm": null,
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M8"],
+      "load_rating": {
+        "value": 1.4,
+        "unit": "kN",
+        "kind": "permissible load Fzul of one anchor for redundant non-structural use in concrete C20/25 to C50/60"
+      },
+      "max_support_spacing": null,
+      "anchor": {
+        "type": "hammer-set internally threaded anchor",
+        "thread": "M8",
+        "substrate": "concrete",
+        "included_fixings": null,
+        "notes": "Effective anchorage depth 25 mm. The cited table lists minimum member thickness 100 mm (80 mm in parentheses), installation torque 8 Nm, minimum spacing 50 mm and minimum edge distance 100 mm for this reduced-depth variant. ETA-07/0142. Not a design value for the duplex timber ceiling."
+      },
+      "assumptions": [],
+      "notes": "Article number and geometry (drill bit 10 mm, drill-hole depth 27 mm, screw-in depth 8–14 mm) are from the fischer SHK catalogue. The permissible load is from the fischer EA II redundant-fastening table, not from the catalogue page.",
+      "sources": [
+        {
+          "title": "fischer SHK catalogue, Einschlaganker EA II article table",
+          "url": "https://www.fischer.de/-/media/fixing-systems/rebrush/fide/service/infos-und-updates/informationsmaterial/documents/kataloge/katalog-sanitaer-v1.pdf",
+          "accessed": "2026-10-18"
+        },
+        {
+          "title": "fischer EA II permissible-load table",
+          "url": "https://fiproductmedia.azureedge.net/media/Marketing%20Materials/Sales%20Materials/VKU_EAII_F_SDE_AIP_V2.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "fischer-ea-ii-m10-532232",
+      "manufacturer": "fischer",
+      "product_line": "EA II",
+      "name": "Einschlaganker EA II M10×25, galvanised",
+      "article_number": "532232",
+      "element_types": ["ceiling_anchor"],
+      "role": "companion",
+      "outer_diameter_mm": null,
+      "nominal_diameter_mm": null,
+      "connection_threads": ["M10"],
+      "load_rating": {
+        "value": 1.9,
+        "unit": "kN",
+        "kind": "permissible load Fzul of one anchor for redundant non-structural use in concrete C20/25 to C50/60"
+      },
+      "max_support_spacing": null,
+      "anchor": {
+        "type": "hammer-set internally threaded anchor",
+        "thread": "M10",
+        "substrate": "concrete",
+        "included_fixings": null,
+        "notes": "Effective anchorage depth 25 mm. The cited table lists minimum member thickness 100 mm (80 mm in parentheses), installation torque 15 Nm, minimum spacing 60 mm and minimum edge distance 100 mm. ETA-07/0142."
+      },
+      "assumptions": [],
+      "notes": "Catalogue geometry: drill bit 12 mm, drill-hole depth 27 mm, screw-in depth 10–14 mm. Load from the same EA II redundant-fastening table.",
+      "sources": [
+        {
+          "title": "fischer SHK catalogue, Einschlaganker EA II article table",
+          "url": "https://www.fischer.de/-/media/fixing-systems/rebrush/fide/service/infos-und-updates/informationsmaterial/documents/kataloge/katalog-sanitaer-v1.pdf",
+          "accessed": "2026-10-18"
+        },
+        {
+          "title": "fischer EA II permissible-load table",
+          "url": "https://fiproductmedia.azureedge.net/media/Marketing%20Materials/Sales%20Materials/VKU_EAII_F_SDE_AIP_V2.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "kermi-console-zb02870003",
+      "manufacturer": "Kermi",
+      "product_line": "Wandkonsole variabel",
+      "name": "Wandkonsolen-Set variabel, Wandabstand 60–100 mm",
+      "article_number": "ZB02870003",
+      "element_types": ["radiator"],
+      "role": "primary",
+      "outer_diameter_mm": null,
+      "nominal_diameter_mm": null,
+      "connection_threads": [],
+      "load_rating": null,
+      "max_support_spacing": null,
+      "anchor": {
+        "type": "wall plug and screw, included with the console set",
+        "thread": null,
+        "substrate": "wall",
+        "included_fixings": "2 screws 8×60 mm, 2 plugs 10×60 mm, 2 washers",
+        "notes": "The reseller states requirement class 2 to VDI 6036 and a minimum 100 mm between the upper slot and the lower locking hole. No newton rating was printed."
+      },
+      "assumptions": [
+        "The console is for Kermi radiators with hanging lugs 25 mm high and 2 mm thick. The duplex IFC radiator is named only Radiator and does not state a manufacturer or lugs."
+      ],
+      "notes": "Wall bracket, not a ceiling hanger. The titled variant is the 60–100 mm wall-distance set. The same text says other sets cover 34–45 mm and 45–60 mm. Colour RAL 9016.",
+      "sources": [
+        {
+          "title": "Kermi Wandkonsolen-Set ZB02870003 reseller technical text",
+          "url": "https://heizung-billiger.de/44039-kermi-wandkonsolen-set-variabel-mit-tiefenverstellung-wa-60-100-mm-weiss-kermi-zb02870003-4037486266503.html",
+          "accessed": "2026-10-18"
+        }
+      ]
+    }
+  ],
+  "guidance": [
+    {
+      "id": "copper-tube-spacing-din1988-2-as-cited",
+      "title": "Horizontal support spacing for copper and stainless tube, as cited from DIN 1988 Teil 2",
+      "applies_to": ["pipe"],
+      "rows": [
+        {"outer_diameter_mm": 12, "horizontal_m": 1.25, "form": "stangenrohr"},
+        {"outer_diameter_mm": 15, "horizontal_m": 1.25, "form": "stangenrohr"},
+        {"outer_diameter_mm": 18, "horizontal_m": 1.5, "form": "stangenrohr"},
+        {"outer_diameter_mm": 22, "horizontal_m": 2.0, "form": "stangenrohr"},
+        {"outer_diameter_mm": 28, "horizontal_m": 2.25, "form": "stangenrohr"},
+        {"outer_diameter_mm": 35, "horizontal_m": 2.75, "form": "stangenrohr"},
+        {"outer_diameter_mm": 42, "horizontal_m": 3.0, "form": "stangenrohr"},
+        {"outer_diameter_mm": 54, "horizontal_m": 3.5, "form": "stangenrohr"},
+        {"outer_diameter_mm": 64, "horizontal_m": 4.0, "form": "stangenrohr"},
+        {"outer_diameter_mm": 76.1, "horizontal_m": 4.25, "form": "stangenrohr"},
+        {"outer_diameter_mm": 88.9, "horizontal_m": 4.75, "form": "stangenrohr"},
+        {"outer_diameter_mm": 108, "horizontal_m": 5.0, "form": "stangenrohr"}
+      ],
+      "notes": "Both catalogues print this as Richtwerte for copper and stainless tube and attribute it to DIN 1988 Teil 2. The standard text was not read for this database. The column copied here is straight length (Stangenrohr). The same IBP table gives shorter distances for copper coil (Ringrohr), for example 0.7–0.9 m at 15 mm, and those are not applied. No vertical-stack column is in this table. A row is offered for a modeled pipe only when the outside diameter is within 0.5 mm of a listed value, and only with the explicit assumption that the unnamed IFC material is the copper or stainless tube the table is about.",
+      "sources": [
+        {
+          "title": "Conex installation notes, section 3.4 Befestigungsabstände",
+          "url": "https://www.beijerref.de/media/ed/5c/fb/1758265815/conex-allgemeine-installationshinweise-ast-2241085.pdf",
+          "accessed": "2026-10-18"
+        },
+        {
+          "title": "IBP technical catalogue, section 4.5 Befestigungsabstände",
+          "url": "https://storage.ua.prom.st/657649_supersan_ibp_tk_all.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "lindab-duct-suspension-spacing",
+      "title": "Lindab recommended duct suspension spacing, uninsulated, no fire class",
+      "applies_to": ["duct_round", "duct_rectangular"],
+      "rows": [
+        {
+          "shape": "round",
+          "diameter_mm": 150,
+          "horizontal_m": 3.0,
+          "table_row": true,
+          "conditions": "uninsulated circular duct, no fire class; recommended spacing 3.0 m across the listed hanger types"
+        },
+        {
+          "shape": "rectangular",
+          "width_mm": 200,
+          "height_mm": 150,
+          "horizontal_m": 2.4,
+          "table_row": true,
+          "conditions": "uninsulated rectangular duct, no fire class"
+        },
+        {
+          "shape": "rectangular",
+          "width_mm": 300,
+          "height_mm": 150,
+          "horizontal_m": 2.4,
+          "table_row": true,
+          "conditions": "uninsulated rectangular duct, no fire class"
+        },
+        {
+          "shape": "rectangular",
+          "width_mm": 300,
+          "height_mm": 300,
+          "horizontal_m": 2.4,
+          "table_row": true,
+          "conditions": "uninsulated rectangular duct, no fire class"
+        },
+        {
+          "shape": "rectangular",
+          "width_mm": null,
+          "height_mm": null,
+          "horizontal_m": 2.4,
+          "table_row": false,
+          "conditions": "stated maximum hanger spacing for horizontal rectangular duct in that section, because more than one duct joint between hangers is considered unsuitable. 150×150 mm is not a row in the size table, which starts at width 200 mm."
+        },
+        {
+          "shape": "round",
+          "diameter_mm": null,
+          "horizontal_m": 3.0,
+          "table_row": false,
+          "conditions": "stated maximum hanger spacing for horizontal circular duct in that section"
+        }
+      ],
+      "notes": "Swedish Lindab suspension guide, widely used for European spiral and rectangular duct. Vertical runs in the same section are limited to 3 m for both shapes. The size-table rows above are the uninsulated, no-fire-class case. Insulated and fire-rated tables in the same document are not copied.",
+      "sources": [
+        {
+          "title": "Lindab Ventilation, Upphängning av ventilationssystem",
+          "url": "https://itsolution.lindab.com/lindabwebproductsdoc/pdf/documentation/ads/se/mounting/upphangning-ventsystem.pdf",
+          "accessed": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "id": "en-12236-duct-support-strength",
+      "title": "EN 12236 strength requirements for duct supports",
+      "applies_to": ["duct_round", "duct_rectangular", "duct_flex"],
+      "rows": [],
+      "notes": "DIN EN 12236:2002 (EN 12236:2002) specifies strength of supports for sheet-metal ductwork of any shape. It does not publish a spacing table. From the preview of the EN text: the fixing into the structure needs a safety factor of at least 3 on the calculated load; vertical members and the joint to the horizontal member need a safety factor of at least 1.5 against yield; horizontal-member deflection must not exceed 0.4 % of the distance between the vertical fixings. Fire loading is outside the standard's scope. No spacing number is derived from it here.",
+      "sources": [
+        {
+          "title": "EN 12236:2002 preview (SIST EN 12236:2002)",
+          "url": "https://cdn.standards.iteh.ai/samples/6392/f9a3d57c81574acb8ee255867c6daaca/SIST-EN-12236-2002.pdf",
+          "accessed": "2026-10-18"
+        },
+        {
+          "title": "DIN EN 12236:2002-04 bibliographic record",
+          "url": "https://doi.org/10.31030/9199301",
+          "accessed": "2026-10-18"
+        }
+      ]
+    }
+  ]
+}

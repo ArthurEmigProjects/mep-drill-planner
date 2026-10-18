@@ -1,0 +1,1595 @@
+{
+  "substrate_assumed_for_anchors": null,
+  "note": "Concrete anchors are not counted in this coverage. The architecture model's ceilings are gypsum on metal stud under timber joists, so a concrete hammer-set anchor does not match the soffit. Pass substrate='concrete' to feasible_mountings when the soffit is concrete.",
+  "models": {
+    "piping": {
+      "file": "zenodo-duplex-piping.ifc",
+      "groups": [
+        {
+          "kind": "pipe_accessory",
+          "size_label": "OD 22.225 mm",
+          "count": 8,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862",
+            "fischer-frs-plus-079442",
+            "hilti-mp-mi-20845"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 22 mm (2 m horizontal) is attached to modeled OD 22.225 mm, which is within 0.5 mm. The table is for copper and stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_accessory",
+          "size_label": "OD 15.875 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079441",
+            "hilti-mp-mi-20843"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 22.225 mm",
+          "count": 38,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862",
+            "fischer-frs-plus-079442",
+            "hilti-mp-mi-20845"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 22 mm (2 m horizontal) is attached to modeled OD 22.225 mm, which is within 0.5 mm. The table is for copper and stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 15.875 mm",
+          "count": 34,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079441",
+            "hilti-mp-mi-20843"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 22.225 mm",
+          "count": 22,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862",
+            "fischer-frs-plus-079442",
+            "hilti-mp-mi-20845"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 22 mm (2 m horizontal) is attached to modeled OD 22.225 mm, which is within 0.5 mm. The table is for copper and stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 41.275 mm",
+          "count": 20,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119858",
+            "fischer-frs-plus-079445",
+            "hilti-mp-mi-20851"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 15.875 / 22.225 mm",
+          "count": 18,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079441",
+            "hilti-mp-mi-20843",
+            "muepro-optimal-119862",
+            "fischer-frs-plus-079442",
+            "hilti-mp-mi-20845"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 22 mm (2 m horizontal) is attached to modeled OD 22.225 mm, which is within 0.5 mm. The table is for copper and stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 104.775 mm",
+          "count": 12,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-a2-064697",
+            "walraven-bismat-ksb2-3396105",
+            "walraven-bismat-2000-3403105"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 15.875 / 22.225 mm",
+          "count": 10,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079441",
+            "hilti-mp-mi-20843",
+            "muepro-optimal-119862",
+            "fischer-frs-plus-079442",
+            "hilti-mp-mi-20845"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 22 mm (2 m horizontal) is attached to modeled OD 22.225 mm, which is within 0.5 mm. The table is for copper and stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 22.225 / 104.775 mm",
+          "count": 10,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862",
+            "fischer-frs-plus-079442",
+            "hilti-mp-mi-20845",
+            "fischer-frs-a2-064697",
+            "walraven-bismat-ksb2-3396105",
+            "walraven-bismat-2000-3403105"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 22 mm (2 m horizontal) is attached to modeled OD 22.225 mm, which is within 0.5 mm. The table is for copper and stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 22.225 mm",
+          "count": 10,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862",
+            "fischer-frs-plus-079442",
+            "hilti-mp-mi-20845"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 22 mm (2 m horizontal) is attached to modeled OD 22.225 mm, which is within 0.5 mm. The table is for copper and stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 15 / 15.875 mm",
+          "count": 8,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119866",
+            "fischer-frs-plus-079440",
+            "fischer-frs-plus-079441",
+            "hilti-mp-mi-20843"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 15 mm (1.25 m horizontal) matches the modeled OD. Applying it still assumes copper or stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 41.275 mm",
+          "count": 6,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119858",
+            "fischer-frs-plus-079445",
+            "hilti-mp-mi-20851"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 15.875 mm",
+          "count": 5,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079441",
+            "hilti-mp-mi-20843"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 12.7 mm",
+          "count": 4,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079440"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 15 / 41.275 mm",
+          "count": 4,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119866",
+            "fischer-frs-plus-079440",
+            "fischer-frs-plus-079441",
+            "hilti-mp-mi-20843",
+            "muepro-optimal-119858",
+            "fischer-frs-plus-079445",
+            "hilti-mp-mi-20851"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 15 mm (1.25 m horizontal) matches the modeled OD. Applying it still assumes copper or stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 41.275 / 104.775 mm",
+          "count": 4,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119858",
+            "fischer-frs-plus-079445",
+            "hilti-mp-mi-20851",
+            "fischer-frs-a2-064697",
+            "walraven-bismat-ksb2-3396105",
+            "walraven-bismat-2000-3403105"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 41.275 / 104.775 mm",
+          "count": 4,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119858",
+            "fischer-frs-plus-079445",
+            "hilti-mp-mi-20851",
+            "fischer-frs-a2-064697",
+            "walraven-bismat-ksb2-3396105",
+            "walraven-bismat-2000-3403105"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 104.775 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-a2-064697",
+            "walraven-bismat-ksb2-3396105",
+            "walraven-bismat-2000-3403105"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 104.775 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-a2-064697",
+            "walraven-bismat-ksb2-3396105",
+            "walraven-bismat-2000-3403105"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 12.7 / 41.275 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079440",
+            "muepro-optimal-119858",
+            "fischer-frs-plus-079445",
+            "hilti-mp-mi-20851"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 12.7 / 41.275 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079440",
+            "muepro-optimal-119858",
+            "fischer-frs-plus-079445",
+            "hilti-mp-mi-20851"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 12.7 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079440"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 15.875 / 22.225 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079441",
+            "hilti-mp-mi-20843",
+            "muepro-optimal-119862",
+            "fischer-frs-plus-079442",
+            "hilti-mp-mi-20845"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 22 mm (2 m horizontal) is attached to modeled OD 22.225 mm, which is within 0.5 mm. The table is for copper and stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 22.225 / 104.775 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862",
+            "fischer-frs-plus-079442",
+            "hilti-mp-mi-20845",
+            "fischer-frs-a2-064697",
+            "walraven-bismat-ksb2-3396105",
+            "walraven-bismat-2000-3403105"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 22 mm (2 m horizontal) is attached to modeled OD 22.225 mm, which is within 0.5 mm. The table is for copper and stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 22.225 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862",
+            "fischer-frs-plus-079442",
+            "hilti-mp-mi-20845"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 22 mm (2 m horizontal) is attached to modeled OD 22.225 mm, which is within 0.5 mm. The table is for copper and stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 22.225 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862",
+            "fischer-frs-plus-079442",
+            "hilti-mp-mi-20845"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve.",
+            "Spacing row 22 mm (2 m horizontal) is attached to modeled OD 22.225 mm, which is within 0.5 mm. The table is for copper and stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 41.275 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119858",
+            "fischer-frs-plus-079445",
+            "hilti-mp-mi-20851"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 41.275 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119858",
+            "fischer-frs-plus-079445",
+            "hilti-mp-mi-20851"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 15.875 mm",
+          "count": 1,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079441",
+            "hilti-mp-mi-20843"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 15.875 mm",
+          "count": 1,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079441",
+            "hilti-mp-mi-20843"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_segment",
+          "size_label": "OD 22.225 mm",
+          "count": 76,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862",
+            "fischer-frs-plus-079442",
+            "hilti-mp-mi-20845"
+          ],
+          "assumptions": [
+            "Spacing row 22 mm (2 m horizontal) is attached to modeled OD 22.225 mm, which is within 0.5 mm. The table is for copper and stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_segment",
+          "size_label": "OD 15.875 mm",
+          "count": 54,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079441",
+            "hilti-mp-mi-20843"
+          ],
+          "assumptions": [],
+          "gap": null
+        },
+        {
+          "kind": "pipe_segment",
+          "size_label": "OD 41.275 mm",
+          "count": 38,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119858",
+            "fischer-frs-plus-079445",
+            "hilti-mp-mi-20851"
+          ],
+          "assumptions": [],
+          "gap": null
+        },
+        {
+          "kind": "pipe_segment",
+          "size_label": "OD 104.775 mm",
+          "count": 24,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-a2-064697",
+            "walraven-bismat-ksb2-3396105",
+            "walraven-bismat-2000-3403105"
+          ],
+          "assumptions": [],
+          "gap": null
+        },
+        {
+          "kind": "pipe_segment",
+          "size_label": "OD 15.0 mm",
+          "count": 8,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119866",
+            "fischer-frs-plus-079440",
+            "fischer-frs-plus-079441",
+            "hilti-mp-mi-20843"
+          ],
+          "assumptions": [
+            "Spacing row 15 mm (1.25 m horizontal) matches the modeled OD. Applying it still assumes copper or stainless tube; the IFC material is unnamed."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_segment",
+          "size_label": "OD 12.7 mm",
+          "count": 6,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079440"
+          ],
+          "assumptions": [],
+          "gap": null
+        },
+        {
+          "kind": "sanitary_fixture",
+          "size_label": "bbox 228.2 \u00d7 510 \u00d7 635 mm",
+          "count": 4,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "No sanitary carrier or fixture bracket is in the database."
+        },
+        {
+          "kind": "sanitary_fixture",
+          "size_label": "bbox 361.9 \u00d7 584.3 \u00d7 722.5 mm",
+          "count": 4,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "No sanitary carrier or fixture bracket is in the database."
+        },
+        {
+          "kind": "sanitary_fixture",
+          "size_label": "bbox 457 \u00d7 457.2 \u00d7 485.8 mm",
+          "count": 4,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "No sanitary carrier or fixture bracket is in the database."
+        },
+        {
+          "kind": "water_heater",
+          "size_label": "bbox 350 \u00d7 500 \u00d7 1000 mm",
+          "count": 2,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "No water-heater support is in the database. The proxy is a floor-standing appliance, not a suspended pipe."
+        }
+      ],
+      "summary": {
+        "group_count": 41,
+        "groups": {
+          "matched": 37,
+          "matched_with_assumption": 0,
+          "unmatched": 4
+        },
+        "elements": {
+          "matched": 449,
+          "matched_with_assumption": 0,
+          "unmatched": 14
+        }
+      }
+    },
+    "ventilation": {
+      "file": "zenodo-duplex-ventilation.ifc",
+      "groups": [
+        {
+          "kind": "air_handling_unit",
+          "size_label": "bbox 475 \u00d7 1100 \u00d7 1400 mm",
+          "count": 2,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "No air-handling-unit frame is in the database."
+        },
+        {
+          "kind": "air_terminal",
+          "size_label": "bbox 101.6 \u00d7 200 \u00d7 200 mm",
+          "count": 18,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "No diffuser or grille fixing is in the database."
+        },
+        {
+          "kind": "air_terminal",
+          "size_label": "bbox 101.6 \u00d7 200 \u00d7 200 mm",
+          "count": 18,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "No diffuser or grille fixing is in the database."
+        },
+        {
+          "kind": "air_terminal",
+          "size_label": "bbox 40 \u00d7 300 \u00d7 300 mm",
+          "count": 2,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "No diffuser or grille fixing is in the database."
+        },
+        {
+          "kind": "air_terminal",
+          "size_label": "bbox 40 \u00d7 300 \u00d7 300 mm",
+          "count": 2,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "No diffuser or grille fixing is in the database."
+        },
+        {
+          "kind": "duct_accessory",
+          "size_label": "connected 200\u00d7150 mm",
+          "count": 6,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_accessory",
+          "size_label": "connected 150\u00d7150 mm",
+          "count": 4,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_accessory",
+          "size_label": "connected 300\u00d7150 mm",
+          "count": 4,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 200\u00d7150 mm",
+          "count": 28,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 150\u00d7150 mm",
+          "count": 26,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 200\u00d7150 mm",
+          "count": 12,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 150\u00d7150 mm",
+          "count": 10,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 300\u00d7300 mm",
+          "count": 10,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 200\u00d7150 mm",
+          "count": 8,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected \u00d8150 mm",
+          "count": 8,
+          "status": "matched",
+          "product_ids": [
+            "sikla-plu-2g-199893"
+          ],
+          "assumptions": [
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 300\u00d7150 mm",
+          "count": 6,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected \u00d8150, 200\u00d7150 mm",
+          "count": 6,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-plu-2g-199893",
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 150\u00d7150 mm",
+          "count": 4,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 150\u00d7150, 300\u00d7300, 200\u00d7150 mm",
+          "count": 4,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 200\u00d7150, 300\u00d7300, 150\u00d7150 mm",
+          "count": 4,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 200\u00d7150, \u00d8150 mm",
+          "count": 4,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902",
+            "sikla-plu-2g-199893"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 300\u00d7150, 300\u00d7300 mm",
+          "count": 4,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 150\u00d7150, 200\u00d7150 mm",
+          "count": 2,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 150\u00d7150, 300\u00d7150 mm",
+          "count": 2,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 150\u00d7150, 300\u00d7150, 200\u00d7150 mm",
+          "count": 2,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 200\u00d7150, 150\u00d7150, 300\u00d7150 mm",
+          "count": 2,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 300\u00d7150, 200\u00d7150 mm",
+          "count": 2,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 300\u00d7150, \u00d8150 mm",
+          "count": 2,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902",
+            "sikla-plu-2g-199893"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 300\u00d7300, 150\u00d7150, 200\u00d7150 mm",
+          "count": 2,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected 300\u00d7300, 200\u00d7150, 150\u00d7150 mm",
+          "count": 2,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected duct unresolved",
+          "count": 2,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "No connected duct size was recovered, so no duct hanger can be selected."
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected \u00d8150 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "sikla-plu-2g-199893"
+          ],
+          "assumptions": [
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_fitting",
+          "size_label": "connected \u00d8150, 300\u00d7150 mm",
+          "count": 2,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-plu-2g-199893",
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hanger size is taken from the connected duct. The fitting or damper is assumed to be carried by that duct support.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_flex",
+          "size_label": "mesh minor axis 151.6 mm",
+          "count": 20,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "No product has a clamping range covering flex-duct mesh minor axis 151.6 mm. Sikla PLU type 150 is a spiral-seam clamp for nominal 150 mm and is not applied."
+        },
+        {
+          "kind": "duct_flex",
+          "size_label": "diameter unresolved",
+          "count": 16,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "Flex-duct diameter could not be recovered from the mesh, and no flex-duct hanger is in the database."
+        },
+        {
+          "kind": "duct_segment",
+          "size_label": "200.0 \u00d7 150.0 mm",
+          "count": 46,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_segment",
+          "size_label": "150.0 \u00d7 150.0 mm",
+          "count": 30,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Lindab's rectangular size table does not list 150.0\u00d7150.0 mm. The same section states a 2.4 m maximum for horizontal rectangular duct, which is not a size-table row and is not applied as a spacing value.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_segment",
+          "size_label": "300.0 \u00d7 300.0 mm",
+          "count": 22,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_segment",
+          "size_label": "300.0 \u00d7 150.0 mm",
+          "count": 18,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "sikla-luw-sl-189893",
+            "sikla-luw-sz-189902"
+          ],
+          "assumptions": [
+            "The LUW datasheet describes suspension of rectangular ducts and does not publish a width or height window.",
+            "The LUW datasheet describes the SZ angle for a wide, low rectangular duct and does not publish a width or height window.",
+            "Hilti MQ-41/3 is attached as a trapeze rail. ETA-18/0119 fastens this channel through its back holes with an M12 bolt, which is not the M8/M10 thread of the LUW hanger."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "duct_segment",
+          "size_label": "OD 150.0 mm",
+          "count": 10,
+          "status": "matched",
+          "product_ids": [
+            "sikla-plu-2g-199893"
+          ],
+          "assumptions": [],
+          "gap": null
+        }
+      ],
+      "summary": {
+        "group_count": 40,
+        "groups": {
+          "matched": 3,
+          "matched_with_assumption": 29,
+          "unmatched": 8
+        },
+        "elements": {
+          "matched": 20,
+          "matched_with_assumption": 274,
+          "unmatched": 80
+        }
+      }
+    },
+    "heating_and_cooling": {
+      "file": "HeatingAndCooling.ifc",
+      "groups": [
+        {
+          "kind": "pipe_accessory",
+          "size_label": "OD 19.05 mm",
+          "count": 4,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 9.52 mm",
+          "count": 37,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-l-539443"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 9.52 / 12.7 mm",
+          "count": 30,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-l-539443",
+            "fischer-frs-plus-079440"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 12.7 mm",
+          "count": 22,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079440"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 9.52 / 12.7 mm",
+          "count": 20,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-l-539443",
+            "fischer-frs-plus-079440"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 9.52 mm",
+          "count": 12,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-l-539443"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 12.7 / 19.05 mm",
+          "count": 8,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079440",
+            "muepro-optimal-119862"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 19.05 mm",
+          "count": 8,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 19.05 mm",
+          "count": 8,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 12.7 / 19.05 mm",
+          "count": 4,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079440",
+            "muepro-optimal-119862"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 9.52 / 12.7 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-l-539443",
+            "fischer-frs-plus-079440"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_fitting",
+          "size_label": "OD 9.52 / 12.7 mm",
+          "count": 2,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-l-539443",
+            "fischer-frs-plus-079440"
+          ],
+          "assumptions": [
+            "Clamp size is the connected pipe's outside diameter. The cited pipe-support tables place the clamp on the tube, not on the fitting or valve."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "pipe_segment",
+          "size_label": "OD 9.52 mm",
+          "count": 81,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-l-539443"
+          ],
+          "assumptions": [],
+          "gap": null
+        },
+        {
+          "kind": "pipe_segment",
+          "size_label": "OD 12.7 mm",
+          "count": 50,
+          "status": "matched",
+          "product_ids": [
+            "fischer-frs-plus-079440"
+          ],
+          "assumptions": [],
+          "gap": null
+        },
+        {
+          "kind": "pipe_segment",
+          "size_label": "OD 19.05 mm",
+          "count": 20,
+          "status": "matched",
+          "product_ids": [
+            "muepro-optimal-119862"
+          ],
+          "assumptions": [],
+          "gap": null
+        },
+        {
+          "kind": "radiator",
+          "size_label": "bbox 100 \u00d7 350 \u00d7 1000 mm",
+          "count": 16,
+          "status": "matched_with_assumption",
+          "product_ids": [
+            "kermi-console-zb02870003"
+          ],
+          "assumptions": [
+            "The console is for Kermi radiators with hanging lugs 25 mm high and 2 mm thick. The duplex IFC radiator is named only Radiator and does not state a manufacturer or lugs."
+          ],
+          "gap": null
+        },
+        {
+          "kind": "stove",
+          "size_label": "bbox 350 \u00d7 500 \u00d7 1000 mm",
+          "count": 2,
+          "status": "unmatched",
+          "product_ids": [],
+          "assumptions": [],
+          "gap": "No stove or boiler support is in the database. The element is floor-standing equipment."
+        }
+      ],
+      "summary": {
+        "group_count": 17,
+        "groups": {
+          "matched": 15,
+          "matched_with_assumption": 1,
+          "unmatched": 1
+        },
+        "elements": {
+          "matched": 308,
+          "matched_with_assumption": 16,
+          "unmatched": 2
+        }
+      }
+    }
+  },
+  "gaps": [
+    {
+      "model": "piping",
+      "kind": "sanitary_fixture",
+      "size_label": "bbox 228.2 \u00d7 510 \u00d7 635 mm",
+      "count": 4,
+      "gap": "No sanitary carrier or fixture bracket is in the database."
+    },
+    {
+      "model": "piping",
+      "kind": "sanitary_fixture",
+      "size_label": "bbox 361.9 \u00d7 584.3 \u00d7 722.5 mm",
+      "count": 4,
+      "gap": "No sanitary carrier or fixture bracket is in the database."
+    },
+    {
+      "model": "piping",
+      "kind": "sanitary_fixture",
+      "size_label": "bbox 457 \u00d7 457.2 \u00d7 485.8 mm",
+      "count": 4,
+      "gap": "No sanitary carrier or fixture bracket is in the database."
+    },
+    {
+      "model": "piping",
+      "kind": "water_heater",
+      "size_label": "bbox 350 \u00d7 500 \u00d7 1000 mm",
+      "count": 2,
+      "gap": "No water-heater support is in the database. The proxy is a floor-standing appliance, not a suspended pipe."
+    },
+    {
+      "model": "ventilation",
+      "kind": "air_handling_unit",
+      "size_label": "bbox 475 \u00d7 1100 \u00d7 1400 mm",
+      "count": 2,
+      "gap": "No air-handling-unit frame is in the database."
+    },
+    {
+      "model": "ventilation",
+      "kind": "air_terminal",
+      "size_label": "bbox 101.6 \u00d7 200 \u00d7 200 mm",
+      "count": 18,
+      "gap": "No diffuser or grille fixing is in the database."
+    },
+    {
+      "model": "ventilation",
+      "kind": "air_terminal",
+      "size_label": "bbox 101.6 \u00d7 200 \u00d7 200 mm",
+      "count": 18,
+      "gap": "No diffuser or grille fixing is in the database."
+    },
+    {
+      "model": "ventilation",
+      "kind": "air_terminal",
+      "size_label": "bbox 40 \u00d7 300 \u00d7 300 mm",
+      "count": 2,
+      "gap": "No diffuser or grille fixing is in the database."
+    },
+    {
+      "model": "ventilation",
+      "kind": "air_terminal",
+      "size_label": "bbox 40 \u00d7 300 \u00d7 300 mm",
+      "count": 2,
+      "gap": "No diffuser or grille fixing is in the database."
+    },
+    {
+      "model": "ventilation",
+      "kind": "duct_fitting",
+      "size_label": "connected duct unresolved",
+      "count": 2,
+      "gap": "No connected duct size was recovered, so no duct hanger can be selected."
+    },
+    {
+      "model": "ventilation",
+      "kind": "duct_flex",
+      "size_label": "mesh minor axis 151.6 mm",
+      "count": 20,
+      "gap": "No product has a clamping range covering flex-duct mesh minor axis 151.6 mm. Sikla PLU type 150 is a spiral-seam clamp for nominal 150 mm and is not applied."
+    },
+    {
+      "model": "ventilation",
+      "kind": "duct_flex",
+      "size_label": "diameter unresolved",
+      "count": 16,
+      "gap": "Flex-duct diameter could not be recovered from the mesh, and no flex-duct hanger is in the database."
+    },
+    {
+      "model": "heating_and_cooling",
+      "kind": "stove",
+      "size_label": "bbox 350 \u00d7 500 \u00d7 1000 mm",
+      "count": 2,
+      "gap": "No stove or boiler support is in the database. The element is floor-standing equipment."
+    }
+  ]
+}

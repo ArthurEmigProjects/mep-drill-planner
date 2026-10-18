@@ -1,0 +1,5088 @@
+{
+  "dataset": {
+    "title": "DuplexModel+MEP",
+    "creators": "Teclaw, Wojciech",
+    "year": 2024,
+    "doi": "10.5281/zenodo.10610773",
+    "url": "https://zenodo.org/records/10610773",
+    "license": "CC BY 4.0"
+  },
+  "units": {
+    "length": "mm unless a field name ends in _m",
+    "model_coordinates": "m"
+  },
+  "notes": [
+    "IFC2X3 export: pipes and ducts are IfcFlowSegment, not IfcPipeSegment / IfcDuctSegment.",
+    "Segment property sets have length and roughness, not nominal diameter. Outside diameter is the circle-profile diameter.",
+    "Rectangular duct profiles mix run length into the profile. Width and height are the two edges that are not the port-to-port direction; height is the edge closer to world Z.",
+    "No insulation covering or insulation property was found on the MEP elements.",
+    "On fittings, NominalDiameter is an IfcPropertyListValue and often disagrees with the connected pipe's circle-profile diameter. Groups keep both; the profile diameter is the one a clamp has to fit.",
+    "Material entities on the MEP models are unnamed."
+  ],
+  "models": {
+    "piping": {
+      "file": "zenodo-duplex-piping.ifc",
+      "schema": "IFC2X3",
+      "element_count": 463,
+      "groups": [
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowController",
+          "kind": "pipe_accessory",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": 22.225,
+          "outer_diameters_mm": [
+            22.225
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 22.225 mm",
+          "count": 8,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 3
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 3
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 1
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "3HbZfS9frEv8ijKqUDynrk",
+            "3HbZfS9frEv8ijKqUDynQt",
+            "3HbZfS9frEv8ijKqUDynPy"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowController",
+          "kind": "pipe_accessory",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": 15.875,
+          "outer_diameters_mm": [
+            15.875
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 15.875 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 1
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "1dbA4L_aHBouPQ8YCN$dmw",
+            "1dbA4L_aHBouPQ8YCN$dpD"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            19.05
+          ],
+          "outer_diameter_mm": 22.225,
+          "outer_diameters_mm": [
+            22.225
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 22.225 mm",
+          "count": 38,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 10
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 10
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 7
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 7
+            },
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 2
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqQOW",
+            "0DoXf6qmD2uA0W21bBqQUb",
+            "0DoXf6qmD2uA0W21bBqQ2S"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 19.05 mm, which does not match the connected profile outside diameter 22.225 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            12.7
+          ],
+          "outer_diameter_mm": 15.875,
+          "outer_diameters_mm": [
+            15.875
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 15.875 mm",
+          "count": 34,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 9
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 9
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 8
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 8
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqQpT",
+            "0DoXf6qmD2uA0W21bBqQpR",
+            "0DoXf6qmD2uA0W21bBqQOA"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 12.7 mm, which does not match the connected profile outside diameter 15.875 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": 22.225,
+          "outer_diameters_mm": [
+            22.225
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 22.225 mm",
+          "count": 22,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 7
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 7
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 3
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 3
+            },
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 1
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqUpC",
+            "0DoXf6qmD2uA0W21bBqUpd",
+            "3HbZfS9frEv8ijKqUDynql"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            38.1
+          ],
+          "outer_diameter_mm": 41.275,
+          "outer_diameters_mm": [
+            41.275
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 41.275 mm",
+          "count": 20,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 10
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 10
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqQ61",
+            "0DoXf6qmD2uA0W21bBqQ6i",
+            "0DoXf6qmD2uA0W21bBqQ6X"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 38.1 mm, which does not match the connected profile outside diameter 41.275 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            15.875,
+            22.225
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 15.875 / 22.225 mm",
+          "count": 18,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 5
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 5
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 4
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 4
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqQdx",
+            "0DoXf6qmD2uA0W21bBqQUV",
+            "0DoXf6qmD2uA0W21bBqQN_"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            101.6
+          ],
+          "outer_diameter_mm": 104.775,
+          "outer_diameters_mm": [
+            104.775
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 104.775 mm",
+          "count": 12,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 6
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 6
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqPsj",
+            "0DoXf6qmD2uA0W21bBqPjF",
+            "0DoXf6qmD2uA0W21bBqPOG"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 101.6 mm, which does not match the connected profile outside diameter 104.775 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            19.05
+          ],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            15.875,
+            22.225
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 15.875 / 22.225 mm",
+          "count": 10,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 3
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 3
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqQdZ",
+            "0DoXf6qmD2uA0W21bBqQNA",
+            "0DoXf6qmD2uA0W21bBqQ9z"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 19.05 mm, which does not match the connected profile outside diameter 15.875, 22.225 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            22.225,
+            104.775
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 22.225 / 104.775 mm",
+          "count": 10,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 3
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 3
+            },
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqQjC",
+            "0DoXf6qmD2uA0W21bBqQIT",
+            "0DoXf6qmD2uA0W21bBqPrO"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            19.05
+          ],
+          "outer_diameter_mm": 22.225,
+          "outer_diameters_mm": [
+            22.225
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 22.225 mm",
+          "count": 10,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 4
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 4
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 1
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqQVQ",
+            "0DoXf6qmD2uA0W21bBqQF1",
+            "0DoXf6qmD2uA0W21bBqQ0z"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 19.05 mm, which does not match the connected profile outside diameter 22.225 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            15.0,
+            15.875
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 15 / 15.875 mm",
+          "count": 8,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqQO4",
+            "0DoXf6qmD2uA0W21bBqQVZ",
+            "3HbZfS9frEv8ijKqUDynnV"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            38.1
+          ],
+          "outer_diameter_mm": 41.275,
+          "outer_diameters_mm": [
+            41.275
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 41.275 mm",
+          "count": 6,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 3
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 3
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqPox",
+            "0DoXf6qmD2uA0W21bBqPao",
+            "0DoXf6qmD2uA0W21bBqPcH"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 38.1 mm, which does not match the connected profile outside diameter 41.275 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": 15.875,
+          "outer_diameters_mm": [
+            15.875
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 15.875 mm",
+          "count": 5,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 3
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "1dbA4L_aHBouPQ8YCN$dmm",
+            "1dbA4L_aHBouPQ8YCN$dmp",
+            "1dbA4L_aHBouPQ8YCN$dp1"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": 12.7,
+          "outer_diameters_mm": [
+            12.7
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 12.7 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 2
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "3H2_vcIGzBTeYkglaJJD5T",
+            "3H2_vcIGzBTeYkglaJJD6r",
+            "3H2_vcIGzBTeYkglaJJCPL"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            15.0,
+            41.275
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 15 / 41.275 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 2
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqPbX",
+            "3HbZfS9frEv8ijKqUDynoo",
+            "3H2_vcIGzBTeYkglaJJCNK"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            101.6
+          ],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            41.275,
+            104.775
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 41.275 / 104.775 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 2
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqPim",
+            "0DoXf6qmD2uA0W21bBqPHQ",
+            "3H2_vcIGzBTeYkglaJJCNw"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 101.6 mm, which does not match the connected profile outside diameter 41.275, 104.775 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            41.275,
+            104.775
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 41.275 / 104.775 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 2
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqPcS",
+            "0DoXf6qmD2uA0W21bBqPHI",
+            "3H2_vcIGzBTeYkglaJJCNI"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            101.6
+          ],
+          "outer_diameter_mm": 104.775,
+          "outer_diameters_mm": [
+            104.775
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 104.775 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 1
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqPTZ",
+            "3H2_vcIGzBTeYkglaJJCNE"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 101.6 mm, which does not match the connected profile outside diameter 104.775 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            101.6
+          ],
+          "outer_diameter_mm": 104.775,
+          "outer_diameters_mm": [
+            104.775
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 104.775 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 1
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2OhZ8vg6D99AU_3FahFbav",
+            "2OhZ8vg6D99AU_3FahFbhY"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 101.6 mm, which does not match the connected profile outside diameter 104.775 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            12.7,
+            41.275
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 12.7 / 41.275 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 1
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "3H2_vcIGzBTeYkglaJJD5E",
+            "3H2_vcIGzBTeYkglaJJCPJ"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            12.7,
+            41.275
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 12.7 / 41.275 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 1
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "3H2_vcIGzBTeYkglaJJD6s",
+            "3H2_vcIGzBTeYkglaJJCPV"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            15.0
+          ],
+          "outer_diameter_mm": 12.7,
+          "outer_diameters_mm": [
+            12.7
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 12.7 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 1
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2JKGRvMcDEJxAVQC0_CYo3",
+            "2JKGRvMcDEJxAVQC0_CYpi"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 15 mm, which does not match the connected profile outside diameter 12.7 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            12.7
+          ],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            15.875,
+            22.225
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 15.875 / 22.225 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 1
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqQOk",
+            "3H2_vcIGzBTeYkglaJJCKA"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 12.7 mm, which does not match the connected profile outside diameter 15.875, 22.225 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            101.6
+          ],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            22.225,
+            104.775
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 22.225 / 104.775 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 1
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "3yV_8PRFnFbgex6Lx58_$8",
+            "3yV_8PRFnFbgex6Lx58__O"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 101.6 mm, which does not match the connected profile outside diameter 22.225, 104.775 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            15.0
+          ],
+          "outer_diameter_mm": 22.225,
+          "outer_diameters_mm": [
+            22.225
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 22.225 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 1
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2JKGRvMcDEJxAVQC0_CYnA",
+            "2JKGRvMcDEJxAVQC0_CYon"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 15 mm, which does not match the connected profile outside diameter 22.225 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            19.05
+          ],
+          "outer_diameter_mm": 22.225,
+          "outer_diameters_mm": [
+            22.225
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 22.225 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 1
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2JKGRvMcDEJxAVQC0_CYT1",
+            "2JKGRvMcDEJxAVQC0_CYV1"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 19.05 mm, which does not match the connected profile outside diameter 22.225 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": 41.275,
+          "outer_diameters_mm": [
+            41.275
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 41.275 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 1
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqPb9",
+            "3H2_vcIGzBTeYkglaJJCNe"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "cap",
+          "height_mm": null,
+          "ifc_class": "IfcFlowTerminal",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": 41.275,
+          "outer_diameters_mm": [
+            41.275
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 41.275 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 1
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqP1r",
+            "3H2_vcIGzBTeYkglaJJCGc"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            12.7
+          ],
+          "outer_diameter_mm": 15.875,
+          "outer_diameters_mm": [
+            15.875
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 15.875 mm",
+          "count": 1,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2JKGRvMcDEJxAVQC0_CYWM"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 12.7 mm, which does not match the connected profile outside diameter 15.875 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            15.0
+          ],
+          "outer_diameter_mm": 15.875,
+          "outer_diameters_mm": [
+            15.875
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 15.875 mm",
+          "count": 1,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2JKGRvMcDEJxAVQC0_CYXQ"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 15 mm, which does not match the connected profile outside diameter 15.875 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "pipe_segment",
+          "material": null,
+          "outer_diameter_mm": 22.225,
+          "outer_diameters_mm": [
+            22.225
+          ],
+          "predefined_type": null,
+          "shape": "round",
+          "size_method": "circle_profile",
+          "width_mm": null,
+          "size_label": "OD 22.225 mm",
+          "count": 76,
+          "total_length_m": 43.338,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 24
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 24
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 11
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 11
+            },
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 3
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 3
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqQiy",
+            "0DoXf6qmD2uA0W21bBqQa9",
+            "0DoXf6qmD2uA0W21bBqQdY"
+          ],
+          "assumptions": [
+            "Modeled outside diameter 22.225 mm matches 7/8 in OD (3/4 in nominal copper tube). The IFC material name is empty, so this is a size observation only."
+          ],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "pipe_segment",
+          "material": null,
+          "outer_diameter_mm": 15.875,
+          "outer_diameters_mm": [
+            15.875
+          ],
+          "predefined_type": null,
+          "shape": "round",
+          "size_method": "circle_profile",
+          "width_mm": null,
+          "size_label": "OD 15.875 mm",
+          "count": 54,
+          "total_length_m": 18.446,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 15
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 15
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 12
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 12
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqR1F",
+            "0DoXf6qmD2uA0W21bBqQuK",
+            "0DoXf6qmD2uA0W21bBqQ$J"
+          ],
+          "assumptions": [
+            "Modeled outside diameter 15.875 mm matches 5/8 in OD (1/2 in nominal copper tube). The IFC material name is empty, so this is a size observation only."
+          ],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "pipe_segment",
+          "material": null,
+          "outer_diameter_mm": 41.275,
+          "outer_diameters_mm": [
+            41.275
+          ],
+          "predefined_type": null,
+          "shape": "round",
+          "size_method": "circle_profile",
+          "width_mm": null,
+          "size_label": "OD 41.275 mm",
+          "count": 38,
+          "total_length_m": 23.516,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 19
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 19
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqQ4v",
+            "0DoXf6qmD2uA0W21bBqQ5w",
+            "0DoXf6qmD2uA0W21bBqQ6L"
+          ],
+          "assumptions": [
+            "Modeled outside diameter 41.275 mm matches 1.625 in OD (1-1/2 in nominal copper tube). The IFC material name is empty, so this is a size observation only."
+          ],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "pipe_segment",
+          "material": null,
+          "outer_diameter_mm": 104.775,
+          "outer_diameters_mm": [
+            104.775
+          ],
+          "predefined_type": null,
+          "shape": "round",
+          "size_method": "circle_profile",
+          "width_mm": null,
+          "size_label": "OD 104.775 mm",
+          "count": 24,
+          "total_length_m": 16.888,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 12
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 12
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqPrD",
+            "0DoXf6qmD2uA0W21bBqPhy",
+            "0DoXf6qmD2uA0W21bBqPiE"
+          ],
+          "assumptions": [
+            "Modeled outside diameter 104.775 mm matches 4.125 in OD (4 in nominal copper tube). The IFC material name is empty, so this is a size observation only."
+          ],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "pipe_segment",
+          "material": null,
+          "outer_diameter_mm": 15.0,
+          "outer_diameters_mm": [
+            15.0
+          ],
+          "predefined_type": null,
+          "shape": "round",
+          "size_method": "circle_profile",
+          "width_mm": null,
+          "size_label": "OD 15.0 mm",
+          "count": 8,
+          "total_length_m": 0.256,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqQg4",
+            "0DoXf6qmD2uA0W21bBqQgM",
+            "0DoXf6qmD2uA0W21bBqQjI"
+          ],
+          "assumptions": [
+            "Modeled outside diameter is exactly 15.0 mm, the outside diameter of metric 15 mm copper tube, unlike the inch-series diameters of the other pipe segments. Material is still not stored in the IFC."
+          ],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "pipe_segment",
+          "material": null,
+          "outer_diameter_mm": 12.7,
+          "outer_diameters_mm": [
+            12.7
+          ],
+          "predefined_type": null,
+          "shape": "round",
+          "size_method": "circle_profile",
+          "width_mm": null,
+          "size_label": "OD 12.7 mm",
+          "count": 6,
+          "total_length_m": 6.121,
+          "systems": [
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 3
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 3
+            }
+          ],
+          "example_global_ids": [
+            "3H2_vcIGzBTeYkglaJJFjV",
+            "3H2_vcIGzBTeYkglaJJFjT",
+            "3H2_vcIGzBTeYkglaJJDPJ"
+          ],
+          "assumptions": [
+            "Modeled outside diameter 12.7 mm matches 1/2 in OD (3/8 in nominal copper tube). The IFC material name is empty, so this is a size observation only."
+          ],
+          "insulation": null
+        },
+        {
+          "bbox_mm": [
+            228.2,
+            510.0,
+            635.0
+          ],
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowTerminal",
+          "kind": "sanitary_fixture",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "world_bbox",
+          "width_mm": null,
+          "size_label": "bbox 228.2 \u00d7 510 \u00d7 635 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 2
+            },
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 2
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqRCv",
+            "3HbZfS9frEv8ijKqUDynpp",
+            "3H2_vcIGzBTeYkglaJJCKs"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "bbox_mm": [
+            361.9,
+            584.3,
+            722.5
+          ],
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowTerminal",
+          "kind": "sanitary_fixture",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "world_bbox",
+          "width_mm": null,
+          "size_label": "bbox 361.9 \u00d7 584.3 \u00d7 722.5 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            },
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 2
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqRLA",
+            "0DoXf6qmD2uA0W21bBqQXC",
+            "3H2_vcIGzBTeYkglaJJDh8"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "bbox_mm": [
+            457.0,
+            457.2,
+            485.8
+          ],
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowTerminal",
+          "kind": "sanitary_fixture",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "world_bbox",
+          "width_mm": null,
+          "size_label": "bbox 457 \u00d7 457.2 \u00d7 485.8 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 2
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 2
+            },
+            {
+              "name": "Sewage1",
+              "object_type": "Sanitary",
+              "count": 2
+            },
+            {
+              "name": "Sewage2",
+              "object_type": "Sanitary",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBq8kK",
+            "0DoXf6qmD2uA0W21bBqQp7",
+            "3H2_vcIGzBTeYkglaJJDhA"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "bbox_mm": [
+            350.0,
+            500.0,
+            1000.0
+          ],
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcBuildingElementProxy",
+          "kind": "water_heater",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "world_bbox",
+          "width_mm": null,
+          "size_label": "bbox 350 \u00d7 500 \u00d7 1000 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "Domestic Cold Water 1",
+              "object_type": "Domestic Cold Water",
+              "count": 1
+            },
+            {
+              "name": "Domestic Cold Water 2",
+              "object_type": "Domestic Cold Water",
+              "count": 1
+            },
+            {
+              "name": "Domestic Hot Water 1",
+              "object_type": "Domestic Hot Water",
+              "count": 1
+            },
+            {
+              "name": "Domestic Hot Water 4",
+              "object_type": "Domestic Hot Water",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "0DoXf6qmD2uA0W21bBqVAu",
+            "3H2_vcIGzBTeYkglaJJCGJ"
+          ],
+          "assumptions": [],
+          "insulation": null
+        }
+      ]
+    },
+    "ventilation": {
+      "file": "zenodo-duplex-ventilation.ifc",
+      "schema": "IFC2X3",
+      "element_count": 374,
+      "groups": [
+        {
+          "bbox_mm": [
+            475.0,
+            1100.0,
+            1400.0
+          ],
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcBuildingElementProxy",
+          "kind": "air_handling_unit",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "world_bbox",
+          "width_mm": null,
+          "size_label": "bbox 475 \u00d7 1100 \u00d7 1400 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ExhaustAir1",
+              "object_type": "Powietrze usuwane",
+              "count": 1
+            },
+            {
+              "name": "ExhaustAir2",
+              "object_type": "Powietrze usuwane",
+              "count": 1
+            },
+            {
+              "name": "Kanalizacja 1",
+              "object_type": "Kanalizacja",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir1.2",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.2",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "0g8pVvDxXC8BAH1OlVdXuo",
+            "3ubYx_ZJX3AuEOafo2Qsdx"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "bbox_mm": [
+            101.6,
+            200.0,
+            200.0
+          ],
+          "family": "supply",
+          "height_mm": null,
+          "ifc_class": "IfcFlowTerminal",
+          "kind": "air_terminal",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "world_bbox",
+          "width_mm": null,
+          "size_label": "bbox 101.6 \u00d7 200 \u00d7 200 mm",
+          "count": 18,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 9
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 9
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_09",
+            "2bhMnyP_L20gE4s7b3M_0i",
+            "2bhMnyP_L20gE4s7b3M_1K"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "bbox_mm": [
+            101.6,
+            200.0,
+            200.0
+          ],
+          "family": "return",
+          "height_mm": null,
+          "ifc_class": "IfcFlowTerminal",
+          "kind": "air_terminal",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "world_bbox",
+          "width_mm": null,
+          "size_label": "bbox 101.6 \u00d7 200 \u00d7 200 mm",
+          "count": 18,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 9
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 9
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_tt",
+            "2bhMnyP_L20gE4s7b3M_mO",
+            "2bhMnyP_L20gE4s7b3M_m0"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "bbox_mm": [
+            40.0,
+            300.0,
+            300.0
+          ],
+          "family": "exhaust",
+          "height_mm": null,
+          "ifc_class": "IfcFlowTerminal",
+          "kind": "air_terminal",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "world_bbox",
+          "width_mm": null,
+          "size_label": "bbox 40 \u00d7 300 \u00d7 300 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ExhaustAir1",
+              "object_type": "Powietrze usuwane",
+              "count": 1
+            },
+            {
+              "name": "ExhaustAir2",
+              "object_type": "Powietrze usuwane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "3ubYx_ZJX3AuEOafo2QtgD",
+            "3ubYx_ZJX3AuEOafo2QtnR"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "bbox_mm": [
+            40.0,
+            300.0,
+            300.0
+          ],
+          "family": "supply",
+          "height_mm": null,
+          "ifc_class": "IfcFlowTerminal",
+          "kind": "air_terminal",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "world_bbox",
+          "width_mm": null,
+          "size_label": "bbox 40 \u00d7 300 \u00d7 300 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "SupplyAir1.2",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.2",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "3ubYx_ZJX3AuEOafo2QtlN",
+            "3ubYx_ZJX3AuEOafo2Qtlk"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            }
+          ],
+          "family": "volume_damper",
+          "height_mm": null,
+          "ifc_class": "IfcFlowController",
+          "kind": "duct_accessory",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 200\u00d7150 mm",
+          "count": 6,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 2
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 2
+            },
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2EkBoFvn51lhJJ3BMkutpd",
+            "2EkBoFvn51lhJJ3BMkutp8",
+            "2EkBoFvn51lhJJ3BMkutf4"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 150.0
+            }
+          ],
+          "family": "volume_damper",
+          "height_mm": null,
+          "ifc_class": "IfcFlowController",
+          "kind": "duct_accessory",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 150\u00d7150 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2EkBoFvn51lhJJ3BMkutcl",
+            "2EkBoFvn51lhJJ3BMkutcR",
+            "2EkBoFvn51lhJJ3BMkutZN"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            }
+          ],
+          "family": "volume_damper",
+          "height_mm": null,
+          "ifc_class": "IfcFlowController",
+          "kind": "duct_accessory",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 300\u00d7150 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2EkBoFvn51lhJJ3BMkuthk",
+            "2EkBoFvn51lhJJ3BMkuthQ",
+            "2EkBoFvn51lhJJ3BMkute1"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            }
+          ],
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 200\u00d7150 mm",
+          "count": 28,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 8
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 8
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 6
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 6
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_lm",
+            "2bhMnyP_L20gE4s7b3M_lp",
+            "2bhMnyP_L20gE4s7b3M$8H"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 150.0
+            }
+          ],
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 150\u00d7150 mm",
+          "count": 26,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 9
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 9
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 4
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 4
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_pc",
+            "2bhMnyP_L20gE4s7b3M_pf",
+            "2bhMnyP_L20gE4s7b3M_iH"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            }
+          ],
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 200\u00d7150 mm",
+          "count": 12,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 3
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 3
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 3
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 3
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_uB",
+            "2bhMnyP_L20gE4s7b3M_lQ",
+            "2bhMnyP_L20gE4s7b3M$Kj"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 150.0
+            }
+          ],
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 150\u00d7150 mm",
+          "count": 10,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 3
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 3
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 2
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_oq",
+            "2bhMnyP_L20gE4s7b3M_o_",
+            "2bhMnyP_L20gE4s7b3M_lk"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 300.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            }
+          ],
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 300\u00d7300 mm",
+          "count": 10,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 3
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 3
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir1.2",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.2",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "0g8pVvDxXC8BAH1OlVdXoA",
+            "0g8pVvDxXC8BAH1OlVdXuN",
+            "0g8pVvDxXC8BAH1OlVdXxH"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            }
+          ],
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 200\u00d7150 mm",
+          "count": 8,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 2
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 2
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 2
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M$FG",
+            "2bhMnyP_L20gE4s7b3M$9E",
+            "2bhMnyP_L20gE4s7b3M$AF"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "outer_diameter_mm": 150.0,
+              "shape": "round"
+            }
+          ],
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected \u00d8150 mm",
+          "count": 8,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 4
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 4
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_rH",
+            "2bhMnyP_L20gE4s7b3M_rw",
+            "2bhMnyP_L20gE4s7b3M_rZ"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            }
+          ],
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 300\u00d7150 mm",
+          "count": 6,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 2
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 2
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_63",
+            "2bhMnyP_L20gE4s7b3M_7K",
+            "2bhMnyP_L20gE4s7b3M_7S"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "outer_diameter_mm": 150.0,
+              "shape": "round"
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            }
+          ],
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected \u00d8150, 200\u00d7150 mm",
+          "count": 6,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 3
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 3
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_xq",
+            "2bhMnyP_L20gE4s7b3M_qr",
+            "2bhMnyP_L20gE4s7b3M_tR"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 150.0
+            }
+          ],
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 150\u00d7150 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M$JG",
+            "2bhMnyP_L20gE4s7b3M$kx",
+            "2bhMnyP_L20gE4s7b3M$cm"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 150.0
+            },
+            {
+              "height_mm": 300.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            }
+          ],
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 150\u00d7150, 300\u00d7300, 200\u00d7150 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M$H2",
+            "2bhMnyP_L20gE4s7b3M$k6",
+            "2bhMnyP_L20gE4s7b3M$c6"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            },
+            {
+              "height_mm": 300.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 150.0
+            }
+          ],
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 200\u00d7150, 300\u00d7300, 150\u00d7150 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M$Kb",
+            "2bhMnyP_L20gE4s7b3M$Ew",
+            "2bhMnyP_L20gE4s7b3M$c1"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            },
+            {
+              "outer_diameter_mm": 150.0,
+              "shape": "round"
+            }
+          ],
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 200\u00d7150, \u00d8150 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 2
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_vh",
+            "2bhMnyP_L20gE4s7b3M_wm",
+            "2bhMnyP_L20gE4s7b3M$bH"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            },
+            {
+              "height_mm": 300.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            }
+          ],
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 300\u00d7150, 300\u00d7300 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_bY",
+            "2bhMnyP_L20gE4s7b3M_WW",
+            "2bhMnyP_L20gE4s7b3M$cI"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 150.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            }
+          ],
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 150\u00d7150, 200\u00d7150 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_ky",
+            "2bhMnyP_L20gE4s7b3M$bX"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 150.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            }
+          ],
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 150\u00d7150, 300\u00d7150 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_o2",
+            "2bhMnyP_L20gE4s7b3M$bo"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 150.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            }
+          ],
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 150\u00d7150, 300\u00d7150, 200\u00d7150 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_fp",
+            "2bhMnyP_L20gE4s7b3M$bl"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 150.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            }
+          ],
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 200\u00d7150, 150\u00d7150, 300\u00d7150 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_gN",
+            "2bhMnyP_L20gE4s7b3M$cG"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            }
+          ],
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 300\u00d7150, 200\u00d7150 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_uK",
+            "2bhMnyP_L20gE4s7b3M$ae"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            },
+            {
+              "outer_diameter_mm": 150.0,
+              "shape": "round"
+            }
+          ],
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 300\u00d7150, \u00d8150 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_v0",
+            "2bhMnyP_L20gE4s7b3M$ag"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 300.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 150.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            }
+          ],
+          "family": "cross",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 300\u00d7300, 150\u00d7150, 200\u00d7150 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M$P9",
+            "2bhMnyP_L20gE4s7b3M$cT"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "height_mm": 300.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 200.0
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 150.0
+            }
+          ],
+          "family": "cross",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected 300\u00d7300, 200\u00d7150, 150\u00d7150 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M$Pf",
+            "2bhMnyP_L20gE4s7b3M$cU"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [],
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "unresolved",
+          "width_mm": null,
+          "size_label": "connected duct unresolved",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M$lu",
+            "2bhMnyP_L20gE4s7b3M$dp"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "outer_diameter_mm": 150.0,
+              "shape": "round"
+            }
+          ],
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected \u00d8150 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_qp",
+            "2bhMnyP_L20gE4s7b3M$bQ"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "connected_duct_sizes": [
+            {
+              "outer_diameter_mm": 150.0,
+              "shape": "round"
+            },
+            {
+              "height_mm": 150.0,
+              "shape": "rectangular",
+              "width_mm": 300.0
+            }
+          ],
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "duct_fitting",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_duct_segment",
+          "width_mm": null,
+          "size_label": "connected \u00d8150, 300\u00d7150 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_vo",
+            "2bhMnyP_L20gE4s7b3M$ai"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "round_flex",
+          "height_mm": null,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "duct_flex",
+          "material": null,
+          "mesh_minor_axis_mm": 151.6,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": "round",
+          "size_method": "faceted_bbox_minor_axis",
+          "width_mm": null,
+          "size_label": "mesh minor axis 151.6 mm",
+          "count": 20,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 7
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 7
+            },
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 3
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 3
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_q$",
+            "2bhMnyP_L20gE4s7b3M_r_",
+            "2bhMnyP_L20gE4s7b3M_pb"
+          ],
+          "assumptions": [
+            "mesh_minor_axis_mm is the smallest edge of the faceted mesh, not a nominal diameter written in the IFC."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "round_flex",
+          "height_mm": null,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "duct_flex",
+          "material": null,
+          "mesh_minor_axis_mm": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": "round",
+          "size_method": "unresolved",
+          "width_mm": null,
+          "size_label": "diameter unresolved",
+          "count": 16,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 6
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 6
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 2
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_rv",
+            "2bhMnyP_L20gE4s7b3M_ra",
+            "2bhMnyP_L20gE4s7b3M_lF"
+          ],
+          "assumptions": [
+            "Flex duct bends in more than one axis, so the mesh bounding box does not expose a tube diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "rectangular",
+          "height_mm": 150.0,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "duct_segment",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": "rectangular",
+          "size_method": "port_axis_against_extrusion",
+          "width_mm": 200.0,
+          "size_label": "200.0 \u00d7 150.0 mm",
+          "count": 46,
+          "total_length_m": 43.655,
+          "systems": [
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 12
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 12
+            },
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 11
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 11
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_MV",
+            "2bhMnyP_L20gE4s7b3M_vg",
+            "2bhMnyP_L20gE4s7b3M_wp"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "rectangular",
+          "height_mm": 150.0,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "duct_segment",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": "rectangular",
+          "size_method": "port_axis_against_extrusion",
+          "width_mm": 150.0,
+          "size_label": "150.0 \u00d7 150.0 mm",
+          "count": 30,
+          "total_length_m": 31.835,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 9
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 9
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 6
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 6
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_mq",
+            "2bhMnyP_L20gE4s7b3M_mk",
+            "2bhMnyP_L20gE4s7b3M_oT"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "rectangular",
+          "height_mm": 300.0,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "duct_segment",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": "rectangular",
+          "size_method": "port_axis_against_extrusion",
+          "width_mm": 300.0,
+          "size_label": "300.0 \u00d7 300.0 mm",
+          "count": 22,
+          "total_length_m": 21.939,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 5
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 5
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 3
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 3
+            },
+            {
+              "name": "SupplyAir1.2",
+              "object_type": "Powietrze nawiewane",
+              "count": 2
+            },
+            {
+              "name": "SupplyAir2.2",
+              "object_type": "Powietrze nawiewane",
+              "count": 2
+            },
+            {
+              "name": "ExhaustAir1",
+              "object_type": "Powietrze usuwane",
+              "count": 1
+            },
+            {
+              "name": "ExhaustAir2",
+              "object_type": "Powietrze usuwane",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_Yq",
+            "2bhMnyP_L20gE4s7b3M_Yw",
+            "2bhMnyP_L20gE4s7b3M$P7"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "rectangular",
+          "height_mm": 150.0,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "duct_segment",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": "rectangular",
+          "size_method": "port_axis_against_extrusion",
+          "width_mm": 300.0,
+          "size_label": "300.0 \u00d7 150.0 mm",
+          "count": 18,
+          "total_length_m": 11.051,
+          "systems": [
+            {
+              "name": "ReturnAir1",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 5
+            },
+            {
+              "name": "ReturnAir2",
+              "object_type": "Powietrze recyrkulacyjne",
+              "count": 5
+            },
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 4
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 4
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_DA",
+            "2bhMnyP_L20gE4s7b3M_$Q",
+            "2bhMnyP_L20gE4s7b3M_v3"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "round",
+          "height_mm": null,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "duct_segment",
+          "material": null,
+          "outer_diameter_mm": 150.0,
+          "outer_diameters_mm": [
+            150.0
+          ],
+          "predefined_type": null,
+          "shape": "round",
+          "size_method": "circle_profile",
+          "width_mm": null,
+          "size_label": "OD 150.0 mm",
+          "count": 10,
+          "total_length_m": 9.896,
+          "systems": [
+            {
+              "name": "SupplyAir1.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 5
+            },
+            {
+              "name": "SupplyAir2.1",
+              "object_type": "Powietrze nawiewane",
+              "count": 5
+            }
+          ],
+          "example_global_ids": [
+            "2bhMnyP_L20gE4s7b3M_7s",
+            "2bhMnyP_L20gE4s7b3M_yu",
+            "2bhMnyP_L20gE4s7b3M_vZ"
+          ],
+          "assumptions": [],
+          "insulation": null
+        }
+      ]
+    },
+    "heating_and_cooling": {
+      "file": "HeatingAndCooling.ifc",
+      "schema": "IFC2X3",
+      "element_count": 326,
+      "groups": [
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowController",
+          "kind": "pipe_accessory",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": 19.05,
+          "outer_diameters_mm": [
+            19.05
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 19.05 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 1
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 1
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 1
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myLOF",
+            "2_O2VU7ajFAP8YQh1myLVp",
+            "2_O2VU7ajFAP8YQh1myNSB"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            10.0
+          ],
+          "outer_diameter_mm": 9.52,
+          "outer_diameters_mm": [
+            9.52
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 9.52 mm",
+          "count": 37,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 11
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 10
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 8
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 8
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myQjT",
+            "2_O2VU7ajFAP8YQh1myQJT",
+            "2_O2VU7ajFAP8YQh1myQMB"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 10 mm, which does not match the connected profile outside diameter 9.52 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            9.52,
+            12.7
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 9.52 / 12.7 mm",
+          "count": 30,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 8
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 8
+            },
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 7
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 7
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myLtt",
+            "2_O2VU7ajFAP8YQh1myLtW",
+            "2_O2VU7ajFAP8YQh1myLtY"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            15.0
+          ],
+          "outer_diameter_mm": 12.7,
+          "outer_diameters_mm": [
+            12.7
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 12.7 mm",
+          "count": 22,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 6
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 6
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 5
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 5
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myL9k",
+            "2_O2VU7ajFAP8YQh1myL9U",
+            "2_O2VU7ajFAP8YQh1myLEt"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 15 mm, which does not match the connected profile outside diameter 12.7 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            15.0
+          ],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            9.52,
+            12.7
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 9.52 / 12.7 mm",
+          "count": 20,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 6
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 6
+            },
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 4
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 4
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myQK1",
+            "2_O2VU7ajFAP8YQh1myLt$",
+            "2_O2VU7ajFAP8YQh1myLte"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 15 mm, which does not match the connected profile outside diameter 9.52, 12.7 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowTerminal",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": 9.52,
+          "outer_diameters_mm": [
+            9.52
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 9.52 mm",
+          "count": 12,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 3
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 3
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 3
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 3
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myK4x",
+            "2_O2VU7ajFAP8YQh1myNxV",
+            "2_O2VU7ajFAP8YQh1myNxG"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            12.7,
+            19.05
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 12.7 / 19.05 mm",
+          "count": 8,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 2
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 2
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 2
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myKdC",
+            "2_O2VU7ajFAP8YQh1myKd7",
+            "2_O2VU7ajFAP8YQh1myKbo"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "transition",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": 19.05,
+          "outer_diameters_mm": [
+            19.05
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 19.05 mm",
+          "count": 8,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 2
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 2
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 2
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myK$I",
+            "2_O2VU7ajFAP8YQh1myKXn",
+            "2_O2VU7ajFAP8YQh1myKXM"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": "elbow",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            20.0
+          ],
+          "outer_diameter_mm": 19.05,
+          "outer_diameters_mm": [
+            19.05
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 19.05 mm",
+          "count": 8,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 2
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 2
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 2
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 2
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myKXz",
+            "2_O2VU7ajFAP8YQh1myKXA",
+            "2_O2VU7ajFAP8YQh1myKcG"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 20 mm, which does not match the connected profile outside diameter 19.05 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            20.0
+          ],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            12.7,
+            19.05
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 12.7 / 19.05 mm",
+          "count": 4,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 1
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 1
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 1
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myKdL",
+            "2_O2VU7ajFAP8YQh1myKbw",
+            "2_O2VU7ajFAP8YQh1myNTT"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 20 mm, which does not match the connected profile outside diameter 12.7, 19.05 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowFitting",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [
+            10.0
+          ],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            9.52,
+            12.7
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 9.52 / 12.7 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 1
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myLZ7",
+            "2_O2VU7ajFAP8YQh1myNSd"
+          ],
+          "assumptions": [
+            "NominalDiameter on the fitting is 10 mm, which does not match the connected profile outside diameter 9.52, 12.7 mm. Support selection uses the profile diameter."
+          ],
+          "insulation": null
+        },
+        {
+          "family": "tee",
+          "height_mm": null,
+          "ifc_class": "IfcFlowTerminal",
+          "kind": "pipe_fitting",
+          "material": null,
+          "nominal_diameter_property_mm": [],
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [
+            9.52,
+            12.7
+          ],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "connected_segment_profile",
+          "width_mm": null,
+          "size_label": "OD 9.52 / 12.7 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 1
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myK4$",
+            "2_O2VU7ajFAP8YQh1myN2f"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "pipe_segment",
+          "material": null,
+          "outer_diameter_mm": 9.52,
+          "outer_diameters_mm": [
+            9.52
+          ],
+          "predefined_type": null,
+          "shape": "round",
+          "size_method": "circle_profile",
+          "width_mm": null,
+          "size_label": "OD 9.52 mm",
+          "count": 81,
+          "total_length_m": 130.103,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 22
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 21
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 19
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 19
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myQjl",
+            "2_O2VU7ajFAP8YQh1myQjR",
+            "2_O2VU7ajFAP8YQh1myQJX"
+          ],
+          "assumptions": [
+            "Modeled outside diameter 9.52 mm matches 3/8 in OD (1/4 in nominal copper tube). The IFC material name is empty, so this is a size observation only."
+          ],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "pipe_segment",
+          "material": null,
+          "outer_diameter_mm": 12.7,
+          "outer_diameters_mm": [
+            12.7
+          ],
+          "predefined_type": null,
+          "shape": "round",
+          "size_method": "circle_profile",
+          "width_mm": null,
+          "size_label": "OD 12.7 mm",
+          "count": 50,
+          "total_length_m": 60.046,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 13
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 13
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 12
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 12
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myQKN",
+            "2_O2VU7ajFAP8YQh1myLt_",
+            "2_O2VU7ajFAP8YQh1myLth"
+          ],
+          "assumptions": [
+            "Modeled outside diameter 12.7 mm matches 1/2 in OD (3/8 in nominal copper tube). The IFC material name is empty, so this is a size observation only."
+          ],
+          "insulation": null
+        },
+        {
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcFlowSegment",
+          "kind": "pipe_segment",
+          "material": null,
+          "outer_diameter_mm": 19.05,
+          "outer_diameters_mm": [
+            19.05
+          ],
+          "predefined_type": null,
+          "shape": "round",
+          "size_method": "circle_profile",
+          "width_mm": null,
+          "size_label": "OD 19.05 mm",
+          "count": 20,
+          "total_length_m": 5.118,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 5
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 5
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 5
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 5
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myLW4",
+            "2_O2VU7ajFAP8YQh1myLbQ",
+            "2_O2VU7ajFAP8YQh1myLO1"
+          ],
+          "assumptions": [
+            "Modeled outside diameter 19.05 mm matches 3/4 in OD (5/8 in nominal copper tube). The IFC material name is empty, so this is a size observation only."
+          ],
+          "insulation": null
+        },
+        {
+          "bbox_mm": [
+            100.0,
+            350.0,
+            1000.0
+          ],
+          "family": "panel",
+          "height_mm": null,
+          "ifc_class": "IfcFlowTerminal",
+          "kind": "radiator",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "world_bbox",
+          "width_mm": null,
+          "size_label": "bbox 100 \u00d7 350 \u00d7 1000 mm",
+          "count": 16,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 8
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 8
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 8
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 8
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myRQA",
+            "2_O2VU7ajFAP8YQh1myRA0",
+            "2_O2VU7ajFAP8YQh1myRBb"
+          ],
+          "assumptions": [],
+          "insulation": null
+        },
+        {
+          "bbox_mm": [
+            350.0,
+            500.0,
+            1000.0
+          ],
+          "family": null,
+          "height_mm": null,
+          "ifc_class": "IfcEnergyConversionDevice",
+          "kind": "stove",
+          "material": null,
+          "outer_diameter_mm": null,
+          "outer_diameters_mm": [],
+          "predefined_type": null,
+          "shape": null,
+          "size_method": "world_bbox",
+          "width_mm": null,
+          "size_label": "bbox 350 \u00d7 500 \u00d7 1000 mm",
+          "count": 2,
+          "total_length_m": null,
+          "systems": [
+            {
+              "name": "HydronicReturn1",
+              "object_type": "Hydronic Return",
+              "count": 1
+            },
+            {
+              "name": "HydronicReturn2",
+              "object_type": "Hydronic Return",
+              "count": 1
+            },
+            {
+              "name": "HydronicSupply1",
+              "object_type": "Hydronic Supply",
+              "count": 1
+            },
+            {
+              "name": "HydronicSupply2",
+              "object_type": "Hydronic Supply",
+              "count": 1
+            }
+          ],
+          "example_global_ids": [
+            "2_O2VU7ajFAP8YQh1myRCV",
+            "2_O2VU7ajFAP8YQh1myNVe"
+          ],
+          "assumptions": [],
+          "insulation": null
+        }
+      ]
+    }
+  },
+  "architecture": {
+    "file": "Architecture.ifc",
+    "schema": "IFC2X3",
+    "storeys": [
+      {
+        "name": "T/FDN",
+        "elevation_m": -1.25
+      },
+      {
+        "name": "Level 1",
+        "elevation_m": 0.0
+      },
+      {
+        "name": "Level 2",
+        "elevation_m": 3.1
+      },
+      {
+        "name": "Roof",
+        "elevation_m": 6.0
+      }
+    ],
+    "slabs": [
+      {
+        "type_name": "Floor:127mm Slab on Grade",
+        "predefined_type": "FLOOR",
+        "thickness_mm": 127.0,
+        "z_min_m": -0.127,
+        "z_max_m": 0.0,
+        "count": 2
+      },
+      {
+        "type_name": "Floor:Residential - Wood Joist with Subflooring",
+        "predefined_type": "FLOOR",
+        "thickness_mm": 305.0,
+        "z_min_m": 2.795,
+        "z_max_m": 3.1,
+        "count": 2
+      },
+      {
+        "type_name": "Floor:Finish Floor - Wood",
+        "predefined_type": "FLOOR",
+        "thickness_mm": 19.0,
+        "z_min_m": 3.1,
+        "z_max_m": 3.119,
+        "count": 6
+      },
+      {
+        "type_name": "Floor:Finish Floor - Ceramic Tile",
+        "predefined_type": "FLOOR",
+        "thickness_mm": 13.0,
+        "z_min_m": 3.1,
+        "z_max_m": 3.113,
+        "count": 2
+      },
+      {
+        "type_name": "Floor:Finish Floor - Wood",
+        "predefined_type": "FLOOR",
+        "thickness_mm": 19.0,
+        "z_min_m": 0.0,
+        "z_max_m": 0.019,
+        "count": 2
+      },
+      {
+        "type_name": "Floor:Finish Floor - Ceramic Tile",
+        "predefined_type": "FLOOR",
+        "thickness_mm": 13.0,
+        "z_min_m": 0.0,
+        "z_max_m": 0.013,
+        "count": 4
+      },
+      {
+        "type_name": "Basic Roof:Live Roof over Wood Joist Flat Roof",
+        "predefined_type": "ROOF",
+        "thickness_mm": 457.0,
+        "z_min_m": 6.0,
+        "z_max_m": 6.457,
+        "count": 1
+      },
+      {
+        "type_name": "Floor:150mm Exterior Slab on Grade",
+        "predefined_type": "FLOOR",
+        "thickness_mm": 150.0,
+        "z_min_m": -0.137,
+        "z_max_m": 0.013,
+        "count": 2
+      }
+    ],
+    "ceilings": [
+      {
+        "type_name": "Compound Ceiling:Gypsum Board",
+        "predefined_type": "CEILING",
+        "thickness_mm": 57.0,
+        "z_min_m": 2.5,
+        "z_max_m": 2.557,
+        "count": 4
+      },
+      {
+        "type_name": "Compound Ceiling:Gypsum Board",
+        "predefined_type": "CEILING",
+        "thickness_mm": 57.0,
+        "z_min_m": 5.6,
+        "z_max_m": 5.657,
+        "count": 8
+      }
+    ],
+    "beams": [
+      {
+        "type_name": "M_W-Wide Flange:W310X60",
+        "predefined_type": null,
+        "thickness_mm": 303.0,
+        "z_min_m": 2.797,
+        "z_max_m": 3.1,
+        "count": 2
+      },
+      {
+        "type_name": "M_W-Wide Flange:W410X60",
+        "predefined_type": null,
+        "thickness_mm": 407.0,
+        "z_min_m": 2.693,
+        "z_max_m": 3.1,
+        "count": 2
+      },
+      {
+        "type_name": "M_W-Wide Flange:W410X60",
+        "predefined_type": null,
+        "thickness_mm": 407.0,
+        "z_min_m": 5.593,
+        "z_max_m": 6.0,
+        "count": 4
+      }
+    ],
+    "material_layer_sets": [
+      {
+        "name": "Basic Wall:Exterior - Brick on Block",
+        "total_thickness_mm": 417.0,
+        "layers": [
+          {
+            "material": "Masonry - Brick",
+            "thickness_mm": 92.0
+          },
+          {
+            "material": "Misc. Air Layers - Air Space",
+            "thickness_mm": 25.0
+          },
+          {
+            "material": "Insulation / Thermal Barriers - Rigid insulation",
+            "thickness_mm": 50.0
+          },
+          {
+            "material": "Masonry - Concrete Block",
+            "thickness_mm": 193.0
+          },
+          {
+            "material": "Metal - Stud Layer",
+            "thickness_mm": 41.0
+          },
+          {
+            "material": "Plasterboard",
+            "thickness_mm": 16.0
+          }
+        ]
+      },
+      {
+        "name": "Basic Wall:Interior - Partition (92mm Stud)",
+        "total_thickness_mm": 124.0,
+        "layers": [
+          {
+            "material": "Plasterboard",
+            "thickness_mm": 16.0
+          },
+          {
+            "material": "Metal - Stud Layer",
+            "thickness_mm": 92.0
+          },
+          {
+            "material": "Plasterboard",
+            "thickness_mm": 16.0
+          }
+        ]
+      },
+      {
+        "name": "Basic Wall:Party Wall - CMU Residential Unit Dimising Wall",
+        "total_thickness_mm": 550.0,
+        "layers": [
+          {
+            "material": "Plasterboard",
+            "thickness_mm": 16.0
+          },
+          {
+            "material": "Metal - Stud Layer",
+            "thickness_mm": 41.0
+          },
+          {
+            "material": "Masonry - Concrete Block",
+            "thickness_mm": 193.0
+          },
+          {
+            "material": "Misc. Air Layers - Air Space",
+            "thickness_mm": 50.0
+          },
+          {
+            "material": "Masonry - Concrete Block",
+            "thickness_mm": 193.0
+          },
+          {
+            "material": "Metal - Stud Layer",
+            "thickness_mm": 41.0
+          },
+          {
+            "material": "Plasterboard",
+            "thickness_mm": 16.0
+          }
+        ]
+      },
+      {
+        "name": "Basic Wall:Foundation - Concrete (417mm)",
+        "total_thickness_mm": 417.0,
+        "layers": [
+          {
+            "material": "Concrete - Cast In Situ",
+            "thickness_mm": 417.0
+          }
+        ]
+      },
+      {
+        "name": "Basic Wall:Foundation - Concrete (435mm)",
+        "total_thickness_mm": 435.0,
+        "layers": [
+          {
+            "material": "Concrete - Cast In Situ",
+            "thickness_mm": 435.0
+          }
+        ]
+      },
+      {
+        "name": "Floor:127mm Slab on Grade",
+        "total_thickness_mm": 127.0,
+        "layers": [
+          {
+            "material": "Concrete",
+            "thickness_mm": 127.0
+          }
+        ]
+      },
+      {
+        "name": "Basic Wall:Interior - Plumbing (152mm Stud)",
+        "total_thickness_mm": 184.0,
+        "layers": [
+          {
+            "material": "Plasterboard",
+            "thickness_mm": 16.0
+          },
+          {
+            "material": "Metal - Stud Layer",
+            "thickness_mm": 152.0
+          },
+          {
+            "material": "Plasterboard",
+            "thickness_mm": 16.0
+          }
+        ]
+      },
+      {
+        "name": "Floor:Residential - Wood Joist with Subflooring",
+        "total_thickness_mm": 305.0,
+        "layers": [
+          {
+            "material": "Wood - Sheathing - plywood",
+            "thickness_mm": 19.0
+          },
+          {
+            "material": "Wood - Dimensional Lumber",
+            "thickness_mm": 286.0
+          }
+        ]
+      },
+      {
+        "name": "Floor:Finish Floor - Wood",
+        "total_thickness_mm": 19.0,
+        "layers": [
+          {
+            "material": "Wood - Flooring",
+            "thickness_mm": 16.0
+          },
+          {
+            "material": "Insulation / Thermal Barriers - Semi-rigid insulation",
+            "thickness_mm": 3.0
+          }
+        ]
+      },
+      {
+        "name": "Floor:Finish Floor - Ceramic Tile",
+        "total_thickness_mm": 13.0,
+        "layers": [
+          {
+            "material": "Ceramic Tile",
+            "thickness_mm": 10.0
+          },
+          {
+            "material": "Masonry - Grout",
+            "thickness_mm": 3.0
+          }
+        ]
+      },
+      {
+        "name": "Basic Roof:Live Roof over Wood Joist Flat Roof",
+        "total_thickness_mm": 457.0,
+        "layers": [
+          {
+            "material": "Site - Grass",
+            "thickness_mm": 64.0
+          },
+          {
+            "material": "Roofing - Barrier",
+            "thickness_mm": 6.0
+          },
+          {
+            "material": "Roofing - EPDM Membrane",
+            "thickness_mm": 6.0
+          },
+          {
+            "material": "Insulation / Thermal Barriers - Rigid insulation",
+            "thickness_mm": 76.0
+          },
+          {
+            "material": "Wood - Sheathing - plywood",
+            "thickness_mm": 19.0
+          },
+          {
+            "material": "Wood - Dimensional Lumber",
+            "thickness_mm": 286.0
+          }
+        ]
+      },
+      {
+        "name": "Compound Ceiling:Gypsum Board",
+        "total_thickness_mm": 57.0,
+        "layers": [
+          {
+            "material": "Metal - Stud Layer",
+            "thickness_mm": 45.0
+          },
+          {
+            "material": "Plasterboard",
+            "thickness_mm": 12.0
+          }
+        ]
+      },
+      {
+        "name": "Basic Wall:Interior - Furring (152 mm Stud)",
+        "total_thickness_mm": 152.0,
+        "layers": [
+          {
+            "material": "Metal - Stud Layer",
+            "thickness_mm": 136.0
+          },
+          {
+            "material": "Plasterboard",
+            "thickness_mm": 16.0
+          }
+        ]
+      },
+      {
+        "name": "Floor:150mm Exterior Slab on Grade",
+        "total_thickness_mm": 150.0,
+        "layers": [
+          {
+            "material": "Concrete - Cast In Situ",
+            "thickness_mm": 150.0
+          }
+        ]
+      },
+      {
+        "name": "Basic Wall:Interior - Furring (38 mm Stud)",
+        "total_thickness_mm": 54.0,
+        "layers": [
+          {
+            "material": "Metal - Stud Layer",
+            "thickness_mm": 38.0
+          },
+          {
+            "material": "Plasterboard",
+            "thickness_mm": 16.0
+          }
+        ]
+      }
+    ],
+    "ceiling_to_structure_gaps": [
+      {
+        "ceiling_z_max_m": 2.557,
+        "ceiling_thickness_mm": 57.0,
+        "overhead_name": "Floor:Residential - Wood Joist with Subflooring",
+        "overhead_z_min_m": 2.795,
+        "gap_mm": 238.0,
+        "count": 4
+      },
+      {
+        "ceiling_z_max_m": 5.657,
+        "ceiling_thickness_mm": 57.0,
+        "overhead_name": "Basic Roof:Live Roof over Wood Joist Flat Roof",
+        "overhead_z_min_m": 6.0,
+        "gap_mm": 343.0,
+        "count": 8
+      }
+    ],
+    "observations": [
+      "The floor and roof build-ups above the rooms use dimensional lumber and plywood, not a concrete soffit.",
+      "Ceilings are compound gypsum board on a metal-stud layer (57 mm in the material layer set), so a concrete ceiling anchor does not match this model's soffit.",
+      "Concrete in this architecture model is the slab on grade and the foundation walls, not the ceiling the MEP hangers would reach."
+    ]
+  }
+}
