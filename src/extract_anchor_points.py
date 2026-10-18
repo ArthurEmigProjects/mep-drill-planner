@@ -86,30 +86,39 @@ def extract_from_ifc(ifc_path: Path, types: tuple[str, ...] = DEFAULT_TYPES) -> 
     for type_name in types:
         if type_name not in schema_types:
             continue
+        # Every instance of this class (each pipe, duct, tray, …).
         for el in model.by_type(type_name):
+            # Tessellate the element into a triangle mesh in world coordinates
+            # (USE_WORLD_COORDS above). Elements with no geometry, or a
+            # representation IfcOpenShell cannot mesh, raise here — skip them
+            # so one bad solid does not abort the whole model.
             try:
                 shape = ifcopenshell.geom.create_shape(settings, el)
             except Exception:
                 continue
             verts = shape.geometry.verts  # flat list x,y,z,x,y,z,...
+            # Fewer than three numbers means no complete vertex — nothing to bound.
             if len(verts) < 3:
                 continue
+            # Un-interleave: index 0,3,6… are x, 1,4,7… are y, 2,5,8… are z.
             xs = verts[0::3]
             ys = verts[1::3]
             zs = verts[2::3]
-            n += 1
+            n += 1  # running count across all types, so ids stay unique
+            # One candidate per element: plan centre of its bbox, at the highest z.
             points.append(
                 {
-                    "id": f"P-{n:04d}",
-                    "element_id": el.GlobalId,
-                    "element_type": el.is_a(),
-                    "x": round((min(xs) + max(xs)) / 2.0, 4),
+                    "id": f"P-{n:04d}",  # P-0001, P-0002, …
+                    "element_id": el.GlobalId,  # stable IFC id of the source element
+                    "element_type": el.is_a(),  # concrete class, e.g. IfcPipeSegment
+                    "x": round((min(xs) + max(xs)) / 2.0, 4),  # bbox centre in plan
                     "y": round((min(ys) + max(ys)) / 2.0, 4),
                     "z": round(max(zs), 4),  # top of bbox ≈ ceiling side
-                    "reason": "bbox_top_centre",
+                    "reason": "bbox_top_centre",  # heuristic tag for later filtering
                 }
             )
 
+    # JSON document written by main(); coordinates are rounded to 0.1 mm.
     return {
         "source": ifc_path.name,
         "units": "m",
