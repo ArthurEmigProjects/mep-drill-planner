@@ -94,12 +94,17 @@ The v0.2 spacing rules need a catalogue of supports that actually fit the pipes,
 | `data/mounting_elements/products.json` | Manufacturer products and spacing guidance |
 | `data/mounting_elements/schema.json` | JSON Schema (draft 2020-12) for that file |
 | `src/mounting.py` | Loader, `feasible_mountings()`, and the coverage report |
+| `src/mounting_statistics.py` | Statistics of the catalogue, the duplex inventory and the coverage |
+| `data/mounting_elements/statistics/` | The same report as Markdown, text, Word, PDF and Excel |
 
 ```bash
 python -m src.inventory_elements
 python -m src.mounting
+python -m src.mounting_statistics
 python -m unittest discover -s tests
 ```
+
+`python -m src.mounting_statistics` writes `data/mounting_elements/statistics/mounting_elements_statistics.md`, `.txt`, `.docx`, `.pdf` and `.xlsx`. The five files carry the same tables: catalogue composition, clamp-window coverage, published loads, guidance spacing, inventory counts and lengths, match status, unmatched gaps, and the architecture ceiling gaps. Word, PDF and Excel need `python-docx`, `reportlab` and `openpyxl` when regenerating; those writers are not required to read the IFC models.
 
 `feasible_mountings(element, substrate=None)` takes a dict with `kind` and a size (an inventory group is valid input) and returns primary products, companion rods / channel / anchors, attached guidance, assumptions, and a gap string when nothing fits.
 
