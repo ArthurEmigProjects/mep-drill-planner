@@ -8,6 +8,6 @@ Then clash check should be applied and the distances should be corrected in the 
 
 The task is to write code that 
 a) detects the runs of pipes, ventilation ducts, etc.;
-b) places the mountig points
+b) places the mounting points
 c) checks vertically if there are clashes
 d) if there are clashes, adjusts the mounting points as described above
