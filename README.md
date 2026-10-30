@@ -104,7 +104,7 @@ python -m src.mounting_statistics
 python -m unittest discover -s tests
 ```
 
-`python -m src.mounting_statistics` writes `data/mounting_elements/statistics/mounting_elements_statistics.md`, `.txt`, `.docx`, `.pdf` and `.xlsx`. The five files carry the same tables: catalogue composition, clamp-window coverage, published loads, guidance spacing, inventory counts and lengths, match status, unmatched gaps, and the architecture ceiling gaps. Word, PDF and Excel need `python-docx`, `reportlab` and `openpyxl` when regenerating; those writers are not required to read the IFC models.
+`python -m src.mounting_statistics` writes `data/mounting_elements/statistics/mounting_elements_statistics.md`, `.txt`, `.docx`, `.pdf` and `.xlsx`. The five files carry the same tables: catalogue composition, clamp-window coverage, published loads, guidance spacing, inventory counts and lengths, match status, unmatched gaps, and the architecture ceiling gaps. How to install the writers and run the command is in [doc/statistics.md](doc/statistics.md).
 
 `feasible_mountings(element, substrate=None)` takes a dict with `kind` and a size (an inventory group is valid input) and returns primary products, companion rods / channel / anchors, attached guidance, assumptions, and a gap string when nothing fits.
 
