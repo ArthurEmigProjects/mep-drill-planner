@@ -1,0 +1,1 @@
+if pipe or duct goes vertical, they need to be mounted on wall of e.g. a shaft, not on the ceiling
