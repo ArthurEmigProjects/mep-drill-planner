@@ -155,6 +155,9 @@ class AppHandler(BaseHTTPRequestHandler):
         if path == "/":
             self._send_file(WEB / "index.html", "text/html; charset=utf-8")
             return
+        if path == "/viewer":
+            self._send_file(WEB / "viewer.html", "text/html; charset=utf-8")
+            return
         if path == "/assets/styles.css":
             self._send_file(WEB / "styles.css", "text/css; charset=utf-8")
             return

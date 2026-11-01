@@ -25,6 +25,7 @@ const banner = document.querySelector("#banner");
 const selectedTitle = document.querySelector("#selected-title");
 const selectedMeta = document.querySelector("#selected-meta");
 const viewBtn = document.querySelector("#view");
+const viewWindowBtn = document.querySelector("#view-window");
 const extractBtn = document.querySelector("#extract");
 const placeBtn = document.querySelector("#place");
 const drawingsBtn = document.querySelector("#drawings");
@@ -124,6 +125,7 @@ function clashFiles() {
 function renderSelection() {
   const file = selectedFile();
   viewBtn.disabled = !file || state.busy;
+  viewWindowBtn.disabled = !file || state.busy;
   extractBtn.disabled = !file || state.busy;
   placeBtn.disabled = !file || state.busy;
   drawingsBtn.disabled = !file || state.busy;
@@ -278,6 +280,7 @@ async function uploadMany(list) {
     showBanner("");
   }
   viewBtn.disabled = true;
+  viewWindowBtn.disabled = true;
   extractBtn.disabled = true;
   placeBtn.disabled = true;
   drawingsBtn.disabled = true;
@@ -528,7 +531,24 @@ async function viewModel() {
   }
 }
 
+function viewerWindowUrl(file) {
+  const params = new URLSearchParams();
+  params.set("id", file.id);
+  for (const extra of clashFiles()) params.append("clash", extra.id);
+  return `/viewer?${params}`;
+}
+
+function openViewerWindow() {
+  const file = selectedFile();
+  if (!file || state.busy) return;
+  const popup = window.open(viewerWindowUrl(file), "mep-ifc-viewer", "popup,width=1280,height=800");
+  if (!popup) {
+    showBanner("The browser blocked the viewer window. Allow pop-ups for this site, or use View in 3D.");
+  }
+}
+
 viewBtn.addEventListener("click", viewModel);
+viewWindowBtn.addEventListener("click", openViewerWindow);
 extractBtn.addEventListener("click", extract);
 placeBtn.addEventListener("click", placeMountingPoints);
 drawingsBtn.addEventListener("click", downloadDrawings);

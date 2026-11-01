@@ -36,7 +36,20 @@ class ViewerHttpTests(unittest.TestCase):
         self.assertIn("FragmentsManager", script)
         with urllib.request.urlopen(f"{self.base}/assets/viewer.js", timeout=5) as response:
             self.assertEqual(response.status, 200)
-            self.assertIn(b"MepViewer", response.read())
+            body = response.read()
+            self.assertIn(b"MepViewer", body)
+            self.assertIn(b"filesFromQuery", body)
+        index = (WEB / "index.html").read_text(encoding="utf-8")
+        self.assertIn('id="view-window"', index)
+
+    def test_viewer_window_page_is_served(self):
+        url = f"{self.base}/viewer?id=sample:HeatingAndCooling.ifc&clash=sample:Architecture.ifc"
+        with urllib.request.urlopen(url, timeout=5) as response:
+            self.assertEqual(response.status, 200)
+            page = response.read().decode("utf-8")
+        self.assertIn('data-page="viewer"', page)
+        self.assertIn('id="viewer-canvas"', page)
+        self.assertIn("/assets/viewer.js", page)
 
     @unittest.skipUnless(SAMPLE.is_file(), "sample IFC is not in examples/")
     def test_ifc_bytes_are_served_for_the_viewer(self):

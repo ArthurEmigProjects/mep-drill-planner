@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Model · MEP drill planner</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+      "three/": "https://unpkg.com/three@0.184.0/",
+      "camera-controls": "https://unpkg.com/camera-controls@3.1.2/dist/camera-controls.module.js",
+      "web-ifc": "https://unpkg.com/web-ifc@0.0.77/web-ifc-api.js",
+      "@thatopen/fragments": "https://unpkg.com/@thatopen/fragments@3.6.0/dist/index.mjs",
+      "@thatopen/components": "https://unpkg.com/@thatopen/components@3.6.0/dist/index.mjs"
+    }
+  }
+  </script>
+</head>
+<body class="viewer-app" data-page="viewer">
+  <section id="viewer">
+    <header class="viewer-bar">
+      <p class="eyebrow">MEP drill planner</p>
+      <h1 id="viewer-title">Model</h1>
+      <p id="viewer-status" class="hint">Starting the viewer…</p>
+    </header>
+    <div id="viewer-canvas" class="viewer-canvas"></div>
+  </section>
+  <script type="module" src="/assets/viewer.js"></script>
+</body>
+</html>

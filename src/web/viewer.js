@@ -106,12 +106,36 @@ async function loadOne(file, index, total, token) {
   await ifcLoader.load(buffer, false, file.id);
 }
 
+function labelForId(id) {
+  const raw = id.includes(":") ? id.slice(id.indexOf(":") + 1) : id;
+  return raw.replace(/^[0-9a-f]{8}-/i, "");
+}
+
+function filesFromQuery() {
+  if (document.body.dataset.page !== "viewer") return null;
+  const params = new URLSearchParams(location.search);
+  const ids = [];
+  const primary = params.get("id");
+  if (primary) ids.push(primary);
+  for (const extra of params.getAll("clash")) {
+    if (extra && !ids.includes(extra)) ids.push(extra);
+  }
+  return ids.map((id) => ({ id, name: labelForId(id) }));
+}
+
 async function open(files) {
   const token = ++generation;
   const section = document.querySelector("#viewer");
-  section.hidden = false;
+  if (section) {
+    section.hidden = false;
+    section.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  const heading = document.querySelector("#viewer-title");
+  if (heading && files.length) heading.textContent = files.map((file) => file.name).join(", ");
+  if (document.body.dataset.page === "viewer" && files[0]) {
+    document.title = `${files[0].name} · MEP drill planner`;
+  }
   status("Starting the viewer…");
-  section.scrollIntoView({ behavior: "smooth", block: "nearest" });
   await ensure();
   if (token !== generation) return;
   await clearModels();
@@ -134,3 +158,12 @@ async function open(files) {
 }
 
 window.MepViewer = { open };
+
+const requested = filesFromQuery();
+if (requested) {
+  if (!requested.length) {
+    status("No model was selected.");
+  } else {
+    open(requested).catch((error) => status(error.message || "Could not open the model."));
+  }
+}
