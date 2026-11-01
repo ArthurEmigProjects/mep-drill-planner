@@ -16,12 +16,15 @@ Turn an MEP IFC model into a list of ceiling anchor / drill points that a constr
 | **3. Public sample IFCs** | Done | Three CC BY 4.0 models under `examples/` (Zenodo ventilation + piping, buildingSMART Duplex MEP); sources attributed below |
 | **4. Sample runs** | Done | Ventilation **320** pts · Piping **439** pts · Duplex MEP **785** pts → `examples/out/*-points.json` (local only; gitignored) |
 | **5. Mounting database** | Done | Inventory of the Zenodo duplex MEP sizes, plus a sourced catalogue of pipe clamps, duct hangers, rods, channel and concrete anchors (`data/mounting_elements/`) |
-| **6. Rule checks** | Not started | Spacing, edge distance, structure clash |
-| **7. HTML report** | Not started | Human-readable map / table of points + rule failures |
-| **8. ROS 2 sim** | Not started | Mobile base + arm visits points (e.g. Gazebo / Jazzy) |
-| **9. Perception** | Later | PyImageSearch / CV: verify as-built holes from site photos |
+| **6. Place hangers** | Done | Straight pipe and duct runs. Pitch starts at 70% of the cited maximum. A rod that meets another service or a beam is shifted so every gap stays between 90% and 95%; a point that cannot move is an unresolved clash. A riser is fixed to the nearest wall. Further IFCs join the clash check with `--obstacles`. Writes JSON and `examples/out/<stem>-mountings.ifc` |
+| **7. Clash drawings** | Done | Floor plan per storey, long section, cross section, a section at each unresolved clash, and isometric views (`python -m src.ifc_drawings`, and the Clash drawings PDF button) |
+| **8. Local page** | Done | `python -m src.ui` picks a sample or an upload, ticks other files for clashes, and lists anchor points and mounting points (regular, moved, unresolved clash) |
+| **9. 3D viewer** | Done | [That Open](https://github.com/ThatOpen/engine_components) view on the page and in its own window. Orbit and plan, perspective and orthographic, category and storey filters, category colors, fade, and section cuts. The hanger IFC is its own model: show or hide it, and filter clear / moved / clash and sanitary / heating-cooling / ventilation |
+| **10. Edge distance** | Not started | How far a drill sits from a slab or beam edge. Spacing and rod clashes are in step 6 |
+| **11. ROS 2 sim** | Not started | Mobile base + arm visits points (e.g. Gazebo / Jazzy) |
+| **12. Perception** | Later | PyImageSearch / CV: verify as-built holes from site photos |
 
-**Current focus:** tighten candidates (ceiling-level / hanger-like only), then rules + HTML report.
+**Current focus:** edge distance from the structure, then the ROS 2 simulation.
 
 ## Quick start
 
@@ -65,8 +68,8 @@ python -m src.extract_anchor_points --demo --out examples/out/points.json
 | Milestone | Status | What |
 |-----------|--------|------|
 | **v0.1** | Done | IFC → points JSON on public MEP samples (schema-safe extractor) |
-| **v0.2** | Next | Ceiling/hanger filtering · spacing + edge-distance rules · HTML report |
-| **v0.3** | Planned | ROS 2 Jazzy sim: mobile base + arm visits points |
+| **v0.2** | Done | Catalogue pitch and clash correction, risers on walls, extra IFCs in the clash check, local page, clash PDF, 3D viewer with a hanger model |
+| **v0.3** | Next | Edge-distance rules, then ROS 2 Jazzy sim: mobile base + arm visits points |
 | **later** | Planned | Perception / PyImageSearch: verify as-built holes from site photos |
 
 ## Sample IFC sources
@@ -130,7 +133,7 @@ python -m unittest discover -s tests
 - Sikla PLU 150 is not applied to flex-duct mesh (151.6 mm) or to flex ducts whose diameter could not be recovered.
 - No product is recorded for sanitary fixtures, water heaters, stoves, air terminals, air-handling units, or flex ducts. Those groups stay unmatched.
 - Radiators match the Kermi wall console only with the assumption that the IFC radiator has the Kermi lug the console is made for. It is a wall fixing, not a ceiling anchor.
-- The extractor in `src/extract_anchor_points.py` is unchanged. This database does not yet generate drill points.
+- Drill points from the catalogue are placed by `src/mounting_points.py`. The bounding-box extractor in `src/extract_anchor_points.py` stays a separate list of hanger candidates.
 
 ## Clash drawings
 
