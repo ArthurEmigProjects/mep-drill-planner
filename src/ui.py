@@ -14,6 +14,7 @@ import json
 import re
 import sys
 import threading
+import urllib.parse
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -149,7 +150,8 @@ class AppHandler(BaseHTTPRequestHandler):
         sys.stderr.write("%s - %s\n" % (self.address_string(), fmt % args))
 
     def do_GET(self) -> None:  # noqa: N802
-        path = self.path.split("?", 1)[0]
+        parsed = urllib.parse.urlsplit(self.path)
+        path = parsed.path
         if path == "/":
             self._send_file(WEB / "index.html", "text/html; charset=utf-8")
             return
@@ -159,8 +161,14 @@ class AppHandler(BaseHTTPRequestHandler):
         if path == "/assets/app.js":
             self._send_file(WEB / "app.js", "text/javascript; charset=utf-8")
             return
+        if path == "/assets/viewer.js":
+            self._send_file(WEB / "viewer.js", "text/javascript; charset=utf-8")
+            return
         if path == "/api/files":
             self._send_json({"files": list_files(), "ifcopenshell": ifcopenshell_ready()})
+            return
+        if path == "/api/ifc":
+            self._send_ifc(parsed.query)
             return
         self.send_error(404)
 
@@ -302,6 +310,32 @@ class AppHandler(BaseHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(raw)
+
+    def _send_ifc(self, query: str) -> None:
+        file_id = urllib.parse.parse_qs(query).get("id", [""])[0]
+        try:
+            path = resolve_file(file_id)
+        except ValueError:
+            self._send_json({"error": "Choose an IFC file first."}, 400)
+            return
+        self._stream_file(path, "application/octet-stream")
+
+    def _stream_file(self, path: Path, content_type: str) -> None:
+        length = path.stat().st_size
+        self.send_response(200)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(length))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        with path.open("rb") as handle:
+            while True:
+                chunk = handle.read(256 * 1024)
+                if not chunk:
+                    break
+                try:
+                    self.wfile.write(chunk)
+                except OSError:
+                    return
 
     def _send_file(self, path: Path, content_type: str) -> None:
         if not path.is_file():

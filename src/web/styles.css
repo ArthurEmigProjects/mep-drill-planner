@@ -26,7 +26,7 @@ body {
 }
 
 main {
-  width: min(980px, calc(100% - 32px));
+  width: min(1120px, calc(100% - 32px));
   margin: 0 auto;
   padding: 48px 0 72px;
 }
@@ -237,7 +237,26 @@ button {
   color: var(--ink);
 }
 
-.ghost:hover { border-color: #b7ad9e; }
+.ghost:hover:not(:disabled) { border-color: #b7ad9e; }
+
+.ghost:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+.viewer-canvas {
+  position: relative;
+  height: min(70vh, 680px);
+  min-height: 480px;
+  margin-top: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #d5dde4;
+  touch-action: none;
+}
+
+.viewer-help { margin-top: 10px; }
 
 .types {
   display: flex;

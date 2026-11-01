@@ -24,6 +24,7 @@ const samplesStatus = document.querySelector("#samples-status");
 const banner = document.querySelector("#banner");
 const selectedTitle = document.querySelector("#selected-title");
 const selectedMeta = document.querySelector("#selected-meta");
+const viewBtn = document.querySelector("#view");
 const extractBtn = document.querySelector("#extract");
 const placeBtn = document.querySelector("#place");
 const drawingsBtn = document.querySelector("#drawings");
@@ -122,6 +123,7 @@ function clashFiles() {
 
 function renderSelection() {
   const file = selectedFile();
+  viewBtn.disabled = !file || state.busy;
   extractBtn.disabled = !file || state.busy;
   placeBtn.disabled = !file || state.busy;
   drawingsBtn.disabled = !file || state.busy;
@@ -275,6 +277,7 @@ async function uploadMany(list) {
   } else {
     showBanner("");
   }
+  viewBtn.disabled = true;
   extractBtn.disabled = true;
   placeBtn.disabled = true;
   drawingsBtn.disabled = true;
@@ -501,6 +504,31 @@ async function downloadDrawings() {
   }
 }
 
+async function viewModel() {
+  const file = selectedFile();
+  if (!file || state.busy) return;
+  if (!window.MepViewer) {
+    showBanner("The 3D viewer did not start. It downloads That Open Engine on first use, so reload once the network is available.");
+    return;
+  }
+  state.busy = true;
+  viewBtn.textContent = "Opening…";
+  renderSelection();
+  showBanner("");
+  try {
+    await window.MepViewer.open([file, ...clashFiles()]);
+  } catch (error) {
+    showBanner(error.message);
+    const node = document.querySelector("#viewer-status");
+    if (node) node.textContent = error.message;
+  } finally {
+    state.busy = false;
+    viewBtn.textContent = "View in 3D";
+    renderSelection();
+  }
+}
+
+viewBtn.addEventListener("click", viewModel);
 extractBtn.addEventListener("click", extract);
 placeBtn.addEventListener("click", placeMountingPoints);
 drawingsBtn.addEventListener("click", downloadDrawings);
