@@ -1,0 +1,1 @@
+There should be all possible filtering, coloring, cutting and all other view logic implemented for the IFC viewer
