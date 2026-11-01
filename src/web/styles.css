@@ -26,7 +26,7 @@ body {
 }
 
 main {
-  width: min(760px, calc(100% - 32px));
+  width: min(980px, calc(100% - 32px));
   margin: 0 auto;
   padding: 48px 0 72px;
 }
@@ -172,6 +172,13 @@ h2 {
   align-items: center;
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
 button {
   font: inherit;
   cursor: pointer;
@@ -221,6 +228,42 @@ button {
   font-size: 0.8rem;
 }
 
+button.chip {
+  font: inherit;
+  border: 1px solid transparent;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+button.chip.on {
+  border-color: var(--accent);
+  background: var(--selected);
+}
+
+.mounting-note { margin-top: 10px; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 650;
+  background: #efe8de;
+}
+
+.badge.shifted, tr.shifted .badge { background: #f4e4da; color: var(--accent-deep); }
+.badge.respaced, tr.respaced .badge { background: #e7eef6; color: #1d4e89; }
+.badge.clash, tr.clash .badge { background: #f8d7d0; color: #8d3014; }
+
+tr.shifted td { background: #fff7f2; }
+tr.respaced td { background: #f4f8fc; }
+tr.clash td { background: #fdecea; }
+
+td.empty {
+  color: var(--muted);
+  padding-top: 14px;
+}
+
 .table-wrap {
   margin-top: 14px;
   overflow: auto;
@@ -263,6 +306,6 @@ button:focus-visible, .file:focus-within {
 }
 
 @media (max-width: 640px) {
-  .selection { flex-direction: column; align-items: stretch; }
-  .primary { width: 100%; }
+  .selection, .actions { flex-direction: column; align-items: stretch; }
+  .primary, .ghost { width: 100%; }
 }

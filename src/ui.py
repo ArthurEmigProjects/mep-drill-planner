@@ -20,6 +20,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from .extract_anchor_points import extract_from_ifc
+from .mounting_points import _round_numbers, load_ifc, plan_mounting_points
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / "examples"
@@ -162,6 +163,9 @@ class AppHandler(BaseHTTPRequestHandler):
         if path == "/api/extract":
             self._extract()
             return
+        if path == "/api/mounting-points":
+            self._mounting_points()
+            return
         self.send_error(404)
 
     def _read_body(self, limit: int) -> bytes | None:
@@ -213,6 +217,32 @@ class AppHandler(BaseHTTPRequestHandler):
         result["out"] = str(out.relative_to(ROOT))
         self._send_json(result)
 
+    def _mounting_points(self) -> None:
+        body = self._read_body(64 * 1024)
+        if body is None:
+            return
+        try:
+            payload = json.loads(body.decode("utf-8"))
+            path = resolve_file(str(payload["id"]))
+        except (KeyError, ValueError, json.JSONDecodeError, UnicodeError):
+            self._send_json({"error": "Choose an IFC file first."}, 400)
+            return
+        try:
+            result = build_mounting_plan(path)
+        except SystemExit as exc:
+            self._send_json({"error": str(exc)}, 500)
+            return
+        except Exception as exc:  # geometry libraries raise a wide set of errors
+            self._send_json({"error": f"Could not place hangers for {path.name}: {exc}"}, 500)
+            return
+        OUT_DIR.mkdir(parents=True, exist_ok=True)
+        out = OUT_DIR / f"{path.stem}-mounting-points.json"
+        extra = {"count", "out", "run_count", "reason_counts", "adjusted_count", "clash_count"}
+        stored = {key: value for key, value in result.items() if key not in extra}
+        out.write_text(json.dumps(stored, indent=2), encoding="utf-8")
+        result["out"] = str(out.relative_to(ROOT))
+        self._send_json(result)
+
     def _send_json(self, data: dict, status: int = 200) -> None:
         raw = json.dumps(data).encode("utf-8")
         self.send_response(status)
@@ -233,6 +263,33 @@ class AppHandler(BaseHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(raw)
+
+
+def build_mounting_plan(path: Path) -> dict:
+    """Place hanger points for one IFC and attach the counts the page shows.
+
+    ``reason`` on each point is the placement outcome. ``shifted_into_90_95``
+    and ``shifted_under_95`` are hangers moved off a blocked station.
+    ``respaced_90_95`` is a whole run placed again inside that band.
+    ``unresolved_clash`` means no clear station stayed within 95% of the
+    catalogue maximum.
+    """
+    segments, obstacles = load_ifc(path)
+    plan = _round_numbers(
+        plan_mounting_points(segments, obstacles, source=path.name)
+    )
+    counts: dict[str, int] = {}
+    for point in plan["points"]:
+        reason = point["reason"]
+        counts[reason] = counts.get(reason, 0) + 1
+    plan["count"] = len(plan["points"])
+    plan["run_count"] = len(plan["runs"])
+    plan["reason_counts"] = counts
+    plan["adjusted_count"] = sum(
+        count for reason, count in counts.items() if reason != "regular_70"
+    )
+    plan["clash_count"] = sum(1 for point in plan["points"] if not point["clear"])
+    return plan
 
 
 def main(argv: list[str] | None = None) -> int:

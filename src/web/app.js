@@ -1,8 +1,19 @@
+const REASONS = {
+  regular_70: "Even 70%",
+  respaced_90_95: "Respaced to 90–95%",
+  shifted_into_90_95: "Moved into 90–95%",
+  shifted_under_95: "Moved under 95%",
+  unresolved_clash: "Unresolved clash",
+};
+
 const state = {
   files: [],
   selectedId: null,
   points: [],
   shown: 25,
+  mountingPoints: [],
+  mountingShown: 25,
+  mountingFilter: "adjusted",
   busy: false,
 };
 
@@ -13,7 +24,14 @@ const banner = document.querySelector("#banner");
 const selectedTitle = document.querySelector("#selected-title");
 const selectedMeta = document.querySelector("#selected-meta");
 const extractBtn = document.querySelector("#extract");
+const placeBtn = document.querySelector("#place");
 const resultsEl = document.querySelector("#results");
+const mountingEl = document.querySelector("#mounting");
+const mountingMeta = document.querySelector("#mounting-meta");
+const mountingNote = document.querySelector("#mounting-note");
+const mountingFilters = document.querySelector("#mounting-filters");
+const mountingRows = document.querySelector("#mounting-rows");
+const showAllMountingBtn = document.querySelector("#show-all-mounting");
 const resultsMeta = document.querySelector("#results-meta");
 const typesEl = document.querySelector("#types");
 const rowsEl = document.querySelector("#rows");
@@ -70,6 +88,7 @@ function renderFiles() {
 function renderSelection() {
   const file = selectedFile();
   extractBtn.disabled = !file || state.busy;
+  placeBtn.disabled = !file || state.busy;
   if (!file) {
     selectedTitle.textContent = "No model yet";
     selectedMeta.textContent = "Choose a sample or open a file. Extraction runs on the model shown here.";
@@ -83,7 +102,37 @@ function renderSelection() {
 function select(id) {
   state.selectedId = id;
   resultsEl.hidden = true;
+  mountingEl.hidden = true;
   renderFiles();
+}
+
+function reasonLabel(reason) {
+  return REASONS[reason] || reason;
+}
+
+function reasonClass(point) {
+  if (point.reason === "unresolved_clash" || point.clear === false) return "clash";
+  if (String(point.reason).startsWith("shifted_")) return "shifted";
+  if (point.reason === "respaced_90_95") return "respaced";
+  return "regular";
+}
+
+function reasonRank(point) {
+  const kind = reasonClass(point);
+  if (kind === "clash") return 0;
+  if (kind === "shifted") return 1;
+  if (kind === "respaced") return 2;
+  return 3;
+}
+
+function metres(value) {
+  if (value === null || value === undefined || value === "") return "";
+  return Number(value).toFixed(3);
+}
+
+function gapLabel(point) {
+  if (point.spacing_ratio === null || point.spacing_ratio === undefined) return "";
+  return `${Math.round(point.spacing_ratio * 100)}%`;
 }
 
 async function loadFiles() {
@@ -180,6 +229,7 @@ async function upload(file) {
   }
   showBanner("");
   extractBtn.disabled = true;
+  placeBtn.disabled = true;
   samplesStatus.textContent = `Opening ${file.name}…`;
   try {
     const response = await fetch("/api/uploads", {
@@ -192,6 +242,7 @@ async function upload(file) {
     state.files = [data.file, ...state.files.filter((item) => item.id !== data.file.id)];
     state.selectedId = data.file.id;
     resultsEl.hidden = true;
+    mountingEl.hidden = true;
     renderFiles();
   } catch (error) {
     showBanner(error.message);
@@ -218,7 +269,145 @@ drop.addEventListener("drop", (event) => {
   upload(file);
 });
 
+function filteredMountingPoints() {
+  const points = state.mountingPoints;
+  if (state.mountingFilter === "adjusted") {
+    return points.filter((point) => point.reason !== "regular_70");
+  }
+  if (state.mountingFilter === "clash") {
+    return points.filter((point) => reasonClass(point) === "clash");
+  }
+  return points;
+}
+
+function renderMounting(data) {
+  const points = (data.points || []).slice().sort((a, b) => reasonRank(a) - reasonRank(b) || a.id.localeCompare(b.id));
+  state.mountingPoints = points;
+  state.mountingShown = 25;
+  const adjusted = data.adjusted_count ?? points.filter((point) => point.reason !== "regular_70").length;
+  state.mountingFilter = adjusted > 0 ? "adjusted" : "all";
+  mountingEl.hidden = false;
+  const count = data.count ?? points.length;
+  const clashes = data.clash_count ?? points.filter((point) => point.clear === false).length;
+  mountingMeta.textContent = `${count} hangers on ${data.run_count ?? (data.runs || []).length} runs · ${adjusted} adjusted · ${clashes} still clashing · ${data.out}`;
+  paintMountingFilters(data.reason_counts || {});
+  paintMountingRows();
+  mountingEl.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function paintMountingFilters(counts) {
+  const adjusted = state.mountingPoints.filter((point) => point.reason !== "regular_70").length;
+  const clashes = state.mountingPoints.filter((point) => reasonClass(point) === "clash").length;
+  const choices = [
+    ["adjusted", `Adjusted ${adjusted}`],
+    ["clash", `Still clashing ${clashes}`],
+    ["all", `All ${state.mountingPoints.length}`],
+  ];
+  mountingFilters.replaceChildren(
+    ...choices.map(([id, label]) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `chip filter${state.mountingFilter === id ? " on" : ""}`;
+      button.textContent = label;
+      button.addEventListener("click", () => {
+        state.mountingFilter = id;
+        state.mountingShown = 25;
+        paintMountingFilters(counts);
+        paintMountingRows();
+      });
+      return button;
+    }),
+  );
+  const listed = Object.entries(counts)
+    .filter(([, count]) => count > 0)
+    .map(([reason, count]) => `${reasonLabel(reason)} ${count}`);
+  mountingNote.textContent = listed.length
+    ? listed.join(" · ")
+    : "No hanger was placed. The runs have no cited spacing, or none are horizontal.";
+}
+
+function paintMountingRows() {
+  const visible = filteredMountingPoints();
+  const slice = visible.slice(0, state.mountingShown);
+  mountingRows.replaceChildren(
+    ...slice.map((point) => {
+      const row = document.createElement("tr");
+      row.className = reasonClass(point);
+      const reason = document.createElement("td");
+      const badge = document.createElement("span");
+      badge.className = `badge ${reasonClass(point)}`;
+      badge.textContent = reasonLabel(point.reason);
+      badge.title = point.clear === false && point.clashing_element_ids && point.clashing_element_ids.length
+        ? `Rod hits ${point.clashing_element_ids.join(", ")}`
+        : point.reason;
+      reason.append(badge);
+      const cells = [
+        [point.id, false],
+        [point.run_id, false],
+      ];
+      for (const [value, numeric] of cells) {
+        const cell = document.createElement("td");
+        if (numeric) cell.className = "num";
+        cell.textContent = value;
+        row.append(cell);
+      }
+      row.append(reason);
+      for (const value of [metres(point.station_m), gapLabel(point), metres(point.x), metres(point.y), metres(point.z)]) {
+        const cell = document.createElement("td");
+        cell.className = "num";
+        cell.textContent = value;
+        row.append(cell);
+      }
+      return row;
+    }),
+  );
+  if (!slice.length) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 8;
+    cell.className = "empty";
+    cell.textContent = state.mountingFilter === "adjusted"
+      ? "No hanger was adjusted. Every placed station kept the even 70% pitch."
+      : "No hanger is in this group.";
+    row.append(cell);
+    mountingRows.append(row);
+  }
+  const more = visible.length > state.mountingShown;
+  showAllMountingBtn.hidden = !more;
+  showAllMountingBtn.textContent = `Show all ${visible.length} mounting points`;
+}
+
+async function placeMountingPoints() {
+  const file = selectedFile();
+  if (!file || state.busy) return;
+  state.busy = true;
+  placeBtn.textContent = "Placing…";
+  renderSelection();
+  showBanner("");
+  try {
+    const response = await fetch("/api/mounting-points", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: file.id }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Placement failed");
+    renderMounting(data);
+  } catch (error) {
+    showBanner(error.message);
+  } finally {
+    state.busy = false;
+    placeBtn.textContent = "Place mounting points";
+    renderSelection();
+  }
+}
+
 extractBtn.addEventListener("click", extract);
+placeBtn.addEventListener("click", placeMountingPoints);
+showAllMountingBtn.addEventListener("click", () => {
+  state.mountingShown = filteredMountingPoints().length;
+  paintMountingRows();
+});
 showAllBtn.addEventListener("click", () => {
   state.shown = state.points.length;
   paintRows();
