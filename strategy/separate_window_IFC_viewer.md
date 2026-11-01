@@ -1,0 +1,1 @@
+It should be possible to open IFC Viewer in a separate browser window
