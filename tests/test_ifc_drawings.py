@@ -11,6 +11,7 @@ from src.ifc_drawings import (
     build_scene,
     clip_to_range,
     drawable_from_obstacle,
+    host_wall_drawables,
     pages_for_scene,
     plan_primitives,
     plane_for_hanger,
@@ -166,6 +167,64 @@ class GeometryTests(unittest.TestCase):
         self.assertTrue(any(item["op"] == "circle" and item["color"] == "pipe" for item in primitives))
         self.assertTrue(any(item["op"] == "line" and item["color"] == "clash" for item in primitives))
         self.assertTrue(any(item.get("color") == "structure" for item in primitives))
+
+    def test_a_wall_bracket_is_drawn_sideways_on_the_plan(self):
+        scene = scene_with_clash()
+        scene["hangers"].append(
+            {
+                "id": "M-0003",
+                "x": 0.02,
+                "y": 1.0,
+                "z": 4.0,
+                "clear": True,
+                "reason": "regular_70",
+                "clashing_element_ids": [],
+                "run_id": "R-0002",
+                "mount": "wall",
+                "mount_direction": [0.0, 1.0, 0.0],
+                "anchor": [0.02, 1.25, 4.0],
+            }
+        )
+        band = {"name": "Level 2", "z0": 3.0, "z1": 5.0, "first": False, "last": True}
+        primitives = plan_primitives(scene, band)
+        lines = [
+            item
+            for item in primitives
+            if item["op"] == "line" and item["color"] == "clear"
+        ]
+        self.assertEqual(len(lines), 1)
+        self.assertAlmostEqual(lines[0]["v1"] - lines[0]["v0"], 0.25, places=3)
+        self.assertAlmostEqual(lines[0]["u0"], 0.02, places=3)
+
+    def test_only_the_wall_beside_the_riser_is_drawn(self):
+        wall = {
+            "element_id": "shaft",
+            "category": "wall",
+            "shape": "box",
+            "min": (0.2, -20.0, 0.0),
+            "max": (0.4, 20.0, 12.0),
+        }
+        other = {
+            "element_id": "elsewhere",
+            "category": "wall",
+            "shape": "box",
+            "min": (30.0, 0.0, 0.0),
+            "max": (30.2, 8.0, 3.0),
+        }
+        runs = [
+            {
+                "wall_element_id": "shaft",
+                "wall_source": None,
+                "origin": [0.0, 1.0, 0.0],
+                "end": [0.0, 1.0, 3.0],
+            }
+        ]
+        drawn = host_wall_drawables([wall, other], runs)
+        self.assertEqual(len(drawn), 1)
+        self.assertEqual(drawn[0]["element_id"], "shaft")
+        self.assertGreater(drawn[0]["min"][1], -2.0)
+        self.assertLess(drawn[0]["max"][1], 4.0)
+        self.assertLess(drawn[0]["max"][2], 5.0)
 
     def test_axonometric_draws_farther_edges_first(self):
         scene = scene_with_clash()

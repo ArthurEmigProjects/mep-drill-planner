@@ -4,12 +4,17 @@ A run is a straight, same-size chain of segments. Points are spaced evenly
 along it. The largest gap is kept to 70% of the spacing the catalogue allows
 for that size, so the hangers sit on a regular pitch with some spare.
 
-Each point is then checked upward. The rod is a vertical line from the top of
+A horizontal run is checked upward. The rod is a vertical line from the top of
 the pipe or duct. If it meets another service or a beam, the run is spaced
 again so every gap between hangers falls between 90% and 95% of the allowed
 spacing, which is as wide as the correction may go. A hanger is never pushed
 so far that a gap exceeds 95%. If no clear position exists inside that limit,
 the point stays and is reported as a clash.
+
+A vertical run is a riser. It is fixed sideways to the nearest wall, such as
+a shaft wall, and the bracket is checked along that path. The same pitch
+rules apply. The catalogue publishes no separate vertical spacing, so the
+cited horizontal pitch is used along the riser.
 
 Run from the repo root:
 
@@ -54,6 +59,10 @@ _ALIGNMENT_COS = math.cos(math.radians(5.0))
 _LATERAL_TOLERANCE_M = 0.02
 # Above this slope the cited tables are horizontal spacings and do not apply.
 _HORIZONTAL_SLOPE = math.sin(math.radians(15.0))
+# Within 15° of plumb the run is a riser and is fixed to a wall.
+_VERTICAL_DZ = math.cos(math.radians(15.0))
+# An axis-aligned wall box thicker than this is not a usable face.
+_MAX_WALL_THICKNESS_M = 0.80
 
 _LINEAR_KINDS = {"pipe_segment", "duct_segment"}
 
@@ -282,9 +291,10 @@ def load_ifc(path: Path) -> tuple[list[dict], list[dict]]:
     """Read straight segments and clash obstacles from an IFC file.
 
     Segments are pipe and duct runs with two ports. Other flow parts become
-    boxes. Beams, members and columns become boxes too. Slabs, walls and
-    ceilings are left out: the rod is meant to reach the soffit, and a wall
-    box would fill the whole storey.
+    boxes. Beams, members and columns become boxes too. Walls are kept as
+    faces a vertical riser can be fixed to; they are not obstacles for a
+    ceiling rod. Slabs and ceilings are left out, because a rod is meant to
+    reach the soffit.
     """
     try:
         import ifcopenshell
@@ -298,6 +308,7 @@ def load_ifc(path: Path) -> tuple[list[dict], list[dict]]:
     obstacles = _obstacles_for_segments(segments)
     obstacles.extend(_other_flow_boxes(model, {segment["global_id"] for segment in segments}))
     obstacles.extend(_structural_boxes(model))
+    obstacles.extend(_wall_boxes(model))
     return segments, obstacles
 
 
@@ -396,22 +407,136 @@ def _place_run(
         row["status"] = "no_spacing_guidance"
         row["note"] = "No cited spacing row covers this size."
         return {"run": row, "points": []}
+    if run["length_m"] < 1e-4:
+        row["status"] = "too_short"
+        return {"run": row, "points": []}
+    if abs(run["direction"][2]) >= _VERTICAL_DZ:
+        return _place_on_wall(
+            run,
+            row,
+            obstacles,
+            rod_radius_m=rod_radius_m,
+            max_rod_length_m=max_rod_length_m,
+            first_point_index=first_point_index,
+            limit=limit,
+        )
     if abs(run["direction"][2]) > _HORIZONTAL_SLOPE:
         row["status"] = "skipped_not_horizontal"
         row["note"] = (
             "The run is steeper than 15 degrees. The cited spacing is for a horizontal service."
         )
         return {"run": row, "points": []}
-    if run["length_m"] < 1e-4:
-        row["status"] = "too_short"
-        return {"run": row, "points": []}
 
+    row["mount"] = "ceiling"
+
+    def locate(station: float) -> dict:
+        x, y, z = _point_on_run(run, station)
+        return {
+            "x": x,
+            "y": y,
+            "z": z,
+            "mount": "ceiling",
+            "mount_direction": [0.0, 0.0, 1.0],
+            "anchor": None,
+        }
+
+    points = _lay_out_points(
+        run,
+        run_id,
+        obstacles,
+        rod_radius_m=rod_radius_m,
+        max_rod_length_m=max_rod_length_m,
+        first_point_index=first_point_index,
+        limit=limit,
+        locate=locate,
+        near=lambda obstacle: _near_run(run, obstacle, rod_radius_m, max_rod_length_m),
+    )
+    return _finish_run(row, run, points)
+
+
+def _place_on_wall(
+    run: dict,
+    row: dict,
+    obstacles: list[dict],
+    *,
+    rod_radius_m: float,
+    max_rod_length_m: float,
+    first_point_index: int,
+    limit: float,
+) -> dict:
+    """Fix a riser to the nearest wall face. The ceiling is not a host."""
+    row["mount"] = "wall"
+    wall = _nearest_wall(run, obstacles, max_rod_length_m)
+    if wall is None:
+        row["status"] = "no_wall"
+        row["note"] = (
+            "The run is vertical, so it has to be fixed to a wall such as a shaft. "
+            "No wall face is within reach."
+        )
+        return {"run": row, "points": []}
+    run["mount_wall"] = wall
+    row["wall_element_id"] = wall.get("element_id")
+    row["wall_source"] = wall.get("source")
+    row["note"] = (
+        "Vertical run, fixed to the nearest wall (for example a shaft wall). "
+        "The pitch is the cited horizontal spacing."
+    )
+
+    def locate(station: float) -> dict:
+        centre = _centre_on_run(run, station)
+        approach = _approach_wall(centre, wall, _outward_radius(run))
+        if approach is None or approach["gap"] > max_rod_length_m:
+            return {
+                "x": centre[0],
+                "y": centre[1],
+                "z": centre[2],
+                "mount": "wall",
+                "mount_direction": None,
+                "anchor": None,
+            }
+        return {
+            "x": approach["surface"][0],
+            "y": approach["surface"][1],
+            "z": approach["surface"][2],
+            "mount": "wall",
+            "mount_direction": list(approach["direction"]),
+            "anchor": list(approach["anchor"]),
+        }
+
+    reach = max_rod_length_m + _outward_radius(run)
+    points = _lay_out_points(
+        run,
+        row["id"],
+        obstacles,
+        rod_radius_m=rod_radius_m,
+        max_rod_length_m=max_rod_length_m,
+        first_point_index=first_point_index,
+        limit=limit,
+        locate=locate,
+        near=lambda obstacle: _near_riser(run, obstacle, reach),
+    )
+    return _finish_run(row, run, points)
+
+
+def _lay_out_points(
+    run: dict,
+    run_id: str,
+    obstacles: list[dict],
+    *,
+    rod_radius_m: float,
+    max_rod_length_m: float,
+    first_point_index: int,
+    limit: float,
+    locate,
+    near,
+) -> list[dict]:
     host_ids = set(run["element_ids"]) | set(run.get("fitting_ids") or [])
     relevant = [
         obstacle
         for obstacle in obstacles
-        if not _is_own_obstacle(obstacle, host_ids)
-        and _near_run(run, obstacle, rod_radius_m, max_rod_length_m)
+        if obstacle.get("category") != "wall"
+        and not _is_own_obstacle(obstacle, host_ids)
+        and near(obstacle)
     ]
 
     def exact_ids(station: float) -> list[str]:
@@ -438,16 +563,19 @@ def _place_run(
         reason = item["reason"]
         if clashes and reason != "unresolved_clash":
             reason = "unresolved_clash"
-        x, y, z = _point_on_run(run, item["station_m"])
+        placed = locate(item["station_m"])
         points.append(
             {
                 "id": f"M-{first_point_index + offset:04d}",
                 "run_id": run_id,
                 "element_id": _element_at_station(run, item["station_m"]),
                 "kind": run["kind"],
-                "x": x,
-                "y": y,
-                "z": z,
+                "x": placed["x"],
+                "y": placed["y"],
+                "z": placed["z"],
+                "mount": placed["mount"],
+                "mount_direction": placed["mount_direction"],
+                "anchor": placed["anchor"],
                 "station_m": item["station_m"],
                 "max_spacing_m": limit,
                 "reason": reason,
@@ -456,6 +584,10 @@ def _place_run(
             }
         )
     _annotate_gaps(points)
+    return points
+
+
+def _finish_run(row: dict, run: dict, points: list[dict]) -> dict:
     row["status"] = _status_from_points(points)
     row["point_ids"] = [point["id"] for point in points]
     if points:
@@ -480,6 +612,9 @@ def _run_row(run: dict, run_id: str, limit: float | None, guidance_id: str | Non
         "origin": list(origin),
         "direction": list(direction),
         "end": [origin[i] + direction[i] * length for i in range(3)],
+        "mount": None,
+        "wall_element_id": None,
+        "wall_source": None,
         "point_ids": [],
         "status": None,
         "note": None,
@@ -532,9 +667,16 @@ def _sample_blocked(run, obstacles, rod_radius_m, max_rod_length_m) -> list[tupl
 
 
 def _clashing_ids(run, station, obstacles, rod_radius_m, max_rod_length_m) -> list[str]:
+    wall = run.get("mount_wall")
+    if wall is not None:
+        return _wall_bracket_clashes(
+            run, station, wall, obstacles, rod_radius_m, max_rod_length_m
+        )
     x, y, z = _point_on_run(run, station)
     found = []
     for obstacle in obstacles:
+        if obstacle.get("category") == "wall":
+            continue
         if rod_hits_obstacle(
             x,
             y,
@@ -547,6 +689,66 @@ def _clashing_ids(run, station, obstacles, rod_radius_m, max_rod_length_m) -> li
             if identifier and identifier not in found:
                 found.append(identifier)
     return found
+
+
+def _wall_bracket_clashes(run, station, wall, obstacles, rod_radius_m, max_rod_length_m) -> list[str]:
+    """Ids hit by the horizontal bracket from the riser to its wall."""
+    centre = _centre_on_run(run, station)
+    approach = _approach_wall(centre, wall, _outward_radius(run))
+    if approach is None or approach["gap"] > max_rod_length_m:
+        name = _clash_name(wall)
+        return [name] if name else ["wall"]
+    direction = approach["direction"]
+    start = _add(approach["surface"], _scale(direction, ROD_START_CLEARANCE_M))
+    end = _add(approach["anchor"], _scale(direction, -EDGE_CLEARANCE_M))
+    if _dot(_sub(end, start), direction) <= 1e-6:
+        return []
+    found = []
+    for obstacle in obstacles:
+        if obstacle.get("category") == "wall":
+            continue
+        if _bracket_hits_obstacle(start, end, obstacle, rod_radius_m):
+            identifier = _clash_name(obstacle)
+            if identifier and identifier not in found:
+                found.append(identifier)
+    return found
+
+
+def _bracket_hits_obstacle(start, end, obstacle, rod_radius_m) -> bool:
+    if obstacle.get("shape") == "cylinder":
+        distance = _segment_distance(
+            start,
+            end,
+            tuple(obstacle["start"]),
+            tuple(obstacle["end"]),
+        )
+        return distance <= obstacle["radius_m"] + rod_radius_m + 1e-9
+    low, high = obstacle["min"], obstacle["max"]
+    padded_low = tuple(low[index] - rod_radius_m for index in range(3))
+    padded_high = tuple(high[index] + rod_radius_m for index in range(3))
+    return _segment_intersects_aabb(start, end, padded_low, padded_high)
+
+
+def _segment_intersects_aabb(start, end, low, high) -> bool:
+    """Whether the finite segment overlaps an axis-aligned box."""
+    tmin = 0.0
+    tmax = 1.0
+    for index in range(3):
+        delta = end[index] - start[index]
+        if abs(delta) < 1e-12:
+            if start[index] < low[index] or start[index] > high[index]:
+                return False
+            continue
+        inv = 1.0 / delta
+        enter = (low[index] - start[index]) * inv
+        leave = (high[index] - start[index]) * inv
+        if enter > leave:
+            enter, leave = leave, enter
+        tmin = max(tmin, enter)
+        tmax = min(tmax, leave)
+        if tmin > tmax:
+            return False
+    return True
 
 
 def _is_own_obstacle(obstacle: dict, host_ids: set[str]) -> bool:
@@ -570,14 +772,109 @@ def _clash_name(obstacle: dict) -> str | None:
     return identifier
 
 
-def _point_on_run(run: dict, station: float) -> tuple[float, float, float]:
+def _centre_on_run(run: dict, station: float) -> tuple[float, float, float]:
     origin = run["origin"]
     direction = run["direction"]
     return (
         origin[0] + station * direction[0],
         origin[1] + station * direction[1],
-        origin[2] + station * direction[2] + _section_rise(run),
+        origin[2] + station * direction[2],
     )
+
+
+def _point_on_run(run: dict, station: float) -> tuple[float, float, float]:
+    x, y, z = _centre_on_run(run, station)
+    return (x, y, z + _section_rise(run))
+
+
+def _outward_radius(run: dict) -> float:
+    """Metres from the centre-line to the face the bracket leaves from.
+
+    A round service uses its radius. A rectangular duct has no stored
+    rotation, so the shorter half-side is used. That reaches the near face
+    when the wall looks onto that side.
+    """
+    if run.get("outer_diameter_mm"):
+        return float(run["outer_diameter_mm"]) / 2000.0
+    halves = [
+        float(size) / 2000.0
+        for size in (run.get("width_mm"), run.get("height_mm"))
+        if isinstance(size, (int, float)) and size > 0
+    ]
+    if not halves:
+        return 0.0
+    return min(halves)
+
+
+def _run_z_span(run: dict) -> tuple[float, float]:
+    end_z = run["origin"][2] + run["direction"][2] * run["length_m"]
+    return min(run["origin"][2], end_z), max(run["origin"][2], end_z)
+
+
+def _usable_wall(obstacle: dict) -> bool:
+    """A wall box thin enough in plan to be a real face."""
+    if obstacle.get("category") != "wall" or obstacle.get("shape") == "cylinder":
+        return False
+    low, high = obstacle.get("min"), obstacle.get("max")
+    if not low or not high:
+        return False
+    thickness = min(float(high[0]) - float(low[0]), float(high[1]) - float(low[1]))
+    height = float(high[2]) - float(low[2])
+    return 0.01 < thickness <= _MAX_WALL_THICKNESS_M and height > 0.05
+
+
+def _nearest_wall(run: dict, obstacles: list[dict], max_reach: float) -> dict | None:
+    """Closest wall face the riser can reach with a horizontal bracket."""
+    centre = _centre_on_run(run, run["length_m"] * 0.5)
+    radius = _outward_radius(run)
+    z0, z1 = _run_z_span(run)
+    best = None
+    best_key = None
+    for obstacle in obstacles:
+        if not _usable_wall(obstacle):
+            continue
+        low, high = obstacle["min"], obstacle["max"]
+        overlap = min(z1, float(high[2])) - max(z0, float(low[2]))
+        if overlap < 0.05:
+            continue
+        approach = _approach_wall(centre, obstacle, radius)
+        if approach is None or approach["gap"] > max_reach + 1e-9:
+            continue
+        key = (approach["gap"], str(obstacle.get("element_id") or ""))
+        if best_key is None or key < best_key:
+            best = obstacle
+            best_key = key
+    return best
+
+
+def _approach_wall(centre, wall: dict, radius: float) -> dict | None:
+    """Horizontal path from the section surface to the near face of ``wall``.
+
+    Returns ``None`` when the centre-line sits inside the wall footprint or
+    the section already meets the face.
+    """
+    low, high = wall["min"], wall["max"]
+    px, py, pz = centre
+    if pz < float(low[2]) - 1e-6 or pz > float(high[2]) + 1e-6:
+        return None
+    cx = min(max(px, float(low[0])), float(high[0]))
+    cy = min(max(py, float(low[1])), float(high[1]))
+    dx = cx - px
+    dy = cy - py
+    horizontal = math.hypot(dx, dy)
+    if horizontal < 1e-6:
+        return None
+    direction = (dx / horizontal, dy / horizontal, 0.0)
+    gap = horizontal - radius
+    if gap <= ROD_START_CLEARANCE_M:
+        return None
+    surface = (px + direction[0] * radius, py + direction[1] * radius, pz)
+    return {
+        "direction": direction,
+        "gap": gap,
+        "surface": surface,
+        "anchor": (cx, cy, pz),
+    }
 
 
 def _section_rise(run: dict) -> float:
@@ -631,6 +928,23 @@ def _size_label(run: dict) -> str:
     if run.get("width_mm") is not None:
         return f"{run['width_mm']:g} × {run['height_mm']:g} mm"
     return "size unknown"
+
+
+def _near_riser(run, obstacle, reach: float) -> bool:
+    """Whether ``obstacle`` can meet a horizontal bracket anywhere on the riser."""
+    origin = run["origin"]
+    end = _add(origin, _scale(run["direction"], run["length_m"]))
+    low, high = _obstacle_bounds(obstacle)
+    z0 = min(origin[2], end[2])
+    z1 = max(origin[2], end[2])
+    if high[2] < z0 or low[2] > z1:
+        return False
+    return not (
+        high[0] < min(origin[0], end[0]) - reach
+        or low[0] > max(origin[0], end[0]) + reach
+        or high[1] < min(origin[1], end[1]) - reach
+        or low[1] > max(origin[1], end[1]) + reach
+    )
 
 
 def _near_run(run, obstacle, rod_radius_m, max_rod_length_m) -> bool:
@@ -1169,6 +1483,26 @@ def _other_flow_boxes(model, segment_global_ids: set[str]) -> list[dict]:
             if box is None:
                 continue
             boxes.append(_box_obstacle(element.GlobalId, box, "service"))
+    return boxes
+
+
+def _wall_boxes(model) -> list[dict]:
+    """Thin wall faces a vertical pipe or duct can be fixed to.
+
+    A diagonal wall's axis-aligned box covers a region rather than a face, so
+    those boxes are left out.
+    """
+    from src.inventory_elements import _world_bbox
+
+    boxes = []
+    for element in _by_type_if_present(model, "IfcWall"):
+        box = _world_bbox(element)
+        if box is None:
+            continue
+        obstacle = _box_obstacle(element.GlobalId, box, "wall")
+        if not _usable_wall(obstacle):
+            continue
+        boxes.append(obstacle)
     return boxes
 
 

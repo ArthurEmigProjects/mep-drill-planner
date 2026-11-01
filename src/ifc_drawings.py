@@ -1,9 +1,10 @@
 """Write floor plans, sections and 3D views of an IFC clash check.
 
 The sheets use the same geometry as the hanger clash test: pipe and duct
-centre-lines, other services, and beams, members and columns. Walls, slabs
-and ceilings stay out, because a rod is meant to reach the soffit. A red
-marker is a hanger whose rod still hits something.
+centre-lines, other services, and beams, members and columns. A vertical
+pipe or duct is fixed to the nearest wall, such as a shaft wall, and that
+wall is drawn beside the riser. Slabs and ceilings stay out. A red marker
+is a hanger whose fixing still hits something.
 
 Run from the repo root:
 
@@ -28,7 +29,8 @@ from src.mounting_points import (
 _MM = 72 / 25.4
 _SCALE_STEPS = (5, 10, 20, 25, 50, 100, 125, 200, 250, 500, 1000, 2000, 5000, 10000)
 
-_CATEGORY_ORDER = {"structure": 0, "service": 1, "duct": 2, "pipe": 3}
+_CATEGORY_ORDER = {"wall": 0, "structure": 1, "service": 2, "duct": 3, "pipe": 4}
+_WALL_DRAW_PAD_M = 0.6
 
 
 def drawable_from_obstacle(obstacle: dict) -> dict | None:
@@ -76,9 +78,12 @@ def build_scene(service: Path, others: list[Path] | None = None) -> dict:
     plan = plan_mounting_points(segments, obstacles, source=service.name)
     drawables = []
     for obstacle in obstacles:
+        if obstacle.get("category") == "wall":
+            continue
         item = drawable_from_obstacle(obstacle)
         if item is not None:
             drawables.append(item)
+    drawables.extend(host_wall_drawables(obstacles, plan["runs"]))
     hangers = [_hanger_from_point(point) for point in plan["points"]]
     scene = {
         "models": list(models),
@@ -131,6 +136,8 @@ def read_storeys(paths: list[Path]) -> list[dict]:
 def scene_bounds(scene: dict) -> dict:
     points = []
     for item in scene.get("drawables") or []:
+        if item.get("category") == "wall":
+            continue
         if item["kind"] == "segment":
             points.extend((item["start"], item["end"]))
         else:
@@ -268,7 +275,21 @@ def building_section_plane(scene: dict, axis: str) -> dict:
 
 
 def plane_for_hanger(scene: dict, hanger: dict) -> dict:
-    """A cut looking along the run, so the pipe is seen in section and the rod in elevation."""
+    """A cut looking along the run, so the pipe is seen in section and the fixing in elevation.
+
+    A wall bracket is shown from the side, so the line from the riser to the
+    wall lies in the sheet.
+    """
+    if hanger.get("mount") == "wall":
+        direction = hanger.get("mount_direction") or (1.0, 0.0, 0.0)
+        nx, ny = -float(direction[1]), float(direction[0])
+        if abs(nx) < 1e-9 and abs(ny) < 1e-9:
+            nx, ny = 1.0, 0.0
+        return {
+            "origin": (float(hanger["x"]), float(hanger["y"])),
+            "normal": (nx, ny),
+            "depth": 0.8,
+        }
     run = (scene.get("runs") or {}).get(hanger.get("run_id")) or {}
     direction = run.get("direction") or (1.0, 0.0, 0.0)
     length = math.hypot(float(direction[0]), float(direction[1]))
@@ -319,7 +340,7 @@ def plan_primitives(scene: dict, band: dict) -> list[dict]:
                     "u1": item["max"][0],
                     "v1": item["max"][1],
                     "color": item["category"],
-                    "weight": "body",
+                    "weight": "ghost" if item["category"] == "wall" else "body",
                     "dashed": dashed,
                 }
             )
@@ -355,6 +376,7 @@ def plan_primitives(scene: dict, band: dict) -> list[dict]:
         if not _overlaps_band((hanger["z"], hanger["z"]), band):
             continue
         primitives.append(_marker(hanger["x"], hanger["y"], hanger, label=False))
+        _append_plan_support(primitives, hanger, scene)
     return primitives
 
 
@@ -397,22 +419,9 @@ def section_primitives(
         if window is not None and not (window[0] <= u <= window[1] and window[2] <= hanger["z"] <= window[3]):
             continue
         primitives.append(_marker(u, hanger["z"], hanger, label=True))
-        if hanger["clear"]:
-            continue
-        top = _rod_top(hanger, scene)
-        if top > hanger["z"] + 1e-4:
-            primitives.append(
-                {
-                    "op": "line",
-                    "u0": u,
-                    "v0": hanger["z"],
-                    "u1": u,
-                    "v1": top,
-                    "color": "clash",
-                    "weight": "cut",
-                    "dashed": False,
-                }
-            )
+        _append_section_support(
+            primitives, hanger, scene, plane, ux, uy, look, depth, thickness, symmetric, window
+        )
     return primitives
 
 
@@ -457,7 +466,7 @@ def axon_primitives(scene: dict, *, flip: bool, crop: tuple | None = None) -> li
                     "v1": v1,
                     "depth": (d0 + d1) / 2.0,
                     "color": item["category"],
-                    "weight": "ghost" if item["category"] == "structure" else "body",
+                    "weight": "ghost" if item["category"] in ("structure", "wall") else "body",
                     "dashed": dashed,
                 }
             )
@@ -466,14 +475,10 @@ def axon_primitives(scene: dict, *, flip: bool, crop: tuple | None = None) -> li
             continue
         u, v, depth = _project_point(hanger["x"], hanger["y"], hanger["z"], flip)
         primitives.append({**_marker(u, v, hanger, label=False), "depth": depth})
-        if hanger["clear"]:
+        segment = _support_segment(hanger, scene)
+        if segment is None:
             continue
-        top = _rod_top(hanger, scene)
-        projected = _project_segment(
-            (hanger["x"], hanger["y"], hanger["z"]),
-            (hanger["x"], hanger["y"], top),
-            flip,
-        )
+        projected = _project_segment(segment[0], segment[1], flip)
         if projected is None:
             continue
         (u0, v0, d0), (u1, v1, d1) = projected
@@ -485,7 +490,7 @@ def axon_primitives(scene: dict, *, flip: bool, crop: tuple | None = None) -> li
                 "u1": u1,
                 "v1": v1,
                 "depth": max(d0, d1) + 1.0,
-                "color": "clash",
+                "color": _support_color(hanger),
                 "weight": "cut",
                 "dashed": False,
             }
@@ -620,6 +625,9 @@ def _hanger_from_point(point: dict) -> dict:
         "reason": point.get("reason") or "",
         "clashing_element_ids": list(point.get("clashing_element_ids") or []),
         "run_id": point.get("run_id"),
+        "mount": point.get("mount") or "ceiling",
+        "mount_direction": point.get("mount_direction"),
+        "anchor": point.get("anchor"),
     }
 
 
@@ -870,6 +878,153 @@ def _clip_window(u0, v0, u1, v1, window):
     return (u0, v0), (u1, v1)
 
 
+def host_wall_drawables(obstacles: list[dict], runs: list[dict]) -> list[dict]:
+    """The piece of each host wall next to the riser it carries.
+
+    A full wall would stretch the sheet across the building. Only the face
+    beside the vertical run is drawn.
+    """
+    groups: dict[tuple, list[dict]] = {}
+    for run in runs:
+        wall_id = run.get("wall_element_id")
+        if not wall_id:
+            continue
+        groups.setdefault((wall_id, run.get("wall_source")), []).append(run)
+    drawables = []
+    for obstacle in obstacles:
+        if obstacle.get("category") != "wall":
+            continue
+        runs_for_wall = groups.get((obstacle.get("element_id"), obstacle.get("source")))
+        if not runs_for_wall:
+            continue
+        clipped = _clip_wall_to_runs(obstacle, runs_for_wall)
+        if clipped is None:
+            continue
+        item = drawable_from_obstacle(clipped)
+        if item is not None:
+            drawables.append(item)
+    return drawables
+
+
+def _clip_wall_to_runs(obstacle: dict, runs: list[dict]) -> dict | None:
+    xs = []
+    ys = []
+    zs = []
+    for run in runs:
+        for point in (run.get("origin"), run.get("end")):
+            if not point:
+                continue
+            xs.append(float(point[0]))
+            ys.append(float(point[1]))
+            zs.append(float(point[2]))
+    if not xs:
+        return None
+    pad = _WALL_DRAW_PAD_M
+    low, high = obstacle["min"], obstacle["max"]
+    clipped_min = (
+        max(float(low[0]), min(xs) - pad),
+        max(float(low[1]), min(ys) - pad),
+        max(float(low[2]), min(zs) - pad),
+    )
+    clipped_max = (
+        min(float(high[0]), max(xs) + pad),
+        min(float(high[1]), max(ys) + pad),
+        min(float(high[2]), max(zs) + pad),
+    )
+    if any(clipped_min[index] >= clipped_max[index] - 1e-6 for index in range(3)):
+        return None
+    copy = dict(obstacle)
+    copy["min"] = clipped_min
+    copy["max"] = clipped_max
+    return copy
+
+
+def _support_color(hanger: dict) -> str:
+    if not hanger["clear"] or hanger.get("reason") == "unresolved_clash":
+        return "clash"
+    if hanger.get("reason") not in (None, "", "regular_70"):
+        return "moved"
+    return "clear"
+
+
+def _support_segment(hanger: dict, scene: dict):
+    """Line from the service to its fixing. Ceiling rods are drawn only when they clash."""
+    anchor = hanger.get("anchor")
+    if hanger.get("mount") == "wall" and anchor and len(anchor) >= 3:
+        start = (float(hanger["x"]), float(hanger["y"]), float(hanger["z"]))
+        end = (float(anchor[0]), float(anchor[1]), float(anchor[2]))
+        if _norm(_sub(end, start)) < 1e-4:
+            return None
+        return start, end
+    if hanger["clear"]:
+        return None
+    top = _rod_top(hanger, scene)
+    if top <= hanger["z"] + 1e-4:
+        return None
+    return (float(hanger["x"]), float(hanger["y"]), float(hanger["z"])), (
+        float(hanger["x"]),
+        float(hanger["y"]),
+        top,
+    )
+
+
+def _append_plan_support(primitives: list[dict], hanger: dict, scene: dict) -> None:
+    segment = _support_segment(hanger, scene)
+    if segment is None:
+        return
+    start, end = segment
+    if math.hypot(end[0] - start[0], end[1] - start[1]) < 1e-4:
+        return
+    primitives.append(
+        {
+            "op": "line",
+            "u0": start[0],
+            "v0": start[1],
+            "u1": end[0],
+            "v1": end[1],
+            "color": _support_color(hanger),
+            "weight": "cut",
+            "dashed": False,
+        }
+    )
+
+
+def _append_section_support(
+    primitives, hanger, scene, plane, ux, uy, look, depth, thickness, symmetric, window
+) -> None:
+    segment = _support_segment(hanger, scene)
+    if segment is None:
+        return
+    start, end = segment
+    _u0, _v0, d0 = _section_point(start[0], start[1], start[2], plane, ux, uy, look)
+    _u1, _v1, d1 = _section_point(end[0], end[1], end[2], plane, ux, uy, look)
+    lo, hi = _slab(depth, thickness, symmetric)
+    clipped = clip_to_range(start, end, d0, d1, lo, hi)
+    if clipped is None:
+        return
+    a, b = clipped
+    ua, va, _da = _section_point(a[0], a[1], a[2], plane, ux, uy, look)
+    ub, vb, _db = _section_point(b[0], b[1], b[2], plane, ux, uy, look)
+    piece = _clip_window(ua, va, ub, vb, window)
+    if piece is None:
+        return
+    (ua, va), (ub, vb) = piece
+    if math.hypot(ub - ua, vb - va) < 1e-4:
+        return
+    primitives.append(
+        {
+            "op": "line",
+            "u0": ua,
+            "v0": va,
+            "u1": ub,
+            "v1": vb,
+            "color": _support_color(hanger),
+            "weight": "cut",
+            "dashed": False,
+        }
+    )
+
+
 def _rod_top(hanger: dict, scene: dict) -> float:
     cap = hanger["z"] + float(scene.get("rod_length_m") or MAX_ROD_LENGTH_M)
     top = hanger["z"] + 0.35
@@ -971,6 +1126,7 @@ _COLORS = {
     "duct": (0.78, 0.40, 0.09),
     "service": (0.40, 0.38, 0.34),
     "structure": (0.48, 0.45, 0.40),
+    "wall": (0.55, 0.60, 0.64),
     "clash": (0.70, 0.14, 0.08),
     "moved": (0.72, 0.40, 0.10),
     "clear": (0.13, 0.42, 0.28),
@@ -1024,7 +1180,10 @@ def _draw_page(pdf, scene, page, index: int, total: int, page_size) -> None:
         )
         if hanger is not None:
             plane = plane_for_hanger(scene, hanger)
-            window = (-1.0, 1.0, hanger["z"] - 0.45, hanger["z"] + 1.15)
+            if hanger.get("mount") == "wall":
+                window = (-2.2, 2.2, hanger["z"] - 0.6, hanger["z"] + 0.6)
+            else:
+                window = (-1.0, 1.0, hanger["z"] - 0.45, hanger["z"] + 1.15)
             primitives = section_primitives(
                 scene,
                 plane,
@@ -1211,6 +1370,7 @@ def _chrome(pdf, title, scene, ratio, width, height, index, total, note) -> None
         ("Ducts", "duct"),
         ("Other services", "service"),
         ("Structure", "structure"),
+        ("Walls", "wall"),
         ("Clash", "clash"),
         ("Moved", "moved"),
         ("Clear", "clear"),
@@ -1240,8 +1400,9 @@ def _draw_cover(pdf, scene, width, height) -> None:
     lines = [
         "Floor plans, a long section, a cross section, a section at each unresolved clash,",
         "and two isometric views. Extra IFCs are drawn dashed and included in the check.",
-        "Geometry is centre-lines, fittings and structure. Walls, slabs and ceilings are omitted.",
-        "Red is a hanger whose rod still hits something. Amber was moved off a clash. Green is clear.",
+        "A vertical pipe or duct is fixed to the nearest wall, such as a shaft wall.",
+        "That wall is drawn next to the riser. Slabs and ceilings stay out.",
+        "Red is a hanger whose fixing still hits something. Amber was moved off a clash. Green is clear.",
         "",
         f"Models: {', '.join(models) if models else '—'}",
         f"Hangers: {scene.get('hanger_count', 0)}",

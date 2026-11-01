@@ -34,6 +34,16 @@ def _pipe(global_id, start, end, diameter=22.225, adjacent=(), fittings=(), syst
     }
 
 
+def _wall(element_id, low, high):
+    return {
+        "element_id": element_id,
+        "shape": "box",
+        "category": "wall",
+        "min": low,
+        "max": high,
+    }
+
+
 def _gaps(stations):
     return [stations[i + 1] - stations[i] for i in range(len(stations) - 1)]
 
@@ -272,6 +282,7 @@ class PlanMountingPointsTests(unittest.TestCase):
         plan = self._run_of_22_mm([])
         self.assertEqual(len(plan["runs"]), 1)
         self.assertEqual(plan["runs"][0]["status"], "placed_initial")
+        self.assertEqual(plan["runs"][0]["mount"], "ceiling")
         self.assertEqual(plan["runs"][0]["max_spacing_m"], 2.0)
         stations = [point["station_m"] for point in plan["points"]]
         self.assertEqual(len(stations), 4)
@@ -313,11 +324,91 @@ class PlanMountingPointsTests(unittest.TestCase):
         plan = self._run_of_22_mm([fitting], fittings=["elbow-1"])
         self.assertEqual(plan["runs"][0]["status"], "placed_initial")
 
-    def test_vertical_run_is_detected_and_not_hung_with_the_horizontal_table(self):
+    def test_vertical_run_without_a_wall_is_not_hung_from_the_ceiling(self):
         segment = _pipe("riser", (0, 0, 0), (0, 0, 3))
+        plan = plan_mounting_points([segment], [])
+        self.assertEqual(plan["runs"][0]["status"], "no_wall")
+        self.assertEqual(plan["runs"][0]["mount"], "wall")
+        self.assertEqual(plan["points"], [])
+
+    def test_a_rising_run_that_is_not_plumb_stays_unhung(self):
+        segment = _pipe("slope", (0, 0, 0), (3, 0, 1))
         plan = plan_mounting_points([segment], [])
         self.assertEqual(plan["runs"][0]["status"], "skipped_not_horizontal")
         self.assertEqual(plan["points"], [])
+
+    def test_vertical_run_is_fixed_to_the_nearest_wall(self):
+        segment = _pipe("riser", (0, 0, 0), (0, 0, 3))
+        shaft = _wall("shaft", (0.20, -1.0, -0.2), (0.38, 1.0, 3.2))
+        far = _wall("far-wall", (-2.5, -1.0, -0.2), (-2.3, 1.0, 3.2))
+        beam_above = {
+            "element_id": "beam-above",
+            "shape": "box",
+            "category": "structure",
+            "min": (-0.3, -0.3, 3.4),
+            "max": (0.5, 0.3, 3.9),
+        }
+        plan = plan_mounting_points([segment], [shaft, far, beam_above])
+        run = plan["runs"][0]
+        self.assertEqual(run["status"], "placed_initial")
+        self.assertEqual(run["mount"], "wall")
+        self.assertEqual(run["wall_element_id"], "shaft")
+        self.assertGreater(len(plan["points"]), 1)
+        radius = 22.225 / 2000.0
+        for point in plan["points"]:
+            self.assertEqual(point["mount"], "wall")
+            self.assertTrue(point["clear"], point)
+            self.assertAlmostEqual(point["x"], radius, places=4)
+            self.assertAlmostEqual(point["y"], 0.0, places=4)
+            self.assertAlmostEqual(point["z"], point["station_m"], places=4)
+            self.assertAlmostEqual(point["anchor"][0], 0.20, places=4)
+            self.assertAlmostEqual(point["anchor"][2], point["z"], places=4)
+            self.assertGreater(point["mount_direction"][0], 0.9)
+
+    def test_a_service_between_the_riser_and_the_wall_is_a_clash(self):
+        segment = _pipe("riser", (0, 0, 0), (0, 0, 3))
+        shaft = _wall("shaft", (0.20, -1.0, -0.2), (0.38, 1.0, 3.2))
+        blocker = {
+            "element_id": "crossing",
+            "shape": "box",
+            "category": "service",
+            "min": (0.05, -0.05, 0.85),
+            "max": (0.18, 0.05, 1.15),
+        }
+        plan = plan_mounting_points([segment], [shaft, blocker])
+        self.assertEqual(plan["runs"][0]["mount"], "wall")
+        self.assertNotEqual(plan["runs"][0]["status"], "placed_initial")
+        for point in plan["points"]:
+            if 0.85 <= point["z"] <= 1.15:
+                self.assertFalse(point["clear"])
+
+    def test_a_wall_does_not_block_a_ceiling_rod(self):
+        segment = _pipe("pipe-1", (0.0, 0.0, 1.0), (4.2, 0.0, 1.0))
+        wall = _wall("beside", (1.2, -0.1, 0.0), (1.5, 0.1, 3.0))
+        plan = plan_mounting_points([segment], [wall])
+        self.assertEqual(plan["runs"][0]["status"], "placed_initial")
+        self.assertEqual(plan["runs"][0]["mount"], "ceiling")
+        self.assertTrue(all(point["clear"] for point in plan["points"]))
+
+    def test_vertical_duct_uses_the_shaft_wall(self):
+        segment = {
+            "global_id": "duct-riser",
+            "kind": "duct_segment",
+            "system_names": (),
+            "start": (0.0, 0.0, 0.0),
+            "end": (0.0, 0.0, 3.0),
+            "outer_diameter_mm": None,
+            "width_mm": 200.0,
+            "height_mm": 150.0,
+            "adjacent_ids": [],
+            "fitting_ids": [],
+        }
+        shaft = _wall("shaft", (0.40, -1.0, -0.2), (0.58, 1.0, 3.2))
+        plan = plan_mounting_points([segment], [shaft])
+        self.assertEqual(plan["runs"][0]["mount"], "wall")
+        self.assertTrue(plan["runs"][0]["status"].startswith("placed"))
+        self.assertTrue(all(point["mount"] == "wall" for point in plan["points"]))
+        self.assertTrue(all(point["anchor"][0] == 0.40 for point in plan["points"]))
 
     def test_size_without_a_spacing_row_is_reported(self):
         segment = _pipe("small", (0, 0, 1), (3, 0, 1), diameter=9.52)
