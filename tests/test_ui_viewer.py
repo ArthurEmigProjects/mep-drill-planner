@@ -39,6 +39,9 @@ class ViewerHttpTests(unittest.TestCase):
             body = response.read()
             self.assertIn(b"MepViewer", body)
             self.assertIn(b"filesFromQuery", body)
+            self.assertIn(b"Clipper", body)
+            self.assertIn(b"Section height", body)
+            self.assertIn(b"getCategories", body)
         index = (WEB / "index.html").read_text(encoding="utf-8")
         self.assertIn('id="view-window"', index)
 

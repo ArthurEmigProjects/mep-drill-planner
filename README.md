@@ -142,7 +142,7 @@ python -m src.ifc_drawings examples/zenodo-duplex-piping.ifc --obstacles example
 
 The same sheets are the **Clash drawings PDF** button on `python -m src.ui`. The writer needs `reportlab` (`pip install -r requirements.txt`).
 
-**View in 3D** on the same page opens the selected IFC, plus any file ticked for clashes, in the browser. **Open in window** loads that same set in its own browser window. The viewer is [That Open Engine](https://github.com/ThatOpen/engine_components) (`@thatopen/components` and `@thatopen/fragments`, MIT) on Three.js. Those libraries and the web-ifc WASM are fetched from unpkg the first time, so the 3D view needs a network connection. Drag to orbit, scroll to zoom, right-drag to pan.
+**View in 3D** on the same page opens the selected IFC, plus any file ticked for clashes, in the browser. **Open in window** loads that same set in its own browser window. The viewer is [That Open Engine](https://github.com/ThatOpen/engine_components) (`@thatopen/components` and `@thatopen/fragments`, MIT) on Three.js. Those libraries and the web-ifc WASM are fetched from unpkg the first time, so the 3D view needs a network connection. Drag to orbit, scroll to zoom, right-drag to pan. The tools on the view switch orbit and plan, perspective and orthographic, filter IFC categories and storeys, color categories, fade the model, and cut sections from the top, the side, or a double-clicked face.
 
 ## Notes
 
