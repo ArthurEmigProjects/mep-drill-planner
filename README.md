@@ -132,6 +132,16 @@ python -m unittest discover -s tests
 - Radiators match the Kermi wall console only with the assumption that the IFC radiator has the Kermi lug the console is made for. It is a wall fixing, not a ceiling anchor.
 - The extractor in `src/extract_anchor_points.py` is unchanged. This database does not yet generate drill points.
 
+## Clash drawings
+
+A PDF of the hanger clash check: one floor plan per storey, a long section, a cross section, a section through each unresolved clash, and isometric 3D views. Extra IFCs are drawn with the services and included in the check. The geometry is the clash model (centre-lines, fittings, beams, members and columns). Walls, slabs and ceilings are left out.
+
+```bash
+python -m src.ifc_drawings examples/zenodo-duplex-piping.ifc --obstacles examples/Architecture.ifc --out examples/out/zenodo-duplex-piping-views.pdf
+```
+
+The same sheets are the **Clash drawings PDF** button on `python -m src.ui`. The writer needs `reportlab` (`pip install -r requirements.txt`).
+
 ## Notes
 
 - Never commit real project IFCs. Use anonymised / public sample models only.

@@ -20,6 +20,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from .extract_anchor_points import extract_from_ifc
+from .ifc_drawings import write_ifc_drawings
 from .mounting_points import _round_numbers, load_clash_context, plan_mounting_points
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -174,6 +175,9 @@ class AppHandler(BaseHTTPRequestHandler):
         if path == "/api/mounting-points":
             self._mounting_points()
             return
+        if path == "/api/drawings":
+            self._drawings()
+            return
         self.send_error(404)
 
     def _read_body(self, limit: int) -> bytes | None:
@@ -254,6 +258,41 @@ class AppHandler(BaseHTTPRequestHandler):
         out.write_text(json.dumps(stored, indent=2), encoding="utf-8")
         result["out"] = str(out.relative_to(ROOT))
         self._send_json(result)
+
+    def _drawings(self) -> None:
+        body = self._read_body(64 * 1024)
+        if body is None:
+            return
+        try:
+            payload = json.loads(body.decode("utf-8"))
+            path = resolve_file(str(payload["id"]))
+            raw_ids = payload.get("obstacle_ids") or []
+            if not isinstance(raw_ids, list):
+                raise ValueError("obstacle_ids")
+            obstacle_paths = [resolve_file(str(item)) for item in raw_ids]
+        except (KeyError, ValueError, json.JSONDecodeError, UnicodeError):
+            self._send_json({"error": "Choose an IFC file first."}, 400)
+            return
+        OUT_DIR.mkdir(parents=True, exist_ok=True)
+        out = OUT_DIR / f"{path.stem}-views.pdf"
+        try:
+            write_ifc_drawings(path, obstacle_paths, out)
+        except SystemExit as exc:
+            self._send_json({"error": str(exc)}, 500)
+            return
+        except Exception as exc:  # geometry libraries raise a wide set of errors
+            self._send_json({"error": f"Could not draw {path.name}: {exc}"}, 500)
+            return
+        raw = out.read_bytes()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/pdf")
+        self.send_header("Content-Disposition", f'attachment; filename="{out.name}"')
+        saved = out.relative_to(ROOT).as_posix()
+        self.send_header("X-Saved-To", saved)
+        self.send_header("Content-Length", str(len(raw)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(raw)
 
     def _send_json(self, data: dict, status: int = 200) -> None:
         raw = json.dumps(data).encode("utf-8")

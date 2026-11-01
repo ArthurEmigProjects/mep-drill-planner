@@ -1094,6 +1094,7 @@ def _obstacles_for_segments(segments: list[dict]) -> list[dict]:
                 {
                     "element_id": segment["global_id"],
                     "shape": "cylinder",
+                    "category": "duct" if segment.get("kind") == "duct_segment" else "pipe",
                     "start": segment["start"],
                     "end": segment["end"],
                     "radius_m": segment["outer_diameter_mm"] / 2000.0,
@@ -1110,6 +1111,7 @@ def _obstacles_for_segments(segments: list[dict]) -> list[dict]:
                 {
                     "element_id": segment["global_id"],
                     "shape": "box",
+                    "category": "duct",
                     "min": low,
                     "max": high,
                 }
@@ -1166,7 +1168,7 @@ def _other_flow_boxes(model, segment_global_ids: set[str]) -> list[dict]:
             box = _world_bbox(element)
             if box is None:
                 continue
-            boxes.append(_box_obstacle(element.GlobalId, box))
+            boxes.append(_box_obstacle(element.GlobalId, box, "service"))
     return boxes
 
 
@@ -1179,15 +1181,16 @@ def _structural_boxes(model) -> list[dict]:
             box = _world_bbox(element)
             if box is None:
                 continue
-            boxes.append(_box_obstacle(element.GlobalId, box))
+            boxes.append(_box_obstacle(element.GlobalId, box, "structure"))
     return boxes
 
 
-def _box_obstacle(element_id: str, box: tuple) -> dict:
+def _box_obstacle(element_id: str, box: tuple, category: str) -> dict:
     xmin, xmax, ymin, ymax, zmin, zmax = box
     return {
         "element_id": element_id,
         "shape": "box",
+        "category": category,
         "min": (xmin, ymin, zmin),
         "max": (xmax, ymax, zmax),
     }

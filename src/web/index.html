@@ -11,7 +11,7 @@
     <header class="mast">
       <p class="eyebrow">MEP drill planner</p>
       <h1>Select an IFC file</h1>
-      <p class="lede">Pick a sample model or open an <span class="mono">.ifc</span> from this computer. The file stays local. Extraction uses the top of each MEP element’s bounding box. Placement spaces hangers along each straight run and shows when a clash moves one. Tick <span class="mono">For clashes</span> on other IFCs when they hold beams or the rest of the services a rod can hit.</p>
+      <p class="lede">Pick a sample model or open an <span class="mono">.ifc</span> from this computer. The file stays local. Extraction uses the top of each MEP element’s bounding box. Placement spaces hangers along each straight run and shows when a clash moves one. Tick <span class="mono">For clashes</span> on other IFCs when they hold beams or the rest of the services a rod can hit. Clash drawings PDF writes a floor plan for each level, a long section, a cross section, a section at each unresolved clash, and 3D views.</p>
     </header>
 
     <p id="banner" class="banner" hidden></p>
@@ -46,6 +46,7 @@
       <div class="actions">
         <button type="button" id="extract" class="ghost" disabled>Extract anchor points</button>
         <button type="button" id="place" class="primary" disabled>Place mounting points</button>
+        <button type="button" id="drawings" class="ghost" disabled>Clash drawings PDF</button>
       </div>
     </section>
 

@@ -26,6 +26,7 @@ const selectedTitle = document.querySelector("#selected-title");
 const selectedMeta = document.querySelector("#selected-meta");
 const extractBtn = document.querySelector("#extract");
 const placeBtn = document.querySelector("#place");
+const drawingsBtn = document.querySelector("#drawings");
 const resultsEl = document.querySelector("#results");
 const mountingEl = document.querySelector("#mounting");
 const mountingMeta = document.querySelector("#mounting-meta");
@@ -123,6 +124,7 @@ function renderSelection() {
   const file = selectedFile();
   extractBtn.disabled = !file || state.busy;
   placeBtn.disabled = !file || state.busy;
+  drawingsBtn.disabled = !file || state.busy;
   if (!file) {
     selectedTitle.textContent = "No model yet";
     selectedMeta.textContent = "Choose a sample or open a file. Extraction runs on the model shown here.";
@@ -275,6 +277,7 @@ async function uploadMany(list) {
   }
   extractBtn.disabled = true;
   placeBtn.disabled = true;
+  drawingsBtn.disabled = true;
   const uploaded = [];
   try {
     for (const file of accepted) {
@@ -457,8 +460,50 @@ async function placeMountingPoints() {
   }
 }
 
+async function downloadDrawings() {
+  const file = selectedFile();
+  if (!file || state.busy) return;
+  state.busy = true;
+  drawingsBtn.textContent = "Drawing…";
+  renderSelection();
+  showBanner("");
+  try {
+    const response = await fetch("/api/drawings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: file.id,
+        obstacle_ids: clashFiles().map((item) => item.id),
+      }),
+    });
+    const type = response.headers.get("Content-Type") || "";
+    if (!response.ok || !type.includes("pdf")) {
+      const data = await response.json();
+      throw new Error(data.error || "Could not draw the PDF");
+    }
+    const blob = await response.blob();
+    const saved = response.headers.get("X-Saved-To");
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = file.name.replace(/\.ifc$/i, "") + "-views.pdf";
+    document.body.append(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    showBanner(saved ? `Saved ${saved}` : "Clash drawings downloaded.");
+  } catch (error) {
+    showBanner(error.message);
+  } finally {
+    state.busy = false;
+    drawingsBtn.textContent = "Clash drawings PDF";
+    renderSelection();
+  }
+}
+
 extractBtn.addEventListener("click", extract);
 placeBtn.addEventListener("click", placeMountingPoints);
+drawingsBtn.addEventListener("click", downloadDrawings);
 showAllMountingBtn.addEventListener("click", () => {
   state.mountingShown = filteredMountingPoints().length;
   paintMountingRows();
