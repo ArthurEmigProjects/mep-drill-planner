@@ -1,0 +1,1 @@
+Is there a possibility to visualize mounting elements (non-problematic, moved, or clashing) in the IFC viewer? I want to have a separate IFC for them which i can show or hide in the IFC viewer. The aforementioned classes of the mounting elements should be filterable. Also I want to distinguish if mounting elements are for sanitary, or heating/cooling, or ventilation
