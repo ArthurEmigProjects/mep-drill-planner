@@ -1,0 +1,1 @@
+There should be a possibility to consider multiple IFCs as this step can contain full information or more information about clashes
