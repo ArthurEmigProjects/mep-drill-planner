@@ -22,6 +22,7 @@ from uuid import uuid4
 
 from .extract_anchor_points import extract_from_ifc
 from .ifc_drawings import write_ifc_drawings
+from .mounting_ifc import write_mounting_ifc
 from .mounting_points import _round_numbers, load_clash_context, plan_mounting_points
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -98,7 +99,7 @@ def describe(path: Path, origin: str) -> dict:
     label = display_name(path, origin)
     catalog = SAMPLE_CATALOG.get(label, {})
     stem = Path(label).stem.replace("-", " ").replace("_", " ")
-    return {
+    payload = {
         "id": f"{origin}:{path.name}",
         "name": label,
         "title": catalog.get("title", stem),
@@ -109,6 +110,10 @@ def describe(path: Path, origin: str) -> dict:
         "schema": meta["schema"],
         "internal_name": meta["internal_name"],
     }
+    mounting = OUT_DIR / f"{path.stem}-mountings.ifc"
+    if mounting.is_file():
+        payload["mounting_id"] = f"out:{mounting.name}"
+    return payload
 
 
 def list_files() -> list[dict]:
@@ -126,7 +131,14 @@ def resolve_file(file_id: str) -> Path:
     kind, sep, name = file_id.partition(":")
     if not sep or Path(name).name != name or not name.lower().endswith(".ifc"):
         raise ValueError("Unknown file")
-    base = EXAMPLES if kind == "sample" else UPLOADS if kind == "upload" else None
+    if kind == "sample":
+        base = EXAMPLES
+    elif kind == "upload":
+        base = UPLOADS
+    elif kind == "out":
+        base = OUT_DIR
+    else:
+        base = None
     if base is None:
         raise ValueError("Unknown file")
     path = (base / name).resolve()
@@ -268,6 +280,11 @@ class AppHandler(BaseHTTPRequestHandler):
         stored = {key: value for key, value in result.items() if key not in extra}
         out.write_text(json.dumps(stored, indent=2), encoding="utf-8")
         result["out"] = str(out.relative_to(ROOT))
+        if result["count"]:
+            ifc_path = OUT_DIR / f"{path.stem}-mountings.ifc"
+            write_mounting_ifc(stored, ifc_path, source=path)
+            result["mounting_ifc"] = f"out:{ifc_path.name}"
+            result["mounting_out"] = str(ifc_path.relative_to(ROOT))
         self._send_json(result)
 
     def _drawings(self) -> None:

@@ -16,6 +16,20 @@ let generation = 0;
 const sectionPlanes = { x: null, y: null, z: null };
 let categories = [];
 let storeys = [];
+let loadedFiles = [];
+let mountingMeta = new Map();
+
+const MOUNT_STATUSES = [
+  ["clear", "Non-problematic"],
+  ["moved", "Moved"],
+  ["clash", "Clashing"],
+];
+const MOUNT_TRADES = [
+  ["sanitary", "Sanitary"],
+  ["heating_cooling", "Heating / cooling"],
+  ["ventilation", "Ventilation"],
+  ["unknown", "Other"],
+];
 
 function status(text) {
   const node = document.querySelector("#viewer-status");
@@ -114,6 +128,34 @@ function mountTools() {
   const categoryList = document.createElement("div");
   categoryList.id = "view-categories";
   categoryList.className = "category-list";
+  const mountingBlock = document.createElement("div");
+  mountingBlock.id = "view-mounting-block";
+  mountingBlock.hidden = true;
+  const mountingHeading = document.createElement("h3");
+  mountingHeading.textContent = "Mounting";
+  const mountingToggle = document.createElement("label");
+  const mountingInput = document.createElement("input");
+  mountingInput.id = "view-mounting";
+  mountingInput.type = "checkbox";
+  mountingInput.checked = true;
+  mountingInput.addEventListener("change", () => {
+    applyVisibility().catch((error) => status(error.message || "Could not filter the model."));
+  });
+  const mountingText = document.createElement("span");
+  mountingText.textContent = "Show mounting elements";
+  mountingToggle.append(mountingInput, mountingText);
+  const statusHeading = document.createElement("h3");
+  statusHeading.textContent = "Status";
+  const tradeHeading = document.createElement("h3");
+  tradeHeading.textContent = "Trade";
+  mountingBlock.append(
+    mountingHeading,
+    mountingToggle,
+    statusHeading,
+    checkboxList("view-status", MOUNT_STATUSES),
+    tradeHeading,
+    checkboxList("view-trade", MOUNT_TRADES),
+  );
 
   const colorHeading = document.createElement("h3");
   colorHeading.textContent = "Color";
@@ -152,12 +194,63 @@ function mountTools() {
     filterHeading,
     storeyLabel,
     categoryList,
+    mountingBlock,
     colorHeading,
     colorField,
     colorRow,
     fade,
   );
   host.append(aside);
+}
+
+function checkboxList(id, options) {
+  const list = document.createElement("div");
+  list.id = id;
+  list.className = "category-list";
+  for (const [value, label] of options) {
+    const row = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.value = value;
+    input.checked = true;
+    input.addEventListener("change", () => {
+      applyVisibility().catch((error) => status(error.message || "Could not filter the model."));
+    });
+    const text = document.createElement("span");
+    text.textContent = label;
+    row.append(input, text);
+    list.append(row);
+  }
+  return list;
+}
+
+function modelById(id) {
+  for (const model of fragments.list.values()) {
+    if (model.modelId === id) return model;
+  }
+  return null;
+}
+
+function isMountingModel(model) {
+  return loadedFiles.some((file) => file.role === "mounting" && file.id === model.modelId);
+}
+
+function checkedValues(selector) {
+  return new Set(
+    [...document.querySelectorAll(`${selector} input:checked`)]
+      .filter((input) => !input.parentElement.hidden)
+      .map((input) => input.value),
+  );
+}
+
+function mountingFiltersOpen() {
+  const block = document.querySelector("#view-mounting-block");
+  if (!block || block.hidden) return true;
+  const show = document.querySelector("#view-mounting");
+  if (show && !show.checked) return false;
+  const inputs = [...document.querySelectorAll("#view-status input, #view-trade input")]
+    .filter((input) => !input.parentElement.hidden);
+  return inputs.every((input) => input.checked);
 }
 
 function toolButton(label, action) {
@@ -204,28 +297,56 @@ async function applyVisibility() {
   const ticked = new Set(tickedCategories());
   const allCategories = categories.length === 0 || ticked.size === categories.length;
   const storeyKey = document.querySelector("#view-storeys")?.value || "";
-  const storey = storeys.find((item) => item.key === storeyKey) || null;
-  if (allCategories && !storey) {
+  if (allCategories && !storeyKey && mountingFiltersOpen()) {
     await hider.set(true);
     fragments.core.update(true);
     return;
   }
+  const statusOn = checkedValues("#view-status");
+  const tradeOn = checkedValues("#view-trade");
+  const showMounting = document.querySelector("#view-mounting")?.checked !== false;
   const map = {};
   for (const model of fragments.list.values()) {
-    let ids = allCategories ? null : new Set(await idsForCategories(model, [...ticked]));
-    if (storey && storey.modelId === model.modelId) {
-      ids = ids ? new Set([...ids].filter((id) => storey.ids.has(id))) : new Set(storey.ids);
-    } else if (storey) {
+    const mounting = isMountingModel(model);
+    let ids;
+    if (mounting && !showMounting) {
       ids = new Set();
+    } else if (mounting || allCategories) {
+      ids = new Set(await model.getItemsIdsWithGeometry());
+    } else {
+      ids = new Set(await idsForCategories(model, [...ticked]));
     }
-    map[model.modelId] = ids || new Set(await idsForCategories(model, categories));
+    if (storeyKey && mounting && showMounting) {
+      ids = new Set([...ids].filter((id) => {
+        const meta = mountingMeta.get(`${model.modelId}:${id}`);
+        return Boolean(meta?.storey) && meta.storey.trim().toLowerCase() === storeyKey;
+      }));
+    } else if (storeyKey) {
+      const allowed = new Set();
+      for (const storey of storeys) {
+        if (storey.modelId === model.modelId && storey.nameKey === storeyKey) {
+          for (const id of storey.ids) allowed.add(id);
+        }
+      }
+      ids = new Set([...ids].filter((id) => allowed.has(id)));
+    }
+    if (mounting && showMounting) {
+      ids = new Set([...ids].filter((id) => {
+        const meta = mountingMeta.get(`${model.modelId}:${id}`);
+        if (!meta) return true;
+        return statusOn.has(meta.status) && tradeOn.has(meta.trade);
+      }));
+    }
+    map[model.modelId] = ids;
   }
   await hider.isolate(map);
   fragments.core.update(true);
 }
 
 async function showEverything() {
-  for (const input of document.querySelectorAll("#view-categories input")) input.checked = true;
+  for (const input of document.querySelectorAll("#view-categories input, #view-mounting-block input")) {
+    if (!input.parentElement.hidden) input.checked = true;
+  }
   const select = document.querySelector("#view-storeys");
   if (select) select.value = "";
   const fade = document.querySelector('#view-tools input[data-axis="fade"]');
@@ -251,6 +372,7 @@ async function colorCategories(names, hex) {
   if (!names.length) return;
   const color = new THREE.Color(hex);
   for (const model of fragments.list.values()) {
+    if (isMountingModel(model)) continue;
     const ids = await idsForCategories(model, names);
     if (ids.length) await model.setColor(ids, color);
   }
@@ -321,6 +443,24 @@ function isStorey(node) {
   return String(node?.category || "").toUpperCase().includes("BUILDINGSTOREY");
 }
 
+async function categoryStoreyNames(model) {
+  try {
+    const items = await model.getItemsOfCategories([/^IFCBUILDINGSTOREY$/i]);
+    const ids = [...new Set(Object.values(items).flat().filter((id) => typeof id === "number"))];
+    if (!ids.length) return [];
+    const rows = await model.getItemsData(ids, {
+      attributesDefault: false,
+      attributes: ["Name", "LongName"],
+    });
+    return ids.map((id, index) => {
+      const data = rowFor(rows, id, index);
+      return readAttribute(data, "Name") || readAttribute(data, "LongName") || "";
+    }).filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
 async function loadStoreys() {
   storeys = [];
   for (const model of fragments.list.values()) {
@@ -336,19 +476,21 @@ async function loadStoreys() {
       for (const child of node?.children || []) walk(child);
     };
     walk(tree);
+    const names = await categoryStoreyNames(model);
+    found.forEach((node, index) => {
+      node.label = names[index] || "";
+    });
     for (const node of found) {
       const ids = new Set();
       collectIds(node, ids);
-      let name = `Storey ${storeys.length + 1}`;
-      if (typeof node.localId === "number") {
-        try {
-          const [data] = await model.getItemsData([node.localId]);
-          name = readAttribute(data, "Name") || readAttribute(data, "LongName") || name;
-        } catch {
-          /* the storey keeps a numbered label */
-        }
-      }
-      storeys.push({ key: `${model.modelId}:${node.localId}`, modelId: model.modelId, name, ids });
+      const name = node.label || node.name || node.Name || `Storey ${storeys.length + 1}`;
+      storeys.push({
+        key: `${model.modelId}:${node.localId}`,
+        modelId: model.modelId,
+        name,
+        nameKey: name.trim().toLowerCase(),
+        ids,
+      });
     }
   }
 }
@@ -361,6 +503,7 @@ async function refreshTools() {
   categories = [];
   const seen = new Set();
   for (const model of fragments.list.values()) {
+    if (isMountingModel(model)) continue;
     const names = await model.getCategories();
     const geometric = new Set(await model.getItemsIdsWithGeometry());
     const items = names.length
@@ -401,11 +544,26 @@ async function refreshTools() {
   all.value = "";
   all.textContent = "All storeys";
   select.append(all);
-  for (const storey of storeys) {
+  const seenStoreys = new Set();
+  const addStoreyOption = (name) => {
+    const key = name.trim().toLowerCase();
+    if (!key || seenStoreys.has(key)) return;
+    seenStoreys.add(key);
     const option = document.createElement("option");
-    option.value = storey.key;
-    option.textContent = storey.name;
+    option.value = key;
+    option.textContent = name.trim();
     select.append(option);
+  };
+  for (const storey of storeys) addStoreyOption(storey.name);
+  for (const meta of mountingMeta.values()) addStoreyOption(meta.storey || "");
+  const mountingBlock = document.querySelector("#view-mounting-block");
+  const hasMounting = loadedFiles.some((file) => file.role === "mounting");
+  if (mountingBlock) mountingBlock.hidden = !hasMounting;
+  for (const input of document.querySelectorAll("#view-mounting-block input")) input.checked = true;
+  const other = document.querySelector('#view-trade input[value="unknown"]');
+  if (other) {
+    const trades = new Set([...mountingMeta.values()].map((item) => item.trade));
+    other.parentElement.hidden = !trades.has("unknown");
   }
   select.hidden = storeys.length === 0;
   select.parentElement.hidden = storeys.length === 0;
@@ -542,16 +700,91 @@ function labelForId(id) {
   return raw.replace(/^[0-9a-f]{8}-/i, "");
 }
 
+function unwrapValue(value) {
+  if (typeof value === "string" || typeof value === "number") return String(value);
+  if (value && typeof value === "object") {
+    if ("value" in value) return unwrapValue(value.value);
+    if ("Value" in value) return unwrapValue(value.Value);
+  }
+  return "";
+}
+
+function psetMount(data) {
+  const found = {};
+  const seen = new WeakSet();
+  const walk = (node, depth) => {
+    if (!node || typeof node !== "object" || depth > 6 || seen.has(node)) return;
+    seen.add(node);
+    if (!Array.isArray(node)) {
+      const name = readAttribute(node, "Name");
+      if (name === "Status" || name === "Trade" || name === "Storey") {
+        const value = unwrapValue(node.NominalValue ?? node.nominalValue);
+        if (value) found[name] = value;
+      }
+    }
+    const children = Array.isArray(node) ? node : Object.values(node);
+    for (const child of children) {
+      if (child && typeof child === "object") walk(child, depth + 1);
+    }
+  };
+  walk(data, 0);
+  return found;
+}
+
+function rowFor(rows, id, index) {
+  if (Array.isArray(rows)) return rows[index] || {};
+  if (rows && typeof rows === "object") return rows[id] || rows[String(id)] || {};
+  return {};
+}
+
+async function indexMountings() {
+  // Prefer Pset_DrillMount Status and Trade. ObjectType and Tag repeat those values.
+  mountingMeta = new Map();
+  for (const file of loadedFiles) {
+    if (file.role !== "mounting") continue;
+    const model = modelById(file.id);
+    if (!model) continue;
+    const ids = [...await model.getItemsIdsWithGeometry()];
+    if (!ids.length) continue;
+    const attributes = { attributesDefault: false, attributes: ["ObjectType", "Tag", "Name", "Description"] };
+    let rows = [];
+    try {
+      rows = await model.getItemsData(ids, {
+        ...attributes,
+        relations: { IsDefinedBy: { attributes: true, relations: true } },
+      });
+    } catch {
+      try {
+        rows = await model.getItemsData(ids, attributes);
+      } catch {
+        rows = [];
+      }
+    }
+    ids.forEach((id, index) => {
+      const data = rowFor(rows, id, index);
+      const pset = psetMount(data);
+      const status = pset.Status || readAttribute(data, "ObjectType");
+      const trade = pset.Trade || readAttribute(data, "Tag");
+      const storey = pset.Storey || readAttribute(data, "Description");
+      if (!status && !trade) return;
+      mountingMeta.set(`${model.modelId}:${id}`, { status, trade, storey });
+    });
+  }
+}
+
 function filesFromQuery() {
   if (document.body.dataset.page !== "viewer") return null;
   const params = new URLSearchParams(location.search);
-  const ids = [];
-  const primary = params.get("id");
-  if (primary) ids.push(primary);
-  for (const extra of params.getAll("clash")) {
-    if (extra && !ids.includes(extra)) ids.push(extra);
-  }
-  return ids.map((id) => ({ id, name: labelForId(id) }));
+  const files = [];
+  const push = (id, role) => {
+    if (id && !files.some((file) => file.id === id)) {
+      files.push({ id, name: labelForId(id), role });
+    }
+  };
+  push(params.get("id"), "service");
+  for (const extra of params.getAll("clash")) push(extra, "clash");
+  for (const extra of params.getAll("mounting")) push(extra, "mounting");
+  return files;
 }
 
 async function open(files) {
@@ -586,6 +819,9 @@ async function open(files) {
     status(`${names} · no geometry to frame`);
     return;
   }
+  loadedFiles = files;
+  await indexMountings();
+  if (token !== generation) return;
   await refreshTools();
   if (token !== generation) return;
   const extent = `${size.x.toFixed(1)} × ${size.y.toFixed(1)} × ${size.z.toFixed(1)} m`;

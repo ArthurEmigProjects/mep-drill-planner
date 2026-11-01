@@ -122,6 +122,18 @@ function clashFiles() {
   return state.files.filter((file) => state.clashIds.has(file.id) && file.id !== state.selectedId);
 }
 
+function filesForViewer(file) {
+  const files = [{ id: file.id, name: file.name, role: "service" }];
+  for (const extra of clashFiles()) {
+    files.push({ id: extra.id, name: extra.name, role: "clash" });
+  }
+  if (file.mounting_id) {
+    const name = `${file.name.replace(/\.ifc$/i, "")}-mountings.ifc`;
+    files.push({ id: file.mounting_id, name, role: "mounting" });
+  }
+  return files;
+}
+
 function renderSelection() {
   const file = selectedFile();
   viewBtn.disabled = !file || state.busy;
@@ -350,7 +362,12 @@ function renderMounting(data) {
   const clashes = data.clash_count ?? points.filter((point) => point.clear === false).length;
   const models = data.clash_models || [];
   const also = models.length > 1 ? ` · also ${models.slice(1).join(", ")}` : "";
-  mountingMeta.textContent = `${count} hangers on ${data.run_count ?? (data.runs || []).length} runs · ${adjusted} adjusted · ${clashes} still clashing${also} · ${data.out}`;
+  const ifc = data.mounting_out ? ` · ${data.mounting_out}` : "";
+  mountingMeta.textContent = `${count} hangers on ${data.run_count ?? (data.runs || []).length} runs · ${adjusted} adjusted · ${clashes} still clashing${also} · ${data.out}${ifc}`;
+  if (data.mounting_ifc) {
+    const file = selectedFile();
+    if (file) file.mounting_id = data.mounting_ifc;
+  }
   paintMountingFilters(data.reason_counts || {});
   paintMountingRows();
   mountingEl.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -519,7 +536,7 @@ async function viewModel() {
   renderSelection();
   showBanner("");
   try {
-    await window.MepViewer.open([file, ...clashFiles()]);
+    await window.MepViewer.open(filesForViewer(file));
   } catch (error) {
     showBanner(error.message);
     const node = document.querySelector("#viewer-status");
@@ -535,6 +552,7 @@ function viewerWindowUrl(file) {
   const params = new URLSearchParams();
   params.set("id", file.id);
   for (const extra of clashFiles()) params.append("clash", extra.id);
+  if (file.mounting_id) params.append("mounting", file.mounting_id);
   return `/viewer?${params}`;
 }
 

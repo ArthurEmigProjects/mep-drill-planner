@@ -358,7 +358,8 @@ body.viewer-app .viewer-canvas {
   overflow: auto;
 }
 
-.category-list label {
+.category-list label,
+#view-mounting-block > label {
   display: flex;
   gap: 8px;
   align-items: center;

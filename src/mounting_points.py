@@ -20,6 +20,9 @@ Run from the repo root:
 
     python -m src.mounting_points examples/HeatingAndCooling.ifc --out examples/out/mounting-points.json
 
+The same command writes ``examples/out/HeatingAndCooling-mountings.ifc`` beside
+the JSON. That file is only the hanger rods.
+
 A second IFC is clash geometry only. Its pipes, ducts and beams can block a
 rod, and its own runs are not given hangers:
 
@@ -269,7 +272,7 @@ def plan_mounting_points(
         )
         run_rows.append(placed["run"])
         point_rows.extend(placed["points"])
-    return {
+    plan = {
         "source": source,
         "units": "m",
         "spacing_rule": {
@@ -285,6 +288,9 @@ def plan_mounting_points(
         "runs": run_rows,
         "points": point_rows,
     }
+    from src.mounting_ifc import annotate_mountings
+
+    return annotate_mountings(plan)
 
 
 def load_ifc(path: Path) -> tuple[list[dict], list[dict]]:
@@ -385,7 +391,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     plan["clash_models"] = clash_models
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(_round_numbers(plan), indent=2), encoding="utf-8")
+    rounded = _round_numbers(plan)
+    args.out.write_text(json.dumps(rounded, indent=2), encoding="utf-8")
+    if rounded["points"]:
+        from src.mounting_ifc import write_mounting_ifc
+
+        ifc_out = args.out.with_name(f"{args.ifc.stem}-mountings.ifc")
+        write_mounting_ifc(rounded, ifc_out, source=args.ifc)
+        print(f"mounting ifc → {ifc_out}")
     _print_summary(plan, args.out)
     return 0
 

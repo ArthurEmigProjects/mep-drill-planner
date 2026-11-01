@@ -24,7 +24,7 @@
     <header class="mast">
       <p class="eyebrow">MEP drill planner</p>
       <h1>Select an IFC file</h1>
-      <p class="lede">Pick a sample model or open an <span class="mono">.ifc</span> from this computer. The file stays local. View in 3D draws the selected model, and any file ticked For clashes, with That Open Engine. Open in window puts that same view in its own browser window. Extraction uses the top of each MEP element’s bounding box. Placement spaces hangers along each straight run and shows when a clash moves one. Tick <span class="mono">For clashes</span> on other IFCs when they hold beams or the rest of the services a rod can hit. Clash drawings PDF writes a floor plan for each level, a long section, a cross section, a section at each unresolved clash, and 3D views.</p>
+      <p class="lede">Pick a sample model or open an <span class="mono">.ifc</span> from this computer. The file stays local. View in 3D draws the selected model, and any file ticked For clashes, with That Open Engine. Open in window puts that same view in its own browser window. Extraction uses the top of each MEP element’s bounding box. Placement spaces hangers along each straight run, shows when a clash moves one, and writes a separate mounting IFC. View in 3D loads that IFC beside the model. The view tools can hide it, and can filter hangers by non-problematic, moved, or clashing, and by sanitary, heating/cooling, or ventilation. Tick <span class="mono">For clashes</span> on other IFCs when they hold beams or the rest of the services a rod can hit. Clash drawings PDF writes a floor plan for each level, a long section, a cross section, a section at each unresolved clash, and 3D views.</p>
     </header>
 
     <p id="banner" class="banner" hidden></p>
@@ -71,7 +71,7 @@
         <p id="viewer-status" class="hint"></p>
       </div>
       <div id="viewer-canvas" class="viewer-canvas"></div>
-      <p class="hint viewer-help">Drag to orbit, scroll to zoom, right-drag to pan. The tools on the view filter categories and storeys, recolor them, and cut sections. Double-click a face to cut there.</p>
+      <p class="hint viewer-help">Drag to orbit, scroll to zoom, right-drag to pan. The tools on the view filter categories and storeys, recolor them, and cut sections. Double-click a face to cut there. After placement, mounting elements are their own model: show or hide them, and filter status and trade, from those tools.</p>
     </section>
 
     <section id="results" class="panel" hidden>
