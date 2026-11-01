@@ -20,7 +20,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from .extract_anchor_points import extract_from_ifc
-from .mounting_points import _round_numbers, load_ifc, plan_mounting_points
+from .mounting_points import _round_numbers, load_clash_context, plan_mounting_points
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / "examples"
@@ -41,6 +41,14 @@ SAMPLE_CATALOG = {
     "buildingsmart-duplex-mep.ifc": {
         "title": "Duplex MEP",
         "detail": "buildingSMART community sample",
+    },
+    "HeatingAndCooling.ifc": {
+        "title": "Duplex heating and cooling",
+        "detail": "Zenodo · Teclaw 2024",
+    },
+    "Architecture.ifc": {
+        "title": "Duplex architecture",
+        "detail": "Zenodo · Teclaw 2024 · beams and structure",
     },
 }
 
@@ -224,11 +232,15 @@ class AppHandler(BaseHTTPRequestHandler):
         try:
             payload = json.loads(body.decode("utf-8"))
             path = resolve_file(str(payload["id"]))
+            raw_ids = payload.get("obstacle_ids") or []
+            if not isinstance(raw_ids, list):
+                raise ValueError("obstacle_ids")
+            obstacle_paths = [resolve_file(str(item)) for item in raw_ids]
         except (KeyError, ValueError, json.JSONDecodeError, UnicodeError):
             self._send_json({"error": "Choose an IFC file first."}, 400)
             return
         try:
-            result = build_mounting_plan(path)
+            result = build_mounting_plan(path, obstacle_paths)
         except SystemExit as exc:
             self._send_json({"error": str(exc)}, 500)
             return
@@ -265,19 +277,21 @@ class AppHandler(BaseHTTPRequestHandler):
         self.wfile.write(raw)
 
 
-def build_mounting_plan(path: Path) -> dict:
+def build_mounting_plan(path: Path, obstacle_paths: list[Path] | None = None) -> dict:
     """Place hanger points for one IFC and attach the counts the page shows.
 
-    ``reason`` on each point is the placement outcome. ``shifted_into_90_95``
-    and ``shifted_under_95`` are hangers moved off a blocked station.
-    ``respaced_90_95`` is a whole run placed again inside that band.
-    ``unresolved_clash`` means no clear station stayed within 95% of the
-    catalogue maximum.
+    ``obstacle_paths`` are further IFCs. Their services and beams join the
+    clash check; their runs are not hung. ``reason`` on each point is the
+    placement outcome. ``shifted_into_90_95`` and ``shifted_under_95`` are
+    hangers moved off a blocked station. ``respaced_90_95`` is a whole run
+    placed again inside that band. ``unresolved_clash`` means no clear
+    station stayed within 95% of the catalogue maximum.
     """
-    segments, obstacles = load_ifc(path)
+    segments, obstacles, clash_models = load_clash_context(path, obstacle_paths)
     plan = _round_numbers(
         plan_mounting_points(segments, obstacles, source=path.name)
     )
+    plan["clash_models"] = clash_models
     counts: dict[str, int] = {}
     for point in plan["points"]:
         reason = point["reason"]

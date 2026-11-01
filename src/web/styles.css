@@ -101,22 +101,49 @@ h2 {
 .file-list:empty { margin-top: 0; }
 
 .file {
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
   gap: 12px;
-  align-items: start;
+  align-items: flex-start;
   padding: 12px 12px;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: #fff;
+}
+
+.file-pick {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+  flex: 1;
+  min-width: 0;
   cursor: pointer;
 }
 
 .file:hover { border-color: #c9bfb0; }
 
-.file:has(input:checked) {
+.file:has(input[type="radio"]:checked) {
   border-color: var(--accent);
   background: var(--selected);
+}
+
+.clash-pick {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 650;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.clash-pick input { accent-color: var(--accent); }
+
+.clash-pick:has(input:disabled) {
+  cursor: default;
+  opacity: 0.72;
 }
 
 .file input {

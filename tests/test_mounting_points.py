@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import tempfile
 import unittest
+from pathlib import Path
 
 from src.mounting_points import (
     ADJUSTED_SPACING_MAX_RATIO,
@@ -323,6 +325,52 @@ class PlanMountingPointsTests(unittest.TestCase):
         self.assertEqual(plan["runs"][0]["status"], "no_spacing_guidance")
         self.assertIsNone(plan["runs"][0]["max_spacing_m"])
         self.assertEqual(plan["points"], [])
+
+    def test_same_id_from_another_ifc_still_blocks_the_rod(self):
+        foreign = {
+            "element_id": "pipe-1",
+            "source": "Architecture.ifc",
+            "shape": "box",
+            "min": (1.3, -0.2, 1.2),
+            "max": (1.5, 0.2, 2.0),
+        }
+        plan = self._run_of_22_mm([foreign])
+        self.assertEqual(plan["runs"][0]["status"], "placed_respaced")
+
+    def test_same_id_without_another_file_is_the_host_and_is_ignored(self):
+        own_box = {
+            "element_id": "pipe-1",
+            "shape": "box",
+            "min": (1.3, -0.2, 1.2),
+            "max": (1.5, 0.2, 2.0),
+        }
+        plan = self._run_of_22_mm([own_box])
+        self.assertEqual(plan["runs"][0]["status"], "placed_initial")
+
+
+class ClashContextTests(unittest.TestCase):
+    def test_extra_file_is_named_once_and_its_obstacles_are_tagged(self):
+        import ifcopenshell
+
+        from src.mounting_points import _tag_obstacle_source, load_clash_context
+
+        original = {"element_id": "beam-1", "shape": "box"}
+        tagged = _tag_obstacle_source([original], "Architecture.ifc")
+        self.assertEqual(tagged[0]["source"], "Architecture.ifc")
+        self.assertNotIn("source", original)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            service = root / "piping.ifc"
+            extra = root / "Architecture.ifc"
+            copy = root / "piping-copy.ifc"
+            for path in (service, extra):
+                ifcopenshell.file(schema="IFC2X3").write(str(path))
+            copy.write_bytes(service.read_bytes())
+            _segments, _obstacles, models = load_clash_context(
+                service, [extra, service, copy, extra]
+            )
+        self.assertEqual(models, ["piping.ifc", "Architecture.ifc", "piping-copy.ifc"])
 
 
 if __name__ == "__main__":

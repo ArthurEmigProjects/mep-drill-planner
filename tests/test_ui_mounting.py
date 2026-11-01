@@ -27,6 +27,7 @@ class MountingPlanPayloadTests(unittest.TestCase):
         )
         self.assertEqual(self.plan["clash_count"], counts["unresolved_clash"])
         self.assertTrue(all("reason" in point for point in self.plan["points"]))
+        self.assertEqual(self.plan["clash_models"], ["zenodo-duplex-piping.ifc"])
 
 
 if __name__ == "__main__":

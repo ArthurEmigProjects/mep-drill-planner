@@ -9,6 +9,7 @@ const REASONS = {
 const state = {
   files: [],
   selectedId: null,
+  clashIds: new Set(),
   points: [],
   shown: 25,
   mountingPoints: [],
@@ -49,8 +50,10 @@ function showBanner(message) {
 }
 
 function fileCard(file) {
-  const label = document.createElement("label");
-  label.className = "file";
+  const card = document.createElement("div");
+  card.className = "file";
+  const pick = document.createElement("label");
+  pick.className = "file-pick";
   const input = document.createElement("input");
   input.type = "radio";
   input.name = "ifc";
@@ -70,8 +73,35 @@ function fileCard(file) {
   const bits = [file.size, file.schema, file.detail].filter(Boolean);
   meta.textContent = bits.join(" · ");
   body.append(title, name, meta);
-  label.append(input, body);
-  return label;
+  pick.append(input, body);
+
+  const clash = document.createElement("label");
+  clash.className = "clash-pick";
+  const box = document.createElement("input");
+  box.type = "checkbox";
+  const always = file.id === state.selectedId;
+  box.checked = always || state.clashIds.has(file.id);
+  box.disabled = always;
+  box.setAttribute(
+    "aria-label",
+    always
+      ? `${file.name} is included in the clash check`
+      : `Include ${file.name} in the clash check`,
+  );
+  box.addEventListener("change", () => {
+    if (box.checked) state.clashIds.add(file.id);
+    else state.clashIds.delete(file.id);
+    mountingEl.hidden = true;
+    renderSelection();
+  });
+  const clashText = document.createElement("span");
+  clashText.textContent = "For clashes";
+  clash.title = always
+    ? "This model is included in the clash check."
+    : "Include this model’s services and beams in the clash check. Its runs are not hung.";
+  clash.append(box, clashText);
+  card.append(pick, clash);
+  return card;
 }
 
 function renderFiles() {
@@ -85,6 +115,10 @@ function renderFiles() {
   renderSelection();
 }
 
+function clashFiles() {
+  return state.files.filter((file) => state.clashIds.has(file.id) && file.id !== state.selectedId);
+}
+
 function renderSelection() {
   const file = selectedFile();
   extractBtn.disabled = !file || state.busy;
@@ -95,12 +129,17 @@ function renderSelection() {
     return;
   }
   selectedTitle.textContent = file.title;
+  const extras = clashFiles();
   const bits = [file.name, file.size, file.schema].filter(Boolean);
+  if (extras.length) {
+    bits.push(`clashes also ${extras.map((item) => item.name).join(", ")}`);
+  }
   selectedMeta.textContent = bits.join(" · ");
 }
 
 function select(id) {
   state.selectedId = id;
+  state.clashIds.delete(id);
   resultsEl.hidden = true;
   mountingEl.hidden = true;
   renderFiles();
@@ -221,26 +260,38 @@ async function extract() {
   }
 }
 
-async function upload(file) {
-  if (!file) return;
-  if (!file.name.toLowerCase().endsWith(".ifc")) {
+async function uploadMany(list) {
+  const incoming = [...list];
+  if (!incoming.length) return;
+  const accepted = incoming.filter((file) => file.name.toLowerCase().endsWith(".ifc"));
+  if (!accepted.length) {
     showBanner("Choose a file that ends in .ifc.");
     return;
   }
-  showBanner("");
+  if (accepted.length < incoming.length) {
+    showBanner("Skipped a file that does not end in .ifc.");
+  } else {
+    showBanner("");
+  }
   extractBtn.disabled = true;
   placeBtn.disabled = true;
-  samplesStatus.textContent = `Opening ${file.name}…`;
+  const uploaded = [];
   try {
-    const response = await fetch("/api/uploads", {
-      method: "POST",
-      headers: { "X-Filename": file.name },
-      body: file,
-    });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "Upload failed");
-    state.files = [data.file, ...state.files.filter((item) => item.id !== data.file.id)];
-    state.selectedId = data.file.id;
+    for (const file of accepted) {
+      samplesStatus.textContent = `Opening ${file.name}…`;
+      const response = await fetch("/api/uploads", {
+        method: "POST",
+        headers: { "X-Filename": file.name },
+        body: file,
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Upload failed");
+      uploaded.push(data.file);
+      state.files = [data.file, ...state.files.filter((item) => item.id !== data.file.id)];
+    }
+    state.selectedId = uploaded[0].id;
+    state.clashIds.delete(uploaded[0].id);
+    for (const file of uploaded.slice(1)) state.clashIds.add(file.id);
     resultsEl.hidden = true;
     mountingEl.hidden = true;
     renderFiles();
@@ -252,9 +303,9 @@ async function upload(file) {
 
 document.querySelector("#browse").addEventListener("click", () => fileInput.click());
 fileInput.addEventListener("change", () => {
-  const file = fileInput.files && fileInput.files[0];
+  const files = fileInput.files ? [...fileInput.files] : [];
   fileInput.value = "";
-  upload(file);
+  uploadMany(files);
 });
 
 drop.addEventListener("dragover", (event) => {
@@ -265,8 +316,7 @@ drop.addEventListener("dragleave", () => drop.classList.remove("hot"));
 drop.addEventListener("drop", (event) => {
   event.preventDefault();
   drop.classList.remove("hot");
-  const file = event.dataTransfer.files && event.dataTransfer.files[0];
-  upload(file);
+  uploadMany(event.dataTransfer.files || []);
 });
 
 function filteredMountingPoints() {
@@ -289,7 +339,9 @@ function renderMounting(data) {
   mountingEl.hidden = false;
   const count = data.count ?? points.length;
   const clashes = data.clash_count ?? points.filter((point) => point.clear === false).length;
-  mountingMeta.textContent = `${count} hangers on ${data.run_count ?? (data.runs || []).length} runs · ${adjusted} adjusted · ${clashes} still clashing · ${data.out}`;
+  const models = data.clash_models || [];
+  const also = models.length > 1 ? ` · also ${models.slice(1).join(", ")}` : "";
+  mountingMeta.textContent = `${count} hangers on ${data.run_count ?? (data.runs || []).length} runs · ${adjusted} adjusted · ${clashes} still clashing${also} · ${data.out}`;
   paintMountingFilters(data.reason_counts || {});
   paintMountingRows();
   mountingEl.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -388,7 +440,10 @@ async function placeMountingPoints() {
     const response = await fetch("/api/mounting-points", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: file.id }),
+      body: JSON.stringify({
+        id: file.id,
+        obstacle_ids: clashFiles().map((item) => item.id),
+      }),
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "Placement failed");

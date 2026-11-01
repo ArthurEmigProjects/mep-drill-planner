@@ -14,6 +14,11 @@ the point stays and is reported as a clash.
 Run from the repo root:
 
     python -m src.mounting_points examples/HeatingAndCooling.ifc --out examples/out/mounting-points.json
+
+A second IFC is clash geometry only. Its pipes, ducts and beams can block a
+rod, and its own runs are not given hangers:
+
+    python -m src.mounting_points examples/zenodo-duplex-piping.ifc --obstacles examples/Architecture.ifc
 """
 
 from __future__ import annotations
@@ -234,7 +239,8 @@ def plan_mounting_points(
 
     ``obstacles`` use the same shape as :func:`rod_hits_obstacle`. An obstacle
     whose ``element_id`` is one of the run's own segments or fittings is
-    ignored for that run.
+    ignored for that run, unless ``source`` names another IFC. The same
+    GlobalId in a second file is a different element and can still clash.
     """
     catalogue = database if database is not None else load_database()
     clash_obstacles = list(obstacles or [])
@@ -295,6 +301,42 @@ def load_ifc(path: Path) -> tuple[list[dict], list[dict]]:
     return segments, obstacles
 
 
+def load_clash_context(
+    service: Path, others: list[Path] | None = None
+) -> tuple[list[dict], list[dict], list[str]]:
+    """Load the IFC to hang, then add clash geometry from further IFCs.
+
+    The first file supplies the runs. Each later file adds its pipes, ducts,
+    fittings and beams as obstacles and does not add runs. Repeating a file,
+    or passing the service file again, does not load it twice.
+    """
+    if not service.is_file():
+        raise FileNotFoundError(str(service))
+    segments, obstacles = load_ifc(service)
+    models = [service.name]
+    seen = {service.resolve()}
+    for other in others or []:
+        resolved = other.resolve()
+        if resolved in seen:
+            continue
+        if not other.is_file():
+            raise FileNotFoundError(str(other))
+        seen.add(resolved)
+        _extra_segments, extra_obstacles = load_ifc(other)
+        obstacles.extend(_tag_obstacle_source(extra_obstacles, other.name))
+        models.append(other.name)
+    return segments, obstacles, models
+
+
+def _tag_obstacle_source(obstacles: list[dict], source: str) -> list[dict]:
+    tagged = []
+    for obstacle in obstacles:
+        copy = dict(obstacle)
+        copy["source"] = source
+        tagged.append(copy)
+    return tagged
+
+
 def main(argv: list[str] | None = None) -> int:
     import argparse
     import sys
@@ -318,18 +360,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--rod-radius", type=float, default=ROD_RADIUS_M)
     args = parser.parse_args(argv)
 
-    if not args.ifc.is_file():
-        print(f"File not found: {args.ifc}", file=sys.stderr)
+    try:
+        segments, obstacles, clash_models = load_clash_context(args.ifc, args.obstacles)
+    except FileNotFoundError as exc:
+        print(f"File not found: {exc.filename or exc}", file=sys.stderr)
         return 1
-    for extra in args.obstacles:
-        if not extra.is_file():
-            print(f"File not found: {extra}", file=sys.stderr)
-            return 1
-
-    segments, obstacles = load_ifc(args.ifc)
-    for extra in args.obstacles:
-        _extra_segments, extra_obstacles = load_ifc(extra)
-        obstacles.extend(extra_obstacles)
     plan = plan_mounting_points(
         segments,
         obstacles,
@@ -337,6 +372,7 @@ def main(argv: list[str] | None = None) -> int:
         rod_radius_m=args.rod_radius,
         max_rod_length_m=args.max_rod_length,
     )
+    plan["clash_models"] = clash_models
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(_round_numbers(plan), indent=2), encoding="utf-8")
     _print_summary(plan, args.out)
@@ -374,7 +410,7 @@ def _place_run(
     relevant = [
         obstacle
         for obstacle in obstacles
-        if obstacle.get("element_id") not in host_ids
+        if not _is_own_obstacle(obstacle, host_ids)
         and _near_run(run, obstacle, rod_radius_m, max_rod_length_m)
     ]
 
@@ -507,10 +543,31 @@ def _clashing_ids(run, station, obstacles, rod_radius_m, max_rod_length_m) -> li
             rod_radius_m=rod_radius_m,
             max_rod_length_m=max_rod_length_m,
         ):
-            identifier = obstacle.get("element_id")
+            identifier = _clash_name(obstacle)
             if identifier and identifier not in found:
                 found.append(identifier)
     return found
+
+
+def _is_own_obstacle(obstacle: dict, host_ids: set[str]) -> bool:
+    """Whether this obstacle is the run itself rather than another model.
+
+    ``source`` is set only on geometry loaded from an additional IFC. That
+    copy is kept even when its GlobalId matches the pipe being hung.
+    """
+    if obstacle.get("element_id") not in host_ids:
+        return False
+    return not obstacle.get("source")
+
+
+def _clash_name(obstacle: dict) -> str | None:
+    identifier = obstacle.get("element_id")
+    if not identifier:
+        return None
+    source = obstacle.get("source")
+    if source:
+        return f"{source} · {identifier}"
+    return identifier
 
 
 def _point_on_run(run: dict, station: float) -> tuple[float, float, float]:
@@ -1151,9 +1208,13 @@ def _print_summary(plan: dict, out: Path) -> None:
     for run in plan["runs"]:
         counts[run["status"]] = counts.get(run["status"], 0) + 1
     unresolved = sum(1 for point in plan["points"] if not point["clear"])
+    models = plan.get("clash_models") or []
+    also = ""
+    if len(models) > 1:
+        also = " · also " + ", ".join(models[1:])
     print(
         f"runs {len(plan['runs'])} {counts} · "
-        f"points {len(plan['points'])} ({unresolved} clashing) → {out}"
+        f"points {len(plan['points'])} ({unresolved} clashing){also} → {out}"
     )
 
 
