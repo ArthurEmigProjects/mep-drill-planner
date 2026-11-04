@@ -18,6 +18,8 @@ const state = {
   mountingShown: 25,
   mountingFilter: "adjusted",
   selectedHangerId: null,
+  selectedHangerIds: [],
+  anchorHangerId: null,
   history: [],
   future: [],
   busy: false,
@@ -61,6 +63,7 @@ const rowsEl = document.querySelector("#rows");
 const showAllBtn = document.querySelector("#show-all");
 const drop = document.querySelector("#drop");
 const fileInput = document.querySelector("#file-input");
+let viewerWindow = null;
 
 function selectedFile() {
   return state.files.find((file) => file.id === state.selectedId) || null;
@@ -374,6 +377,8 @@ function renderMounting(data) {
   state.history = [];
   state.future = [];
   state.selectedHangerId = null;
+  state.selectedHangerIds = [];
+  state.anchorHangerId = null;
   state.mountingShown = 25;
   const points = data.points || [];
   const adjusted = data.adjusted_count ?? points.filter((point) => point.reason !== "regular_70").length;
@@ -389,10 +394,13 @@ function adoptPlan(data) {
   if (data.runs) state.runs = data.runs;
   if (useSelectionOverride) {
     state.selectedHangerId = selectionOverride;
+    state.selectedHangerIds = selectionOverride ? [selectionOverride] : [];
+    state.anchorHangerId = selectionOverride;
     useSelectionOverride = false;
   }
+  state.selectedHangerIds = state.selectedHangerIds.filter((id) => points.some((point) => point.id === id));
   if (state.selectedHangerId && !points.some((point) => point.id === state.selectedHangerId)) {
-    state.selectedHangerId = null;
+    state.selectedHangerId = state.selectedHangerIds[0] || null;
   }
   mountingEl.hidden = false;
   const count = data.count ?? points.length;
@@ -448,9 +456,12 @@ function paintMountingRows() {
   mountingRows.replaceChildren(
     ...slice.map((point) => {
       const row = document.createElement("tr");
-      row.className = `hanger-row ${reasonClass(point)}${point.id === state.selectedHangerId ? " on" : ""}`;
+      row.className = `hanger-row ${reasonClass(point)}${hangerIsOn(point.id) ? " on" : ""}`;
       row.dataset.hangerId = point.id;
-      row.addEventListener("click", () => selectHanger(point.id));
+      row.addEventListener("click", (event) => {
+        const ordered = [...mountingRows.querySelectorAll("[data-hanger-id]")].map((item) => item.dataset.hangerId);
+        selectHanger(point.id, event, ordered);
+      });
       const reason = document.createElement("td");
       const badge = document.createElement("span");
       badge.className = `badge ${reasonClass(point)}`;
@@ -577,6 +588,7 @@ async function viewModel() {
   showBanner("");
   try {
     await window.MepViewer.open(filesForViewer(file));
+    if (state.selectedHangerIds.length) focusViewerOnHangers(state.selectedHangerIds);
   } catch (error) {
     showBanner(error.message);
     const node = document.querySelector("#viewer-status");
@@ -599,8 +611,8 @@ function viewerWindowUrl(file) {
 function openViewerWindow() {
   const file = selectedFile();
   if (!file || state.busy) return;
-  const popup = window.open(viewerWindowUrl(file), "mep-ifc-viewer", "popup,width=1280,height=800");
-  if (!popup) {
+  viewerWindow = window.open(viewerWindowUrl(file), "mep-ifc-viewer", "popup,width=1280,height=800");
+  if (!viewerWindow) {
     showBanner("The browser blocked the viewer window. Allow pop-ups for this site, or use View in 3D.");
   }
 }
@@ -672,10 +684,10 @@ function paintObjects() {
     for (const point of hangers) {
       const line = document.createElement("button");
       line.type = "button";
-      line.className = `object-line${point.id === state.selectedHangerId ? " on" : ""}`;
+      line.className = `object-line${hangerIsOn(point.id) ? " on" : ""}`;
       line.dataset.hangerId = point.id;
       line.setAttribute("role", "option");
-      line.setAttribute("aria-selected", point.id === state.selectedHangerId ? "true" : "false");
+      line.setAttribute("aria-selected", hangerIsOn(point.id) ? "true" : "false");
       const ident = document.createElement("span");
       ident.textContent = point.id;
       const badge = document.createElement("span");
@@ -685,7 +697,7 @@ function paintObjects() {
       where.className = "where";
       where.textContent = `${metres(point.station_m)} m`;
       line.append(ident, badge, where);
-      line.addEventListener("click", () => selectHanger(point.id));
+      line.addEventListener("click", (event) => selectHanger(point.id, event));
       group.append(line);
     }
     return group;
@@ -716,6 +728,7 @@ function paintEditor() {
     const run = runsById().get(point.run_id);
     const bits = [point.run_id, reasonLabel(point.reason)];
     if (run && run.size_label) bits.push(run.size_label);
+    if (state.selectedHangerIds.length > 1) bits.push(`framing ${state.selectedHangerIds.length}`);
     hangerEditorTitle.textContent = point.id;
     hangerEditorMeta.textContent = point.clear === false
       ? `${bits.join(" · ")}. The rod was clashing. A move does not run the clash check again.`
@@ -735,14 +748,65 @@ function paintEditor() {
   paintHistory();
 }
 
-function selectHanger(id) {
-  state.selectedHangerId = id;
+function hangerIsOn(id) {
+  return state.selectedHangerIds.includes(id);
+}
+
+function selectHanger(id, event, orderedIds) {
+  const ordered = orderedIds?.length ? orderedIds : objectIds();
+  const toggle = Boolean(event && (event.ctrlKey || event.metaKey) && !event.shiftKey);
+  const extend = Boolean(event?.shiftKey && state.anchorHangerId && ordered.includes(id) && ordered.includes(state.anchorHangerId));
+  if (extend) {
+    const start = ordered.indexOf(state.anchorHangerId);
+    const end = ordered.indexOf(id);
+    const [from, to] = start < end ? [start, end] : [end, start];
+    state.selectedHangerIds = ordered.slice(from, to + 1);
+    state.selectedHangerId = id;
+  } else if (toggle) {
+    const chosen = new Set(state.selectedHangerIds);
+    if (chosen.has(id)) chosen.delete(id);
+    else chosen.add(id);
+    state.selectedHangerIds = [...chosen];
+    state.selectedHangerId = chosen.has(id) ? id : (state.selectedHangerIds.at(-1) || null);
+  } else {
+    state.selectedHangerIds = [id];
+    state.selectedHangerId = id;
+    state.anchorHangerId = id;
+  }
   paintObjects();
   paintMountingRows();
   paintEditor();
-  const line = hangerObjects?.querySelector(`[data-hanger-id="${CSS.escape(id)}"]`);
+  const current = state.selectedHangerId;
+  const line = current ? hangerObjects?.querySelector(`[data-hanger-id="${CSS.escape(current)}"]`) : null;
   if (line) line.scrollIntoView({ block: "nearest" });
   hangerObjects?.focus();
+  focusViewerOnHangers(state.selectedHangerIds);
+}
+
+function focusViewerOnHangers(ids) {
+  const list = [...ids];
+  if (window.MepViewer?.focusHangers) {
+    window.MepViewer.focusHangers(list).catch((error) => {
+      const node = document.querySelector("#viewer-status");
+      if (node) node.textContent = error.message || "Could not frame those hangers.";
+    });
+  }
+  if (viewerWindow && !viewerWindow.closed) {
+    viewerWindow.postMessage({ type: "mep-focus-hangers", ids: list }, window.location.origin);
+  }
+}
+
+function applyViewerHangerPick(ids) {
+  const known = ids.filter((id) => state.mountingPoints.some((point) => point.id === id));
+  if (!known.length || mountingEl.hidden) return;
+  state.selectedHangerIds = known;
+  state.selectedHangerId = known[known.length - 1];
+  state.anchorHangerId = state.selectedHangerId;
+  paintObjects();
+  paintMountingRows();
+  paintEditor();
+  const line = hangerObjects?.querySelector(`[data-hanger-id="${CSS.escape(state.selectedHangerId)}"]`);
+  if (line) line.scrollIntoView({ block: "nearest" });
 }
 
 function objectIds() {
@@ -863,6 +927,20 @@ if (hangerEditor) {
 hangerDelete?.addEventListener("click", deleteSelected);
 undoBtn?.addEventListener("click", undoEdit);
 redoBtn?.addEventListener("click", redoEdit);
+
+window.addEventListener("message", (event) => {
+  if (event.origin !== window.location.origin) return;
+  if (event.data?.type !== "mep-viewer-ready") return;
+  if (!state.selectedHangerIds.length) return;
+  event.source?.postMessage(
+    { type: "mep-focus-hangers", ids: state.selectedHangerIds },
+    window.location.origin,
+  );
+});
+
+window.addEventListener("mep-hanger-picked", (event) => {
+  applyViewerHangerPick(event.detail?.ids || []);
+});
 
 hangerObjects?.addEventListener("keydown", (event) => {
   const ids = objectIds();

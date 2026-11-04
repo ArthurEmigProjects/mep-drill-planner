@@ -18,6 +18,19 @@ let categories = [];
 let storeys = [];
 let loadedFiles = [];
 let mountingMeta = new Map();
+let hangerByName = new Map();
+let hangerByLocal = new Map();
+let selection = {};
+let opening = false;
+let pendingFocus = null;
+let focusToken = 0;
+let propertyToken = 0;
+const SELECT_STYLE = {
+  color: new THREE.Color("#e8a317"),
+  opacity: 1,
+  transparent: false,
+  renderedFaces: 1,
+};
 
 const MOUNT_STATUSES = [
   ["clear", "Non-problematic"],
@@ -213,6 +226,30 @@ function mountTools() {
     fade,
   );
   host.append(aside);
+  mountProperties(host);
+}
+
+function mountProperties(host) {
+  if (!host || document.querySelector("#view-properties")) return;
+  const aside = document.createElement("aside");
+  aside.id = "view-properties";
+  aside.className = "view-properties";
+  aside.hidden = true;
+  aside.addEventListener("pointerdown", (event) => event.stopPropagation());
+  const heading = document.createElement("h3");
+  heading.textContent = "Properties";
+  const empty = document.createElement("p");
+  empty.id = "view-property-empty";
+  empty.className = "hint";
+  empty.textContent = "Click an element to read its properties. Shift-click adds another.";
+  const body = document.createElement("div");
+  body.id = "view-property-body";
+  aside.append(heading, empty, body);
+  host.append(aside);
+}
+
+function inOverlay(event) {
+  return Boolean(event.target?.closest?.("#view-tools, #view-properties"));
 }
 
 function checkboxList(id, options) {
@@ -656,6 +693,8 @@ async function refreshTools() {
   select.hidden = storeys.length === 0;
   select.parentElement.hidden = storeys.length === 0;
   tools.hidden = false;
+  const properties = document.querySelector("#view-properties");
+  if (properties) properties.hidden = false;
 }
 
 async function start() {
@@ -731,6 +770,37 @@ async function start() {
     }
   });
   mountTools();
+  let pointer = null;
+  container.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0 || inOverlay(event)) {
+      pointer = null;
+      return;
+    }
+    pointer = {
+      x: event.clientX,
+      y: event.clientY,
+      id: event.pointerId,
+      shift: event.shiftKey,
+      toggle: event.ctrlKey || event.metaKey,
+    };
+  });
+  container.addEventListener("pointerup", (event) => {
+    if (!pointer || event.pointerId !== pointer.id) return;
+    const start = pointer;
+    pointer = null;
+    if (inOverlay(event)) return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    if (dx * dx + dy * dy > 25) return;
+    const mode = start.shift ? "add" : start.toggle ? "toggle" : "replace";
+    pickElement(mode, event.clientX, event.clientY).catch((error) => status(error.message || "Could not select that element."));
+  });
+  window.addEventListener("message", (event) => {
+    if (event.origin !== window.location.origin) return;
+    const data = event.data;
+    if (!data || data.type !== "mep-focus-hangers" || !Array.isArray(data.ids)) return;
+    focusHangers(data.ids).catch((error) => status(error.message || "Could not frame those hangers."));
+  });
 }
 
 function ensure() {
@@ -760,6 +830,11 @@ async function frameModels() {
 }
 
 async function clearModels() {
+  hangerByName = new Map();
+  hangerByLocal = new Map();
+  selection = {};
+  propertyToken += 1;
+  renderProperties([]);
   const ids = [...fragments.list.keys()];
   await Promise.all(ids.map((id) => fragments.core.disposeModel(id)));
 }
@@ -789,7 +864,7 @@ function labelForId(id) {
 }
 
 function unwrapValue(value) {
-  if (typeof value === "string" || typeof value === "number") return String(value);
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") return String(value);
   if (value && typeof value === "object") {
     if ("value" in value) return unwrapValue(value.value);
     if ("Value" in value) return unwrapValue(value.Value);
@@ -827,7 +902,10 @@ function rowFor(rows, id, index) {
 
 async function indexMountings() {
   // Prefer Pset_DrillMount Status and Trade. ObjectType and Tag repeat those values.
+  // Name is the hanger id, so the object list can frame the matching rod.
   mountingMeta = new Map();
+  hangerByName = new Map();
+  hangerByLocal = new Map();
   for (const file of loadedFiles) {
     if (file.role !== "mounting") continue;
     const model = modelById(file.id);
@@ -851,6 +929,14 @@ async function indexMountings() {
     ids.forEach((id, index) => {
       const data = rowFor(rows, id, index);
       const pset = psetMount(data);
+      const name = readAttribute(data, "Name");
+      if (name) {
+        const hit = { modelId: model.modelId, localId: id, name };
+        const list = hangerByName.get(name) || [];
+        list.push(hit);
+        hangerByName.set(name, list);
+        hangerByLocal.set(`${model.modelId}:${id}`, name);
+      }
       const status = pset.Status || readAttribute(data, "ObjectType");
       const trade = pset.Trade || readAttribute(data, "Tag");
       const storey = pset.Storey || readAttribute(data, "Description");
@@ -875,49 +961,399 @@ function filesFromQuery() {
   return files;
 }
 
-async function open(files) {
-  const token = ++generation;
-  const section = document.querySelector("#viewer");
-  if (section) {
-    section.hidden = false;
-    section.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }
-  const heading = document.querySelector("#viewer-title");
-  if (heading && files.length) heading.textContent = files.map((file) => file.name).join(", ");
-  if (document.body.dataset.page === "viewer" && files[0]) {
-    document.title = `${files[0].name} · MEP drill planner`;
-  }
-  const tools = document.querySelector("#view-tools");
-  if (tools) tools.hidden = true;
-  status("Starting the viewer…");
-  await ensure();
-  if (token !== generation) return;
-  clearCuts();
-  await clearModels();
-  if (token !== generation) return;
-  let index = 0;
-  for (const file of files) {
-    index += 1;
-    await loadOne(file, index, files.length, token);
-    if (token !== generation) return;
-  }
-  const size = await frameModels();
-  const names = files.map((file) => file.name).join(", ");
-  if (!size) {
-    status(`${names} · no geometry to frame`);
-    return;
-  }
-  loadedFiles = files;
-  await indexMountings();
-  if (token !== generation) return;
-  await refreshTools();
-  if (token !== generation) return;
-  const extent = `${size.x.toFixed(1)} × ${size.y.toFixed(1)} × ${size.z.toFixed(1)} m`;
-  const label = files.length === 1 ? names : `${files.length} models · ${names}`;
-  status(`${label} · ${extent}`);
+function selectionCount(map) {
+  let count = 0;
+  for (const ids of Object.values(map)) count += ids.size;
+  return count;
 }
 
-window.MepViewer = { open };
+function cloneSelection(map) {
+  const copy = {};
+  for (const [modelId, ids] of Object.entries(map)) copy[modelId] = new Set(ids);
+  return copy;
+}
+
+function hitFrom(result) {
+  if (!result || typeof result.localId !== "number") return null;
+  const only = fragments.list.size === 1 ? [...fragments.list.keys()][0] : "";
+  const modelId = result.fragments?.modelId || result.modelId || only;
+  if (!modelId) return null;
+  return { modelId, localId: result.localId };
+}
+
+async function raycastHit(clientX, clientY) {
+  const caster = components.get(OBC.Raycasters).get(world);
+  try {
+    const hit = hitFrom(await caster.castRay());
+    if (hit) return hit;
+  } catch {
+    /* the GPU pick can miss a thin rod; the fragments raycast is the fallback */
+  }
+  const dom = world.renderer?.three?.domElement;
+  if (!dom || typeof fragments.raycast !== "function") return null;
+  try {
+    return hitFrom(await fragments.raycast({
+      camera: world.camera.three,
+      mouse: new THREE.Vector2(clientX, clientY),
+      dom,
+    }));
+  } catch {
+    return null;
+  }
+}
+
+function definitionList(rows) {
+  const list = document.createElement("dl");
+  for (const [label, value] of rows) {
+    const term = document.createElement("dt");
+    term.textContent = label;
+    const detail = document.createElement("dd");
+    detail.textContent = value;
+    list.append(term, detail);
+  }
+  return list;
+}
+
+function renderProperties(sections) {
+  const body = document.querySelector("#view-property-body");
+  const empty = document.querySelector("#view-property-empty");
+  if (!body || !empty) return;
+  if (!sections.length) {
+    body.replaceChildren();
+    empty.hidden = false;
+    return;
+  }
+  empty.hidden = true;
+  body.replaceChildren(...sections.map((section) => {
+    const block = document.createElement("section");
+    const title = document.createElement("h4");
+    title.textContent = section.title || "Element";
+    block.append(title);
+    if (section.rows.length) block.append(definitionList(section.rows));
+    for (const set of section.sets) {
+      const heading = document.createElement("h5");
+      heading.textContent = set.name;
+      block.append(heading, definitionList(set.items));
+    }
+    return block;
+  }));
+}
+
+const LEADING_ATTRIBUTES = ["GlobalId", "ObjectType", "Tag", "Description", "PredefinedType"];
+const SKIP_ATTRIBUTES = new Set([
+  "IsDefinedBy",
+  "IsTypedBy",
+  "HasAssociations",
+  "ContainedInStructure",
+  "Decomposes",
+  "IsDecomposedBy",
+  "HasAssignments",
+  "HasPropertySets",
+  "OwnerHistory",
+  "ObjectPlacement",
+  "Representation",
+]);
+
+function prettyKey(key) {
+  if (key === "GlobalId") return "Global ID";
+  if (key === "ObjectType") return "Object type";
+  if (key === "PredefinedType") return "Predefined type";
+  return key.replace(/_/g, " ");
+}
+
+function propertySets(data) {
+  const sets = [];
+  const seen = new WeakSet();
+  const collect = (node, depth) => {
+    if (!node || typeof node !== "object" || depth > 8 || seen.has(node)) return;
+    seen.add(node);
+    const props = node.HasProperties || node.hasProperties;
+    const name = readAttribute(node, "Name");
+    if (name && Array.isArray(props)) {
+      const items = [];
+      for (const prop of props) {
+        if (!prop || typeof prop !== "object") continue;
+        const label = readAttribute(prop, "Name");
+        const value = unwrapValue(prop.NominalValue ?? prop.nominalValue ?? prop.EnumerationValues ?? prop.Value);
+        if (label) items.push([label, value || "—"]);
+      }
+      if (items.length) sets.push({ name, items });
+      return;
+    }
+    const children = Array.isArray(node) ? node : Object.values(node);
+    for (const child of children) {
+      if (child && typeof child === "object") collect(child, depth + 1);
+    }
+  };
+  const branch = data?.IsDefinedBy || data?.isDefinedBy;
+  if (branch) collect(branch, 0);
+  return sets;
+}
+
+function describeItem(data) {
+  const category = readAttribute(data, "_category") || readAttribute(data, "category");
+  const name = readAttribute(data, "Name") || readAttribute(data, "LongName") || (category ? prettyCategory(category) : "Element");
+  const rows = [];
+  const used = new Set(["Name", "_category", "category"]);
+  if (category) rows.push(["Category", prettyCategory(category)]);
+  for (const key of LEADING_ATTRIBUTES) {
+    const value = readAttribute(data, key);
+    if (!value) continue;
+    rows.push([prettyKey(key), value]);
+    used.add(key);
+  }
+  const guid = readAttribute(data, "_guid");
+  if (guid && !rows.some(([label]) => label === "Global ID")) rows.push(["Global ID", guid]);
+  for (const [key, raw] of Object.entries(data || {})) {
+    if (used.has(key) || key.startsWith("_") || SKIP_ATTRIBUTES.has(key)) continue;
+    const value = unwrapValue(raw);
+    if (!value) continue;
+    rows.push([prettyKey(key), value]);
+  }
+  return { title: name, rows, sets: propertySets(data) };
+}
+
+async function showProperties(map) {
+  const token = ++propertyToken;
+  const sections = [];
+  for (const [modelId, ids] of Object.entries(map)) {
+    const model = modelById(modelId);
+    const list = [...ids];
+    if (!model || !list.length) continue;
+    let rows = [];
+    try {
+      rows = await model.getItemsData(list, {
+        attributesDefault: true,
+        relations: { IsDefinedBy: { attributes: true, relations: true } },
+      });
+    } catch {
+      try {
+        rows = await model.getItemsData(list, { attributesDefault: true });
+      } catch {
+        rows = [];
+      }
+    }
+    if (token !== propertyToken) return;
+    list.forEach((id, index) => sections.push(describeItem(rowFor(rows, id, index))));
+  }
+  if (token !== propertyToken) return;
+  renderProperties(sections);
+}
+
+function publishHangers(map) {
+  const ids = [];
+  for (const [modelId, localIds] of Object.entries(map)) {
+    for (const localId of localIds) {
+      const name = hangerByLocal.get(`${modelId}:${localId}`);
+      if (!name) return;
+      ids.push(name);
+    }
+  }
+  if (!ids.length) return;
+  window.dispatchEvent(new CustomEvent("mep-hanger-picked", { detail: { ids } }));
+}
+
+async function clearPick() {
+  selection = {};
+  propertyToken += 1;
+  if (fragments) {
+    await fragments.resetHighlight();
+    fragments.core.update(true);
+  }
+  renderProperties([]);
+}
+
+function absorbBox(target, item, matrix) {
+  if (!item || typeof item.clone !== "function" || typeof item.isEmpty !== "function" || item.isEmpty()) return false;
+  const clone = item.clone();
+  if (matrix && typeof clone.applyMatrix4 === "function") clone.applyMatrix4(matrix);
+  target.union(clone);
+  return true;
+}
+
+async function frameSelection(map) {
+  const box = new THREE.Box3();
+  for (const [modelId, ids] of Object.entries(map)) {
+    const model = modelById(modelId);
+    if (!model || !ids.size) continue;
+    model.object?.updateMatrixWorld?.(true);
+    const matrix = model.object?.matrixWorld;
+    let boxes = [];
+    try {
+      const raw = await model.getBoxes([...ids]);
+      boxes = Array.isArray(raw) ? raw : raw ? [raw] : [];
+    } catch {
+      boxes = [];
+    }
+    let absorbed = 0;
+    for (const item of boxes) {
+      if (absorbBox(box, item, matrix)) absorbed += 1;
+    }
+    if (absorbed) continue;
+    try {
+      const positions = await model.getPositions([...ids]);
+      for (const point of positions) {
+        if (!point) continue;
+        const clone = typeof point.clone === "function" ? point.clone() : new THREE.Vector3(point.x, point.y, point.z);
+        if (matrix && typeof clone.applyMatrix4 === "function") clone.applyMatrix4(matrix);
+        box.expandByPoint(clone);
+      }
+    } catch {
+      /* this element has no measurable geometry */
+    }
+  }
+  if (box.isEmpty()) return false;
+  const size = box.getSize(new THREE.Vector3());
+  if (Math.max(size.x, size.y, size.z) < 0.8) box.expandByScalar(0.45);
+  await world.camera.controls.fitToBox(box, true, {
+    paddingTop: 0.35,
+    paddingBottom: 0.35,
+    paddingLeft: 0.35,
+    paddingRight: 0.35,
+  });
+  for (const model of fragments.list.values()) model.useCamera(world.camera.three);
+  fragments.core.update(true);
+  return true;
+}
+
+async function commitSelection(map, { frame, fromPointer }) {
+  selection = map;
+  await fragments.resetHighlight();
+  if (selectionCount(selection)) await fragments.highlight(SELECT_STYLE, selection);
+  fragments.core.update(true);
+  await showProperties(selection);
+  const framed = frame ? await frameSelection(selection) : true;
+  if (fromPointer) publishHangers(selection);
+  return framed;
+}
+
+async function pickElement(mode, clientX, clientY) {
+  if (!loadedFiles.length) return;
+  const hit = await raycastHit(clientX, clientY);
+  if (!hit) {
+    if (mode === "replace") await clearPick();
+    return;
+  }
+  const next = mode === "replace" ? {} : cloneSelection(selection);
+  if (!next[hit.modelId]) next[hit.modelId] = new Set();
+  if (mode === "toggle" && next[hit.modelId].has(hit.localId)) {
+    next[hit.modelId].delete(hit.localId);
+    if (!next[hit.modelId].size) delete next[hit.modelId];
+  } else {
+    next[hit.modelId].add(hit.localId);
+  }
+  if (!selectionCount(next)) {
+    await clearPick();
+    return;
+  }
+  await commitSelection(next, { frame: false, fromPointer: true });
+}
+
+async function revealHangers(wanted, token) {
+  if (token !== focusToken) return;
+  if (!wanted.length) {
+    await clearPick();
+    return;
+  }
+  const found = [];
+  for (const id of wanted) {
+    const hits = hangerByName.get(id) || [];
+    if (hits.length) found.push(...hits);
+  }
+  if (token !== focusToken) return;
+  if (!found.length) {
+    status(wanted.length === 1 ? `${wanted[0]} is not in the open model.` : "Those hangers are not in the open model.");
+    return;
+  }
+  const map = {};
+  for (const hit of found) {
+    if (!map[hit.modelId]) map[hit.modelId] = new Set();
+    map[hit.modelId].add(hit.localId);
+  }
+  const framedView = await commitSelection(map, { frame: true, fromPointer: false });
+  if (token !== focusToken) return;
+  if (!framedView) {
+    status("Those hangers have no geometry to frame.");
+    return;
+  }
+  const framed = new Set(found.map((hit) => hit.name)).size;
+  if (framed === wanted.length && framed === 1) status(`Framed ${wanted[0]}.`);
+  else if (framed === wanted.length) status(`Framed ${framed} hangers.`);
+  else status(`Framed ${framed} of ${wanted.length} hangers.`);
+}
+
+async function focusHangers(ids) {
+  const wanted = [...new Set((ids || []).map((id) => String(id || "")).filter(Boolean))];
+  pendingFocus = wanted;
+  if (opening || !loadedFiles.length) return;
+  const token = ++focusToken;
+  pendingFocus = null;
+  await revealHangers(wanted, token);
+}
+
+function tellOpenerReady() {
+  if (!window.opener || window.opener === window) return;
+  window.opener.postMessage({ type: "mep-viewer-ready" }, window.location.origin);
+}
+
+async function open(files) {
+  const token = ++generation;
+  focusToken += 1;
+  opening = true;
+  try {
+    const section = document.querySelector("#viewer");
+    if (section) {
+      section.hidden = false;
+      section.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    const heading = document.querySelector("#viewer-title");
+    if (heading && files.length) heading.textContent = files.map((file) => file.name).join(", ");
+    if (document.body.dataset.page === "viewer" && files[0]) {
+      document.title = `${files[0].name} · MEP drill planner`;
+    }
+    const tools = document.querySelector("#view-tools");
+    if (tools) tools.hidden = true;
+    const properties = document.querySelector("#view-properties");
+    if (properties) properties.hidden = true;
+    status("Starting the viewer…");
+    await ensure();
+    if (token !== generation) return;
+    clearCuts();
+    await clearModels();
+    if (token !== generation) return;
+    let index = 0;
+    for (const file of files) {
+      index += 1;
+      await loadOne(file, index, files.length, token);
+      if (token !== generation) return;
+    }
+    const size = await frameModels();
+    const names = files.map((file) => file.name).join(", ");
+    if (!size) {
+      status(`${names} · no geometry to frame`);
+      return;
+    }
+    loadedFiles = files;
+    await indexMountings();
+    if (token !== generation) return;
+    await refreshTools();
+    if (token !== generation) return;
+    const extent = `${size.x.toFixed(1)} × ${size.y.toFixed(1)} × ${size.z.toFixed(1)} m`;
+    const label = files.length === 1 ? names : `${files.length} models · ${names}`;
+    status(`${label} · ${extent}`);
+  } finally {
+    if (token === generation) opening = false;
+  }
+  if (token !== generation) return;
+  if (pendingFocus) {
+    const wanted = pendingFocus;
+    pendingFocus = null;
+    await revealHangers(wanted, ++focusToken);
+  }
+  if (token === generation) tellOpenerReady();
+}
+
+window.MepViewer = { open, focusHangers };
 
 const requested = filesFromQuery();
 if (requested) {

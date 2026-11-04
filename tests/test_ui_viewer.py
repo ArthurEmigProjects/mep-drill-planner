@@ -49,8 +49,17 @@ class ViewerHttpTests(unittest.TestCase):
             self.assertNotIn(b"hider.isolate", body)
             self.assertIn(b"Pset_DrillMount", body)
             self.assertIn(b"mounting", body)
+            self.assertIn(b"focusHangers", body)
+            self.assertIn(b"view-properties", body)
+            self.assertIn(b"castRay", body)
+            self.assertIn(b"resetHighlight", body)
+        app = (WEB / "app.js").read_text(encoding="utf-8")
+        self.assertIn("focusHangers", app)
+        self.assertIn("selectedHangerIds", app)
+        self.assertIn("mep-focus-hangers", app)
         index = (WEB / "index.html").read_text(encoding="utf-8")
         self.assertIn('id="view-window"', index)
+        self.assertIn('aria-multiselectable="true"', index)
 
     def test_viewer_window_page_is_served(self):
         url = f"{self.base}/viewer?id=sample:HeatingAndCooling.ifc&clash=sample:Architecture.ifc"

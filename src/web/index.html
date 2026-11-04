@@ -71,7 +71,7 @@
         <p id="viewer-status" class="hint"></p>
       </div>
       <div id="viewer-canvas" class="viewer-canvas"></div>
-      <p class="hint viewer-help">Drag to orbit, scroll to zoom, right-drag to pan. The tools on the view show or hide each loaded model, including architecture and the other trades, then filter categories and storeys, recolor them, and cut sections. Double-click a face to cut there. After placement, mounting elements are their own model: show or hide them, and filter status and trade, from those tools.</p>
+      <p class="hint viewer-help">Drag to orbit, scroll to zoom, right-drag to pan. Click an element to select it and read its properties. Shift-click adds another. Choosing one or more hangers in the object list or the table frames them here. The tools on the view show or hide each loaded model, including architecture and the other trades, then filter categories and storeys, recolor them, and cut sections. Double-click a face to cut there. After placement, mounting elements are their own model: show or hide them, and filter status and trade, from those tools.</p>
     </section>
 
     <section id="results" class="panel" hidden>
@@ -113,7 +113,7 @@
       <div class="hanger-layout">
         <div class="object-pane">
           <h3 id="objects-heading">Objects</h3>
-          <div id="hanger-objects" class="object-list" role="listbox" tabindex="0" aria-labelledby="objects-heading"></div>
+          <div id="hanger-objects" class="object-list" role="listbox" tabindex="0" aria-multiselectable="true" aria-labelledby="objects-heading"></div>
         </div>
         <div class="editor-pane">
         <form id="hanger-editor" class="hanger-editor" hidden>
@@ -140,7 +140,7 @@
             <button type="button" id="hanger-delete" class="ghost">Delete hanger</button>
           </div>
         </form>
-        <p id="hanger-editor-empty" class="hint hanger-editor-empty">Select a hanger in the object list to move it or delete it.</p>
+        <p id="hanger-editor-empty" class="hint hanger-editor-empty">Select a hanger in the object list to move it or delete it. Ctrl-click or Shift-click selects several, and the 3D view frames them.</p>
         </div>
       </div>
       <div id="mounting-filters" class="types" role="group" aria-label="Which hangers to show"></div>

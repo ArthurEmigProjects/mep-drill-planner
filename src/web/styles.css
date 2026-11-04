@@ -336,6 +336,69 @@ body.viewer-app .viewer-canvas {
 
 .view-tools .hint { margin-top: 8px; font-size: 0.8rem; }
 
+.view-properties {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: 12px;
+  width: min(280px, calc(100% - 24px));
+  max-height: calc(100% - 24px);
+  overflow: auto;
+  padding: 12px;
+  background: rgba(246, 244, 239, 0.94);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(28, 25, 21, 0.08);
+}
+
+.view-properties h3 {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.view-properties h4 {
+  margin: 12px 0 4px;
+  font-size: 0.92rem;
+}
+
+.view-properties h4:first-child { margin-top: 0; }
+
+.view-properties h5 {
+  margin: 10px 0 2px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.view-properties dl { margin: 0; }
+
+.view-properties dt {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.view-properties dd {
+  margin: 0 0 6px;
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+}
+
+.view-properties .hint { margin: 0; font-size: 0.8rem; }
+
+@media (max-width: 720px) {
+  .view-properties {
+    top: auto;
+    bottom: 12px;
+    max-height: 42%;
+  }
+}
+
 .view-slider,
 .view-color {
   display: grid;
