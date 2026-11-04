@@ -24,7 +24,7 @@
     <header class="mast">
       <p class="eyebrow">MEP drill planner</p>
       <h1>Select an IFC file</h1>
-      <p class="lede">Pick a sample model or open an <span class="mono">.ifc</span> from this computer. The file stays local. View in 3D draws the selected model, and any file ticked For clashes, with That Open Engine. Open in window puts that same view in its own browser window. Extraction uses the top of each MEP element’s bounding box. Placement spaces hangers along each straight run, shows when a clash moves one, and writes a separate mounting IFC. View in 3D loads that IFC beside the model. The view tools can hide it, and can filter hangers by non-problematic, moved, or clashing, and by sanitary, heating/cooling, or ventilation. Tick <span class="mono">For clashes</span> on other IFCs when they hold beams or the rest of the services a rod can hit. Clash drawings PDF writes a floor plan for each level, a long section, a cross section, a section at each unresolved clash, and 3D views.</p>
+      <p class="lede">Pick a sample model or open an <span class="mono">.ifc</span> from this computer. The file stays local. View in 3D draws the selected model, and any file ticked For clashes, with That Open Engine. Open in window puts that same view in its own browser window. Extraction uses the top of each MEP element’s bounding box. Placement spaces hangers along each straight run, shows when a clash moves one, and writes a separate mounting IFC. The object list selects a hanger so it can be moved, deleted, or restored with Undo and Redo. View in 3D loads that IFC beside the model. The view tools can hide it, and can filter hangers by non-problematic, moved, or clashing, and by sanitary, heating/cooling, or ventilation. Tick <span class="mono">For clashes</span> on other IFCs when they hold beams or the rest of the services a rod can hit. Clash drawings PDF writes a floor plan for each level, a long section, a cross section, a section at each unresolved clash, and 3D views.</p>
     </header>
 
     <p id="banner" class="banner" hidden></p>
@@ -103,6 +103,46 @@
         <p id="mounting-meta" class="hint"></p>
       </div>
       <p id="mounting-note" class="hint mounting-note"></p>
+      <div class="hanger-bar">
+        <div class="hanger-actions">
+          <button type="button" id="undo" class="ghost" disabled title="Undo (Ctrl+Z)">Undo</button>
+          <button type="button" id="redo" class="ghost" disabled title="Redo (Ctrl+Y)">Redo</button>
+        </div>
+        <p id="edit-status" class="hint"></p>
+      </div>
+      <div class="hanger-layout">
+        <div class="object-pane">
+          <h3 id="objects-heading">Objects</h3>
+          <div id="hanger-objects" class="object-list" role="listbox" tabindex="0" aria-labelledby="objects-heading"></div>
+        </div>
+        <div class="editor-pane">
+        <form id="hanger-editor" class="hanger-editor" hidden>
+          <p class="eyebrow">Selected hanger</p>
+          <h3 id="hanger-editor-title"></h3>
+          <p id="hanger-editor-meta" class="hint"></p>
+          <label>Along the run (m)
+            <input id="hanger-station" type="number" step="0.001" min="0" autocomplete="off">
+          </label>
+          <div class="xyz">
+            <label>X
+              <input id="hanger-x" type="number" step="0.001" autocomplete="off">
+            </label>
+            <label>Y
+              <input id="hanger-y" type="number" step="0.001" autocomplete="off">
+            </label>
+            <label>Z
+              <input id="hanger-z" type="number" step="0.001" autocomplete="off">
+            </label>
+          </div>
+          <p class="hint editor-note">Along the run keeps a wall hanger on the wall. X, Y and Z move the point itself.</p>
+          <div class="hanger-editor-actions">
+            <button type="submit" id="hanger-apply" class="primary">Apply</button>
+            <button type="button" id="hanger-delete" class="ghost">Delete hanger</button>
+          </div>
+        </form>
+        <p id="hanger-editor-empty" class="hint hanger-editor-empty">Select a hanger in the object list to move it or delete it.</p>
+        </div>
+      </div>
       <div id="mounting-filters" class="types" role="group" aria-label="Which hangers to show"></div>
       <div class="table-wrap">
         <table>

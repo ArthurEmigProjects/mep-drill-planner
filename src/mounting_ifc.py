@@ -74,7 +74,7 @@ def status_for_point(point: dict) -> str:
     if point.get("clear") is False or point.get("reason") == "unresolved_clash":
         return "clash"
     reason = str(point.get("reason") or "")
-    if reason.startswith("shifted_") or reason == "respaced_90_95":
+    if reason.startswith("shifted_") or reason in {"respaced_90_95", "user_moved"}:
         return "moved"
     return "clear"
 

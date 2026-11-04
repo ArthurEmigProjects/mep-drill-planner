@@ -640,7 +640,7 @@ def _status_from_points(points: list[dict]) -> str:
         return "placed_with_unresolved_clashes"
     if any(reason == "respaced_90_95" for reason in reasons):
         return "placed_respaced"
-    if any(reason.startswith("shifted_") for reason in reasons):
+    if any(reason == "user_moved" or reason.startswith("shifted_") for reason in reasons):
         return "placed_adjusted"
     return "placed_initial"
 

@@ -21,6 +21,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from .extract_anchor_points import extract_from_ifc
+from .hanger_edit import HangerEditError, attach_mounting_counts, edit_hangers
 from .ifc_drawings import write_ifc_drawings
 from .mounting_ifc import write_mounting_ifc
 from .mounting_points import _round_numbers, load_clash_context, plan_mounting_points
@@ -65,6 +66,14 @@ def ifcopenshell_ready() -> bool:
     except ImportError:
         return False
     return True
+
+
+def stored_label(path: Path) -> str:
+    """Path to show on the page, relative to the repo when it lives there."""
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return path.name
 
 
 def format_bytes(n: int) -> str:
@@ -198,6 +207,9 @@ class AppHandler(BaseHTTPRequestHandler):
         if path == "/api/mounting-points":
             self._mounting_points()
             return
+        if path == "/api/mounting-edits":
+            self._mounting_edits()
+            return
         if path == "/api/drawings":
             self._drawings()
             return
@@ -210,7 +222,7 @@ class AppHandler(BaseHTTPRequestHandler):
             self._send_json({"error": "Missing content length"}, 400)
             return None
         if length <= 0 or length > limit:
-            self._send_json({"error": "File is empty or larger than 250 MB"}, 400)
+            self._send_json({"error": "Request is empty or too large."}, 400)
             return None
         return self.rfile.read(length)
 
@@ -249,7 +261,7 @@ class AppHandler(BaseHTTPRequestHandler):
         out = OUT_DIR / f"{path.stem}-points.json"
         out.write_text(json.dumps(result, indent=2), encoding="utf-8")
         result["count"] = len(result["points"])
-        result["out"] = str(out.relative_to(ROOT))
+        result["out"] = stored_label(out)
         self._send_json(result)
 
     def _mounting_points(self) -> None:
@@ -279,13 +291,58 @@ class AppHandler(BaseHTTPRequestHandler):
         extra = {"count", "out", "run_count", "reason_counts", "adjusted_count", "clash_count"}
         stored = {key: value for key, value in result.items() if key not in extra}
         out.write_text(json.dumps(stored, indent=2), encoding="utf-8")
-        result["out"] = str(out.relative_to(ROOT))
+        result["out"] = stored_label(out)
+        self._write_mounting_ifc(result, stored, path)
+        self._send_json(result)
+
+    def _mounting_edits(self) -> None:
+        body = self._read_body(8 * 1024 * 1024)
+        if body is None:
+            return
+        try:
+            payload = json.loads(body.decode("utf-8"))
+            path = resolve_file(str(payload["id"]))
+        except (KeyError, ValueError, json.JSONDecodeError, UnicodeError):
+            self._send_json({"error": "Choose an IFC file first."}, 400)
+            return
+        out = OUT_DIR / f"{path.stem}-mounting-points.json"
+        if not out.is_file():
+            self._send_json({"error": "Place mounting points before editing hangers."}, 400)
+            return
+        try:
+            saved = json.loads(out.read_text(encoding="utf-8"))
+            revised = edit_hangers(saved, payload)
+        except (HangerEditError, json.JSONDecodeError, UnicodeError) as exc:
+            self._send_json({"error": str(exc)}, 400)
+            return
+        except Exception as exc:  # a broken saved plan or the IFC writer
+            self._send_json({"error": f"Could not edit hangers: {exc}"}, 500)
+            return
+        result = attach_mounting_counts(revised)
+        if "clash_models" not in result and isinstance(saved, dict):
+            result["clash_models"] = saved.get("clash_models") or []
+        extra = {"count", "out", "run_count", "reason_counts", "adjusted_count", "clash_count"}
+        stored = {key: value for key, value in result.items() if key not in extra}
+        out.write_text(json.dumps(stored, indent=2), encoding="utf-8")
+        result["out"] = stored_label(out)
+        try:
+            self._write_mounting_ifc(result, stored, path)
+        except Exception as exc:  # geometry libraries raise a wide set of errors
+            self._send_json({"error": f"Could not write the hanger model: {exc}"}, 500)
+            return
+        self._send_json(result)
+
+    def _write_mounting_ifc(self, result: dict, stored: dict, path: Path) -> None:
+        ifc_path = OUT_DIR / f"{path.stem}-mountings.ifc"
         if result["count"]:
-            ifc_path = OUT_DIR / f"{path.stem}-mountings.ifc"
             write_mounting_ifc(stored, ifc_path, source=path)
             result["mounting_ifc"] = f"out:{ifc_path.name}"
-            result["mounting_out"] = str(ifc_path.relative_to(ROOT))
-        self._send_json(result)
+            result["mounting_out"] = stored_label(ifc_path)
+            return
+        if ifc_path.is_file():
+            ifc_path.unlink()
+        result["mounting_ifc"] = None
+        result["mounting_out"] = None
 
     def _drawings(self) -> None:
         body = self._read_body(64 * 1024)
@@ -385,18 +442,7 @@ def build_mounting_plan(path: Path, obstacle_paths: list[Path] | None = None) ->
         plan_mounting_points(segments, obstacles, source=path.name)
     )
     plan["clash_models"] = clash_models
-    counts: dict[str, int] = {}
-    for point in plan["points"]:
-        reason = point["reason"]
-        counts[reason] = counts.get(reason, 0) + 1
-    plan["count"] = len(plan["points"])
-    plan["run_count"] = len(plan["runs"])
-    plan["reason_counts"] = counts
-    plan["adjusted_count"] = sum(
-        count for reason, count in counts.items() if reason != "regular_70"
-    )
-    plan["clash_count"] = sum(1 for point in plan["points"] if not point["clear"])
-    return plan
+    return attach_mounting_counts(plan)
 
 
 def main(argv: list[str] | None = None) -> int:

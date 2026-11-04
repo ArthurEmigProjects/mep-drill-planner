@@ -4,6 +4,7 @@ const REASONS = {
   shifted_into_90_95: "Moved into 90–95%",
   shifted_under_95: "Moved under 95%",
   unresolved_clash: "Unresolved clash",
+  user_moved: "Moved by hand",
 };
 
 const state = {
@@ -13,8 +14,12 @@ const state = {
   points: [],
   shown: 25,
   mountingPoints: [],
+  runs: [],
   mountingShown: 25,
   mountingFilter: "adjusted",
+  selectedHangerId: null,
+  history: [],
+  future: [],
   busy: false,
 };
 
@@ -36,6 +41,20 @@ const mountingNote = document.querySelector("#mounting-note");
 const mountingFilters = document.querySelector("#mounting-filters");
 const mountingRows = document.querySelector("#mounting-rows");
 const showAllMountingBtn = document.querySelector("#show-all-mounting");
+const undoBtn = document.querySelector("#undo");
+const redoBtn = document.querySelector("#redo");
+const editStatus = document.querySelector("#edit-status");
+const hangerObjects = document.querySelector("#hanger-objects");
+const hangerEditor = document.querySelector("#hanger-editor");
+const hangerEditorEmpty = document.querySelector("#hanger-editor-empty");
+const hangerEditorTitle = document.querySelector("#hanger-editor-title");
+const hangerEditorMeta = document.querySelector("#hanger-editor-meta");
+const hangerStation = document.querySelector("#hanger-station");
+const hangerX = document.querySelector("#hanger-x");
+const hangerY = document.querySelector("#hanger-y");
+const hangerZ = document.querySelector("#hanger-z");
+const hangerApply = document.querySelector("#hanger-apply");
+const hangerDelete = document.querySelector("#hanger-delete");
 const resultsMeta = document.querySelector("#results-meta");
 const typesEl = document.querySelector("#types");
 const rowsEl = document.querySelector("#rows");
@@ -169,7 +188,7 @@ function reasonLabel(reason) {
 
 function reasonClass(point) {
   if (point.reason === "unresolved_clash" || point.clear === false) return "clash";
-  if (String(point.reason).startsWith("shifted_")) return "shifted";
+  if (point.reason === "user_moved" || String(point.reason).startsWith("shifted_")) return "shifted";
   if (point.reason === "respaced_90_95") return "respaced";
   return "regular";
 }
@@ -352,25 +371,44 @@ function filteredMountingPoints() {
 }
 
 function renderMounting(data) {
-  const points = (data.points || []).slice().sort((a, b) => reasonRank(a) - reasonRank(b) || a.id.localeCompare(b.id));
-  state.mountingPoints = points;
+  state.history = [];
+  state.future = [];
+  state.selectedHangerId = null;
   state.mountingShown = 25;
+  const points = data.points || [];
   const adjusted = data.adjusted_count ?? points.filter((point) => point.reason !== "regular_70").length;
   state.mountingFilter = adjusted > 0 ? "adjusted" : "all";
+  adoptPlan(data);
+  if (editStatus) editStatus.textContent = "";
+  mountingEl.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function adoptPlan(data) {
+  const points = (data.points || []).slice().sort((a, b) => reasonRank(a) - reasonRank(b) || a.id.localeCompare(b.id));
+  state.mountingPoints = points;
+  if (data.runs) state.runs = data.runs;
+  if (useSelectionOverride) {
+    state.selectedHangerId = selectionOverride;
+    useSelectionOverride = false;
+  }
+  if (state.selectedHangerId && !points.some((point) => point.id === state.selectedHangerId)) {
+    state.selectedHangerId = null;
+  }
   mountingEl.hidden = false;
   const count = data.count ?? points.length;
+  const adjusted = data.adjusted_count ?? points.filter((point) => point.reason !== "regular_70").length;
   const clashes = data.clash_count ?? points.filter((point) => point.clear === false).length;
   const models = data.clash_models || [];
   const also = models.length > 1 ? ` · also ${models.slice(1).join(", ")}` : "";
   const ifc = data.mounting_out ? ` · ${data.mounting_out}` : "";
-  mountingMeta.textContent = `${count} hangers on ${data.run_count ?? (data.runs || []).length} runs · ${adjusted} adjusted · ${clashes} still clashing${also} · ${data.out}${ifc}`;
-  if (data.mounting_ifc) {
-    const file = selectedFile();
-    if (file) file.mounting_id = data.mounting_ifc;
-  }
+  mountingMeta.textContent = `${count} hangers on ${data.run_count ?? (data.runs || state.runs).length} runs · ${adjusted} adjusted · ${clashes} still clashing${also} · ${data.out}${ifc}`;
+  const file = selectedFile();
+  if (file) file.mounting_id = data.mounting_ifc || null;
   paintMountingFilters(data.reason_counts || {});
   paintMountingRows();
-  mountingEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  paintObjects();
+  paintEditor();
+  paintHistory();
 }
 
 function paintMountingFilters(counts) {
@@ -410,7 +448,9 @@ function paintMountingRows() {
   mountingRows.replaceChildren(
     ...slice.map((point) => {
       const row = document.createElement("tr");
-      row.className = reasonClass(point);
+      row.className = `hanger-row ${reasonClass(point)}${point.id === state.selectedHangerId ? " on" : ""}`;
+      row.dataset.hangerId = point.id;
+      row.addEventListener("click", () => selectHanger(point.id));
       const reason = document.createElement("td");
       const badge = document.createElement("span");
       badge.className = `badge ${reasonClass(point)}`;
@@ -577,6 +617,290 @@ showAllMountingBtn.addEventListener("click", () => {
 showAllBtn.addEventListener("click", () => {
   state.shown = state.points.length;
   paintRows();
+});
+
+function clonePoints(points) {
+  return JSON.parse(JSON.stringify(points));
+}
+
+function runsById() {
+  return new Map(state.runs.map((run) => [run.id, run]));
+}
+
+function selectedHanger() {
+  return state.mountingPoints.find((point) => point.id === state.selectedHangerId) || null;
+}
+
+function listedRuns() {
+  const known = new Map(state.runs.map((run) => [run.id, run]));
+  const ids = new Set(state.mountingPoints.map((point) => point.run_id));
+  for (const run of state.runs) {
+    if (run.status === "no_hangers") ids.add(run.id);
+  }
+  return [...ids]
+    .sort((a, b) => String(a).localeCompare(String(b)))
+    .map((id) => known.get(id) || { id });
+}
+
+function nearNumber(left, right) {
+  return Math.abs(Number(left) - Number(right)) <= 0.00051;
+}
+
+function paintHistory() {
+  if (!undoBtn || !redoBtn) return;
+  undoBtn.disabled = state.busy || state.history.length === 0;
+  redoBtn.disabled = state.busy || state.future.length === 0;
+}
+
+function paintObjects() {
+  if (!hangerObjects) return;
+  const hadFocus = document.activeElement === hangerObjects;
+  const runs = runsById();
+  const groups = listedRuns().map((run) => {
+    const group = document.createElement("div");
+    const header = document.createElement("div");
+    header.className = "object-run";
+    const hangers = state.mountingPoints
+      .filter((point) => point.run_id === run.id)
+      .slice()
+      .sort((a, b) => a.station_m - b.station_m || a.id.localeCompare(b.id));
+    const stored = runs.get(run.id) || run;
+    const kind = stored.kind || stored.size_label || "run";
+    const length = stored.length_m === undefined ? "" : `${Number(stored.length_m).toFixed(3)} m`;
+    header.textContent = [run.id, kind, length, `${hangers.length} hangers`].filter(Boolean).join(" · ");
+    group.append(header);
+    for (const point of hangers) {
+      const line = document.createElement("button");
+      line.type = "button";
+      line.className = `object-line${point.id === state.selectedHangerId ? " on" : ""}`;
+      line.dataset.hangerId = point.id;
+      line.setAttribute("role", "option");
+      line.setAttribute("aria-selected", point.id === state.selectedHangerId ? "true" : "false");
+      const ident = document.createElement("span");
+      ident.textContent = point.id;
+      const badge = document.createElement("span");
+      badge.className = `badge ${reasonClass(point)}`;
+      badge.textContent = reasonLabel(point.reason);
+      const where = document.createElement("span");
+      where.className = "where";
+      where.textContent = `${metres(point.station_m)} m`;
+      line.append(ident, badge, where);
+      line.addEventListener("click", () => selectHanger(point.id));
+      group.append(line);
+    }
+    return group;
+  });
+  hangerObjects.replaceChildren(...groups);
+  if (!groups.length) {
+    const empty = document.createElement("p");
+    empty.className = "hint hanger-editor-empty";
+    empty.textContent = "No hanger was placed.";
+    hangerObjects.append(empty);
+  }
+  if (hadFocus) hangerObjects.focus();
+}
+
+let useSelectionOverride = false;
+let selectionOverride = null;
+
+function paintEditor() {
+  const point = selectedHanger();
+  if (hangerEditor) hangerEditor.hidden = !point;
+  if (hangerEditorEmpty) hangerEditorEmpty.hidden = Boolean(point);
+  if (!point) {
+    paintHistory();
+    return;
+  }
+  const locked = state.busy;
+  if (!locked) {
+    const run = runsById().get(point.run_id);
+    const bits = [point.run_id, reasonLabel(point.reason)];
+    if (run && run.size_label) bits.push(run.size_label);
+    hangerEditorTitle.textContent = point.id;
+    hangerEditorMeta.textContent = point.clear === false
+      ? `${bits.join(" · ")}. The rod was clashing. A move does not run the clash check again.`
+      : bits.join(" · ");
+    hangerStation.value = metres(point.station_m);
+    hangerStation.max = run && run.length_m !== undefined ? String(run.length_m) : "";
+    hangerX.value = metres(point.x);
+    hangerY.value = metres(point.y);
+    hangerZ.value = metres(point.z);
+  }
+  hangerStation.disabled = locked;
+  hangerX.disabled = locked;
+  hangerY.disabled = locked;
+  hangerZ.disabled = locked;
+  hangerApply.disabled = locked;
+  hangerDelete.disabled = locked;
+  paintHistory();
+}
+
+function selectHanger(id) {
+  state.selectedHangerId = id;
+  paintObjects();
+  paintMountingRows();
+  paintEditor();
+  const line = hangerObjects?.querySelector(`[data-hanger-id="${CSS.escape(id)}"]`);
+  if (line) line.scrollIntoView({ block: "nearest" });
+  hangerObjects?.focus();
+}
+
+function objectIds() {
+  return [...hangerObjects.querySelectorAll(".object-line")].map((line) => line.dataset.hangerId);
+}
+
+function neighborAfterDelete(id) {
+  const point = state.mountingPoints.find((item) => item.id === id);
+  if (!point) return null;
+  const siblings = state.mountingPoints
+    .filter((item) => item.run_id === point.run_id)
+    .slice()
+    .sort((a, b) => a.station_m - b.station_m || a.id.localeCompare(b.id));
+  const index = siblings.findIndex((item) => item.id === id);
+  const next = siblings[index + 1] || siblings[index - 1];
+  return next ? next.id : null;
+}
+
+async function sendEdit(operation, mode) {
+  const file = selectedFile();
+  if (!file || state.busy || mountingEl.hidden) {
+    useSelectionOverride = false;
+    return false;
+  }
+  const past = clonePoints(state.mountingPoints);
+  state.busy = true;
+  renderSelection();
+  paintHistory();
+  paintEditor();
+  if (editStatus) editStatus.textContent = "Saving…";
+  showBanner("");
+  try {
+    const response = await fetch("/api/mounting-edits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: file.id, ...operation }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Could not edit the hanger");
+    if (mode === "undo") {
+      state.history.pop();
+      state.future.push(past);
+    } else if (mode === "redo") {
+      state.future.pop();
+      state.history.push(past);
+    } else {
+      state.history.push(past);
+      if (state.history.length > 50) state.history.shift();
+      state.future = [];
+    }
+    adoptPlan(data);
+    if (editStatus) {
+      editStatus.textContent = data.mounting_out
+        ? "Saved. View in 3D loads the updated rods."
+        : "Saved.";
+    }
+    return true;
+  } catch (error) {
+    useSelectionOverride = false;
+    if (editStatus) editStatus.textContent = "";
+    showBanner(error.message);
+    paintEditor();
+    return false;
+  } finally {
+    state.busy = false;
+    renderSelection();
+    paintHistory();
+    paintEditor();
+  }
+}
+
+function commitEditor() {
+  const point = selectedHanger();
+  if (!point || state.busy) return;
+  const station = Number(hangerStation.value);
+  const x = Number(hangerX.value);
+  const y = Number(hangerY.value);
+  const z = Number(hangerZ.value);
+  if ([station, x, y, z].some((value) => Number.isNaN(value))) {
+    showBanner("Station, X, Y and Z need numbers.");
+    return;
+  }
+  const stationChanged = !nearNumber(station, point.station_m);
+  const positionChanged = !nearNumber(x, point.x) || !nearNumber(y, point.y) || !nearNumber(z, point.z);
+  if (!stationChanged && !positionChanged) return;
+  const operation = stationChanged
+    ? { op: "move", hanger_id: point.id, station_m: station }
+    : { op: "move", hanger_id: point.id, x, y, z };
+  sendEdit(operation, "edit");
+}
+
+function deleteSelected() {
+  const point = selectedHanger();
+  if (!point || state.busy) return;
+  selectionOverride = neighborAfterDelete(point.id);
+  useSelectionOverride = true;
+  sendEdit({ op: "delete", hanger_id: point.id }, "edit");
+}
+
+function undoEdit() {
+  if (state.busy || !state.history.length || mountingEl.hidden) return;
+  const previous = state.history[state.history.length - 1];
+  sendEdit({ op: "replace", points: previous }, "undo");
+}
+
+function redoEdit() {
+  if (state.busy || !state.future.length || mountingEl.hidden) return;
+  const next = state.future[state.future.length - 1];
+  sendEdit({ op: "replace", points: next }, "redo");
+}
+
+if (hangerEditor) {
+  hangerEditor.addEventListener("submit", (event) => {
+    event.preventDefault();
+    commitEditor();
+  });
+}
+hangerDelete?.addEventListener("click", deleteSelected);
+undoBtn?.addEventListener("click", undoEdit);
+redoBtn?.addEventListener("click", redoEdit);
+
+hangerObjects?.addEventListener("keydown", (event) => {
+  const ids = objectIds();
+  if (!ids.length) return;
+  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+    event.preventDefault();
+    const current = ids.indexOf(state.selectedHangerId);
+    const step = event.key === "ArrowDown" ? 1 : -1;
+    const nextIndex = current < 0 ? 0 : Math.min(ids.length - 1, Math.max(0, current + step));
+    selectHanger(ids[nextIndex]);
+  }
+  if (event.key === "Delete" || event.key === "Backspace") {
+    event.preventDefault();
+    deleteSelected();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (!(event.ctrlKey || event.metaKey) || event.altKey || mountingEl.hidden) return;
+  const tag = document.activeElement && document.activeElement.tagName;
+  const inHangerField = hangerEditor && hangerEditor.contains(document.activeElement);
+  if ((tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") && !inHangerField) return;
+  if (inHangerField && selectedHanger()) {
+    const point = selectedHanger();
+    const dirty = !nearNumber(hangerStation.value, point.station_m)
+      || !nearNumber(hangerX.value, point.x)
+      || !nearNumber(hangerY.value, point.y)
+      || !nearNumber(hangerZ.value, point.z);
+    if (dirty) return;
+  }
+  const key = event.key.toLowerCase();
+  if (key === "z" && !event.shiftKey) {
+    event.preventDefault();
+    undoEdit();
+  } else if (key === "y" || (key === "z" && event.shiftKey)) {
+    event.preventDefault();
+    redoEdit();
+  }
 });
 
 loadFiles().catch((error) => {

@@ -53,6 +53,8 @@ class TradeAndStatusTests(unittest.TestCase):
         self.assertEqual(status_for_point({"reason": "shifted_under_95", "clear": True}), "moved")
         self.assertEqual(status_for_point({"reason": "shifted_into_90_95", "clear": True}), "moved")
         self.assertEqual(status_for_point({"reason": "respaced_90_95", "clear": True}), "moved")
+        self.assertEqual(status_for_point({"reason": "user_moved", "clear": True}), "moved")
+        self.assertEqual(status_for_point({"reason": "user_moved", "clear": False}), "clash")
         self.assertEqual(status_for_point({"reason": "unresolved_clash", "clear": False}), "clash")
         self.assertEqual(status_for_point({"reason": "regular_70", "clear": False}), "clash")
 
