@@ -115,6 +115,13 @@ function mountTools() {
 
   const filterHeading = document.createElement("h3");
   filterHeading.textContent = "Filter";
+  const modelHeading = document.createElement("h3");
+  modelHeading.id = "view-models-heading";
+  modelHeading.textContent = "Models";
+  modelHeading.hidden = true;
+  const modelList = document.createElement("div");
+  modelList.id = "view-models";
+  modelList.className = "category-list";
   const storeyLabel = document.createElement("label");
   storeyLabel.className = "view-slider";
   const storeyText = document.createElement("span");
@@ -139,6 +146,9 @@ function mountTools() {
   mountingInput.type = "checkbox";
   mountingInput.checked = true;
   mountingInput.addEventListener("change", () => {
+    const mounting = loadedFiles.find((file) => file.role === "mounting");
+    const box = modelToggle(mounting && mounting.id);
+    if (box) box.checked = mountingInput.checked;
     applyVisibility().catch((error) => status(error.message || "Could not filter the model."));
   });
   const mountingText = document.createElement("span");
@@ -192,6 +202,8 @@ function mountTools() {
     toolButton("Clear cuts", () => clearCuts()),
     cutNote,
     filterHeading,
+    modelHeading,
+    modelList,
     storeyLabel,
     categoryList,
     mountingBlock,
@@ -233,6 +245,64 @@ function modelById(id) {
 
 function isMountingModel(model) {
   return loadedFiles.some((file) => file.role === "mounting" && file.id === model.modelId);
+}
+
+function modelToggle(modelId) {
+  if (!modelId) return null;
+  return [...document.querySelectorAll("#view-models input")].find((input) => input.dataset.modelId === modelId) || null;
+}
+
+function modelLabel(file) {
+  const name = file.name.toLowerCase();
+  if (file.role === "mounting" || name.includes("mounting")) return "Hangers";
+  if (name.includes("architecture")) return "Architecture";
+  if (name.includes("ventilation")) return "Ventilation";
+  if (name.includes("heating") || name.includes("cooling")) return "Heating / cooling";
+  if (name.includes("piping")) return "Piping";
+  if (name.includes("mep")) return "MEP";
+  const stem = file.name.replace(/\.ifc$/i, "").replace(/[-_]+/g, " ");
+  return stem.charAt(0).toUpperCase() + stem.slice(1);
+}
+
+function modelLabels(files) {
+  const labels = files.map(modelLabel);
+  const counts = new Map();
+  for (const label of labels) counts.set(label, (counts.get(label) || 0) + 1);
+  return labels.map((label, index) => (counts.get(label) > 1 ? `${label} · ${files[index].name}` : label));
+}
+
+function allModelsShown() {
+  const inputs = [...document.querySelectorAll("#view-models input")];
+  return inputs.length === 0 || inputs.every((input) => input.checked);
+}
+
+function paintModelToggles() {
+  const list = document.querySelector("#view-models");
+  const heading = document.querySelector("#view-models-heading");
+  if (!list) return;
+  const labels = modelLabels(loadedFiles);
+  list.replaceChildren(...loadedFiles.map((file, index) => {
+    const row = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.checked = true;
+    input.dataset.modelId = file.id;
+    input.addEventListener("change", () => {
+      if (file.role === "mounting") {
+        const master = document.querySelector("#view-mounting");
+        if (master) master.checked = input.checked;
+      }
+      applyVisibility().catch((error) => status(error.message || "Could not filter the model."));
+    });
+    const text = document.createElement("span");
+    text.textContent = labels[index];
+    text.title = file.name;
+    row.append(input, text);
+    return row;
+  }));
+  const empty = loadedFiles.length === 0;
+  list.hidden = empty;
+  if (heading) heading.hidden = empty;
 }
 
 function checkedValues(selector) {
@@ -293,13 +363,30 @@ async function idsForCategories(model, names) {
   return Object.values(items).flat();
 }
 
+async function showOnly(map) {
+  // Hide and show in sequence. The engine's isolate() starts both at once,
+  // and the hide can finish last, so a ticked model stays invisible.
+  for (const model of fragments.list.values()) {
+    const wanted = map[model.modelId] || new Set();
+    const allIds = [...await model.getItemsIdsWithGeometry()];
+    const hidden = [];
+    const shown = [];
+    for (const id of allIds) {
+      if (wanted.has(id)) shown.push(id);
+      else hidden.push(id);
+    }
+    if (hidden.length) await model.setVisible(hidden, false);
+    if (shown.length) await model.setVisible(shown, true);
+  }
+  await fragments.core.update(true);
+}
+
 async function applyVisibility() {
   const ticked = new Set(tickedCategories());
   const allCategories = categories.length === 0 || ticked.size === categories.length;
   const storeyKey = document.querySelector("#view-storeys")?.value || "";
-  if (allCategories && !storeyKey && mountingFiltersOpen()) {
+  if (allCategories && !storeyKey && mountingFiltersOpen() && allModelsShown()) {
     await hider.set(true);
-    fragments.core.update(true);
     return;
   }
   const statusOn = checkedValues("#view-status");
@@ -307,9 +394,10 @@ async function applyVisibility() {
   const showMounting = document.querySelector("#view-mounting")?.checked !== false;
   const map = {};
   for (const model of fragments.list.values()) {
+    const toggle = modelToggle(model.modelId);
     const mounting = isMountingModel(model);
     let ids;
-    if (mounting && !showMounting) {
+    if ((toggle && !toggle.checked) || (mounting && !showMounting)) {
       ids = new Set();
     } else if (mounting || allCategories) {
       ids = new Set(await model.getItemsIdsWithGeometry());
@@ -339,12 +427,11 @@ async function applyVisibility() {
     }
     map[model.modelId] = ids;
   }
-  await hider.isolate(map);
-  fragments.core.update(true);
+  await showOnly(map);
 }
 
 async function showEverything() {
-  for (const input of document.querySelectorAll("#view-categories input, #view-mounting-block input")) {
+  for (const input of document.querySelectorAll("#view-categories input, #view-mounting-block input, #view-models input")) {
     if (!input.parentElement.hidden) input.checked = true;
   }
   const select = document.querySelector("#view-storeys");
@@ -500,6 +587,7 @@ async function refreshTools() {
   const list = document.querySelector("#view-categories");
   const select = document.querySelector("#view-storeys");
   if (!tools || !list || !select) return;
+  paintModelToggles();
   categories = [];
   const seen = new Set();
   for (const model of fragments.list.values()) {
